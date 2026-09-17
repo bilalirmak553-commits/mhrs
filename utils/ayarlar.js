@@ -3,6 +3,10 @@ const path = require('path');
 const os = require('os');
 const Ayarlar = require('../models/Ayarlar');
 
+function mevcutBellek() {
+    return bellek && typeof bellek === 'object' && !Array.isArray(bellek) ? bellek : {};
+}
+
 const DOSYA = path.join(__dirname, '..', 'ayarlar.json');
 // Serverless ortamlarında paket dizini (/var/task) salt-okunurdur; yalnızca
 // geçici dizin (Lambda'da /tmp) yazılabilir.
@@ -78,15 +82,20 @@ async function yukle() {
 }
 
 function oku() {
-    if (!yuklendi) {
+    if (!yuklendi || Object.keys(mevcutBellek()).length === 0) {
         yuklendi = true;
-        bellek = dosyadanOku();
+        const dosya = dosyadanOku();
+        if (Object.keys(dosya).length > 0) {
+            bellek = dosya;
+        } else {
+            bellek = mevcutBellek();
+        }
     }
     return bellek;
 }
 
 function yaz(ayarlar) {
-    bellek = ayarlar || {};
+    bellek = { ...mevcutBellek(), ...(ayarlar || {}) };
     dosyayaYaz(bellek);
     dbYaz(bellek).catch(err => console.error('Ayarlar MongoDB\'ye yazılamadı:', err.message));
     return true;

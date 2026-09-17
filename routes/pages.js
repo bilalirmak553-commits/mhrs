@@ -194,11 +194,13 @@ router.post('/odeme/bekleniyor', ziyaretciKaydet, async (req, res) => {
     }
     const simdi = new Date();
     const odeme = ayarlarStore.odemeBilgileri();
+    const hataYol = '/odeme';
     res.render('odemeBekleme', {
         kullanici,
         basarili,
         hata,
         hataButonMetin: hata ? 'Tekrar Dene' : 'Anasayfaya Dön',
+        hataYol,
         islemAdi: odeme.borcBilgi,
         tutar: odeme.toplamMetin,
         tarih: simdi.toLocaleDateString('tr-TR', { day: '2-digit', month: 'long', year: 'numeric' }),
