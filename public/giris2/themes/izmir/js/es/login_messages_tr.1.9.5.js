@@ -1,0 +1,1 @@
+"use strict";var edDic=window.edDic||{};edDic.login={wrongTckError:"T.C. Kimlik numaranızı hatalı girdiniz.",wrongGSMError:"Hatalı GSM Numarası Girdiniz."};

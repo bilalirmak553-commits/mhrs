@@ -1,0 +1,10 @@
+<script>
+    (function () {
+        var t = null;
+        try { t = localStorage.getItem('mhrs-admin-tema'); } catch (e) { }
+        if (t !== 'karanlik' && t !== 'aydinlik') {
+            t = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'karanlik' : 'aydinlik';
+        }
+        document.documentElement.setAttribute('data-tema', t);
+    })();
+</script>

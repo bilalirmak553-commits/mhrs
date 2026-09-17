@@ -1,0 +1,94 @@
+/* ============================================
+   giris2.html - e-Devlet Giriş Ekranı özel stilleri
+   Bu dosya yalnızca giris2.html tarafından kullanılır.
+   index.html / style.css ile karıştırılmamalıdır.
+   ============================================ */
+
+.ed-icon-lg {
+    font-size: 1.33333em;
+    line-height: 0.75em;
+    vertical-align: -0.0667em;
+}
+
+.ed-icon-xs {
+    font-size: 0.75em;
+}
+
+.ed-icon-sm {
+    font-size: 0.875em;
+}
+
+.ed-icon-1x {
+    font-size: 1em;
+}
+
+.ed-icon-2x {
+    font-size: 2em;
+}
+
+.ed-icon-3x {
+    font-size: 3em;
+}
+
+.ed-icon-4x {
+    font-size: 4em;
+}
+
+.ed-icon-5x {
+    font-size: 5em;
+}
+
+.ed-icon-6x {
+    font-size: 6em;
+}
+
+.ed-icon-7x {
+    font-size: 7em;
+}
+
+.ed-icon-8x {
+    font-size: 8em;
+}
+
+.ed-icon-9x {
+    font-size: 9em;
+}
+
+.ed-icon-10x {
+    font-size: 10em;
+}
+
+.ed-icon-fw {
+    text-align: center;
+    width: 1.25em;
+}
+
+.ed-icon-border {
+    border: solid 0.08em #eee;
+    border-radius: 0.1em;
+    padding: 0.2em 0.25em 0.15em;
+}
+
+.ed-icon-pull-left {
+    float: left;
+}
+
+.ed-icon-pull-right {
+    float: right;
+}
+
+.ed-icon.ed-icon-pull-left {
+    margin-right: 0.3em;
+}
+
+.ed-icon.ed-icon-pull-right {
+    margin-left: 0.3em;
+}
+
+.ed-icon-right {
+    margin-right: 0;
+}
+
+.ed-icon-left {
+    margin-left: 0;
+}

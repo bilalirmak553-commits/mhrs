@@ -1,0 +1,379 @@
+<!doctype html>
+<html lang="tr"><head>
+    <meta charset="utf-8">
+    <title>MHRS | Randevu Al</title>
+    <meta http-equiv="cache-control" content="max-age=0">
+    <meta http-equiv="cache-control" content="no-cache">
+    <meta http-equiv="expires" content="0">
+    <meta http-equiv="expires" content="Tue, 01 Jan 1980 1:00:00 GMT">
+    <meta http-equiv="pragma" content="no-cache">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="description" content="MHRS Randevu Al | T.C. Sağlık Bakanlığı | Sağlık Bakanlığına bağlı hastanelere, semt polikliniklerine ve aile sağlık merkezlerine MHRS üzerinden randevu oluştur.">
+    <meta name="keywords" content="mhrs, randevu, MHRS Randevu, Randevu Al, Randevu Oluştur, Hastane Randevu, E-Randevu, Hekim Randevu, Randevu, MHRS, Aile Hekimi Randevu, Aile Hekimi, 182 mhrs, Aşı randevu, Aile diş hekimi randevu, Görüntülü muayene randevusu">
+    <link rel="shortcut icon" href="/img/icon/favIcon.png">
+  <link rel="stylesheet" href="/css/anasayfa.css">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { corePlugins: { preflight: false } };</script>
+  <style>
+    /* ===== MHRS uyumlu popup bileşenleri ===== */
+    .mhrs-popup-overlay {
+      position: fixed;
+      inset: 0;
+      z-index: 99999997;
+      background: rgba(0, 0, 0, 0.45);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+    }
+    .mhrs-popup-overlay--ust { z-index: 99999999; }
+    .mhrs-popup-card {
+      width: 100%;
+      max-width: 440px;
+      max-height: 92vh;
+      overflow-y: auto;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    }
+    .mhrs-popup-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 14px 24px;
+      background: #a21f29;
+      border-radius: 10px 10px 0 0;
+    }
+    .mhrs-popup-header h2 {
+      margin: 0;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 700;
+      line-height: 1.4;
+    }
+    .mhrs-popup-body { padding: 20px 24px 24px; }
+    .mhrs-popup-kimlik { margin: 0 0 6px; font-size: 14px; font-weight: 700; color: rgba(0, 0, 0, 0.85); }
+    .mhrs-popup-aciklama { margin: 0; font-size: 14px; line-height: 1.6; color: rgba(0, 0, 0, 0.65); }
+    .mhrs-popup-label { display: block; margin: 16px 0 6px; font-size: 14px; color: rgba(0, 0, 0, 0.65); }
+    .mhrs-popup-input-wrap {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      height: 54px;
+      padding: 0 16px;
+      background: #fff;
+      border: 1px solid #d9d9d9;
+      border-radius: 999px;
+      transition: border-color 0.3s, box-shadow 0.3s;
+      overflow: hidden;
+    }
+    .mhrs-popup-input-wrap:focus-within {
+      border-color: #a21f29;
+      box-shadow: 0 0 0 2px rgba(162, 31, 41, 0.12);
+    }
+    .mhrs-popup-prefix {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding-right: 12px;
+      font-size: 22px;
+      font-weight: 700;
+      color: rgba(31, 41, 55, 0.9);
+      border-right: 1px solid rgba(0, 0, 0, 0.12);
+      line-height: 1;
+    }
+    .mhrs-popup-prefix .caret {
+      font-size: 18px;
+      color: rgba(31, 41, 55, 0.7);
+      transform: translateY(-1px);
+    }
+    .mhrs-popup-input {
+      box-sizing: border-box;
+      width: 100%;
+      height: 100%;
+      padding: 0 0 0 14px;
+      font-size: 18px;
+      font-weight: 500;
+      color: rgba(0, 0, 0, 0.65);
+      background: transparent;
+      border: 0;
+      outline: none;
+      min-width: 0;
+    }
+    .mhrs-popup-input::placeholder {
+      color: rgba(0, 0, 0, 0.36);
+      font-size: 16px;
+    }
+    .mhrs-popup-hata { display: none; margin: 8px 0 0; font-size: 12px; line-height: 1.5; color: #f5222d; }
+    .mhrs-popup-btn {
+      display: block;
+      width: 100%;
+      height: 40px;
+      margin-top: 16px;
+      padding: 0 15px;
+      border: 0;
+      border-radius: 4px;
+      font-size: 14px;
+      font-weight: 700;
+      color: #fff;
+      background: #a21f29;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    .mhrs-popup-btn:hover { background: #8a1a22; }
+    .mhrs-popup-btn:disabled {
+      background: #f5f5f5;
+      color: rgba(0, 0, 0, 0.25);
+      cursor: not-allowed;
+    }
+    .mhrs-popup-bildirim {
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 360px;
+      padding: 24px;
+      background: #fff;
+      border-radius: 10px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      text-align: center;
+    }
+    .mhrs-popup-bildirim-icon {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 56px;
+      height: 56px;
+      margin: 0 auto 12px;
+      border-radius: 50%;
+      background: #f6ffed;
+      color: #52c41a;
+      font-size: 28px;
+    }
+    .mhrs-popup-bildirim h2 { margin: 0 0 6px; font-size: 16px; font-weight: 700; color: rgba(0, 0, 0, 0.85); }
+    .mhrs-popup-bildirim p { margin: 0; font-size: 14px; line-height: 1.6; color: rgba(0, 0, 0, 0.65); }
+    .mhrs-popup-kutu { margin: 12px 0; padding: 12px 14px; border-radius: 4px; font-size: 14px; }
+    .mhrs-popup-kutu ul { margin: 0; padding-left: 18px; }
+    .mhrs-popup-kutu p { margin: 0; line-height: 1.6; }
+    .mhrs-popup-kutu--uyari { background: #fffbe6; border-left: 4px solid #faad14; color: rgba(0, 0, 0, 0.85); }
+    .mhrs-popup-kutu--hata { background: #fff1f0; border-left: 4px solid #f5222d; }
+    .mhrs-popup-kutu--bilgi { background: #e6f7ff; border-left: 4px solid #1890ff; }
+    .mhrs-popup-tutar-satir { display: flex; justify-content: space-between; font-size: 14px; color: rgba(0, 0, 0, 0.65); }
+    .mhrs-popup-onay {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-top: 16px;
+      font-size: 12px;
+      line-height: 1.5;
+      color: rgba(0, 0, 0, 0.65);
+      cursor: pointer;
+    }
+    .mhrs-popup-onay input { margin-top: 2px; cursor: pointer; }
+    @media (max-width: 480px) {
+      .mhrs-popup-card,
+      .mhrs-popup-bildirim { max-width: 100%; }
+    }
+  </style>
+  </head>
+
+  <body style="">
+    
+
+    <script>
+      window.addEventListener("DOMContentLoaded", () => {
+        const interval = setInterval(() => {
+          const app = document.getElementById("vatandasApp");
+          if (app && app.children.length > 0) {
+            document.getElementById("initial-loader")?.remove();
+            clearInterval(interval);
+          }
+        }, 100);
+      });
+    </script>
+    
+    <div id="vatandasApp"><div class="ant-spin" style="position: absolute; z-index: 9999999; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.28);"><i class="anticon ant-spin-dot" style="position: absolute; top: 50%; left: calc(50% - 50px); color: rgb(162, 31, 41);"><img src="/img/loading.gif" alt="" style="width: 100px;"></i></div><div class="ant-spin" style="position: absolute; z-index: 9999999; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.28);"><i class="anticon ant-spin-dot" style="position: absolute; top: 50%; left: calc(50% - 50px); color: rgb(162, 31, 41);"><img src="/img/loading.gif" alt="" style="width: 100px;"></i></div><section class="workspace-layout ant-layout"><%- include("partials/header") %><main class="layout-content ant-layout-content"><div style="padding: 0px;"><div class="mhrs-content-custom "><div class="flex flex-row flex-md-col flex-sm-col flex-xs-col mb-16 dashboard-container"><div class="flex flex-col flex-1"><div class="ant-card randevu-card-dissiz aile-randevu-card mb-16 mr-16"><div class="ant-card-body"><div class="randevu-turu-grup-content"><div class="randevu-turu-grup-icon"><i class="anticon randevu-icon"><img src="./img/icon/tema-icon-1-02.png" alt="imgAlt"></i></div><div class="randevu-turu-grup-article"><h3>Aile Hekimi Randevusu Al</h3><h5>Bağlı bulunduğunuz Aile Hekiminizden randevu alabilirsiniz.</h5></div></div></div></div><div class="ant-card randevu-card-dissiz hasta-randevu-card mb-16 mr-16"><div class="ant-card-body"><div class="randevu-turu-grup-content"><div class="randevu-turu-grup-icon"><i class="anticon randevu-icon"><img src="./img/icon/tema-icon-1-03.png" alt="imgAlt"></i></div><div class="randevu-turu-grup-article"><h3>Hastane Randevusu Al</h3><h5>Hastanede bulunan kliniklerden randevu alabilirsiniz.</h5></div></div></div></div><div class="ant-card randevu-card-dissiz shm-randevu-card mb-16 mr-16"><div class="ant-card-body"><div class="randevu-turu-grup-content"><div class="randevu-turu-grup-icon"><i class="anticon randevu-icon"><img src="./img/icon/tema-icon-1-01.png" alt="imgAlt"></i></div><div class="randevu-turu-grup-article"><h3>Sağlıklı Hayat Merkezi Randevusu Al</h3><h5>Sağlıklı Hayat Merkezlerinde bulunan kliniklerden randevu alabilirsiniz.</h5></div></div></div></div></div><div class="flex flex-col flex-2 h-full mb-16"><div class="dashboard-rnd-container flex flex-sm-col flex-md-col flex-row  flex-1"><div class="ant-tabs ant-tabs-top w-full ant-tabs-card"><div role="tablist" class="ant-tabs-bar ant-tabs-top-bar ant-tabs-card-bar" tabindex="0"><div class="ant-tabs-nav-container"><span unselectable="unselectable" class="ant-tabs-tab-prev ant-tabs-tab-btn-disabled"><span class="ant-tabs-tab-prev-icon"><i aria-label="icon: left" class="anticon anticon-left ant-tabs-tab-prev-icon-target"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="left" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 0 0 0 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"></path></svg></i></span></span><span unselectable="unselectable" class="ant-tabs-tab-next ant-tabs-tab-btn-disabled"><span class="ant-tabs-tab-next-icon"><i aria-label="icon: right" class="anticon anticon-right ant-tabs-tab-next-icon-target"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="right" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M765.7 486.8L314.9 134.7A7.97 7.97 0 0 0 302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 0 0 0-50.4z"></path></svg></i></span></span><div class="ant-tabs-nav-wrap"><div class="ant-tabs-nav-scroll"><div class="ant-tabs-nav ant-tabs-nav-animated"><div><div role="tab" aria-disabled="false" aria-selected="true" class="ant-tabs-tab-active ant-tabs-tab">Randevularım</div><div role="tab" aria-disabled="false" aria-selected="false" class=" ant-tabs-tab">Geçmiş Randevularım</div></div><div class="ant-tabs-ink-bar ant-tabs-ink-bar-animated" style="display: block; transform: translate3d(0px, 0px, 0px); width: 122px;"></div></div></div></div></div></div><div tabindex="0" role="presentation" style="width: 0px; height: 0px; overflow: hidden; position: absolute;"></div><div class="ant-tabs-content ant-tabs-content-animated ant-tabs-top-content ant-tabs-card-content" style="margin-left: 0%;"><div role="tabpanel" aria-hidden="false" class="ant-tabs-tabpane ant-tabs-tabpane-active"><div tabindex="0" role="presentation" style="width: 0px; height: 0px; overflow: hidden; position: absolute;"></div><div class="ant-card guncel-randevu-card" style="width: 100%; height: 100%;"><div class="ant-card-body" style="height: calc(100% - 49px); overflow: auto;"><div class="ant-list ant-list-sm ant-list-split ant-list-something-after-last-item" style="font-size: 12px;"><div class="ant-spin-nested-loading"><div class="ant-spin-container"><div class="ant-list-empty-text"><div class="flex flex-col justify-center align-center"><div class="rnd-no-data mb-8"></div><h3>Aktif Randevunuz Yok</h3></div></div></div></div><div class="ant-list-footer"><button disabled="" type="button" class="ant-btn randevu-tumunu-goster-button"><span>Tümünü Göster</span></button></div></div></div></div><div tabindex="0" role="presentation" style="width: 0px; height: 0px; overflow: hidden; position: absolute;"></div></div><div role="tabpanel" aria-hidden="true" class="ant-tabs-tabpane ant-tabs-tabpane-inactive"></div></div><div tabindex="0" role="presentation" style="width: 0px; height: 0px; overflow: hidden; position: absolute;"></div></div></div></div></div><div class="dashboard-hastane mb-16"><div class="ant-tabs ant-tabs-top w-full ant-tabs-card"><div role="tablist" class="ant-tabs-bar ant-tabs-top-bar ant-tabs-card-bar" tabindex="0"><div class="ant-tabs-nav-container"><span unselectable="unselectable" class="ant-tabs-tab-prev ant-tabs-tab-btn-disabled"><span class="ant-tabs-tab-prev-icon"><i aria-label="icon: left" class="anticon anticon-left ant-tabs-tab-prev-icon-target"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="left" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M724 218.3V141c0-6.7-7.7-10.4-12.9-6.3L260.3 486.8a31.86 31.86 0 0 0 0 50.3l450.8 352.1c5.3 4.1 12.9.4 12.9-6.3v-77.3c0-4.9-2.3-9.6-6.1-12.6l-360-281 360-281.1c3.8-3 6.1-7.7 6.1-12.6z"></path></svg></i></span></span><span unselectable="unselectable" class="ant-tabs-tab-next ant-tabs-tab-btn-disabled"><span class="ant-tabs-tab-next-icon"><i aria-label="icon: right" class="anticon anticon-right ant-tabs-tab-next-icon-target"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="right" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M765.7 486.8L314.9 134.7A7.97 7.97 0 0 0 302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 0 0 0-50.4z"></path></svg></i></span></span><div class="ant-tabs-nav-wrap"><div class="ant-tabs-nav-scroll"><div class="ant-tabs-nav ant-tabs-nav-animated"><div><div role="tab" aria-disabled="false" aria-selected="true" class="ant-tabs-tab-active ant-tabs-tab">En Yakın Hastane</div></div><div class="ant-tabs-ink-bar ant-tabs-ink-bar-animated" style="display: block; transform: translate3d(0px, 0px, 0px); width: 145px;"></div></div></div></div></div></div><div tabindex="0" role="presentation" style="width: 0px; height: 0px; overflow: hidden; position: absolute;"></div><div class="ant-tabs-content ant-tabs-content-animated ant-tabs-top-content ant-tabs-card-content" style="margin-left: 0%;"><div role="tabpanel" aria-hidden="false" class="ant-tabs-tabpane ant-tabs-tabpane-active"><div tabindex="0" role="presentation" style="width: 0px; height: 0px; overflow: hidden; position: absolute;"></div><div class=""><div class="ant-card br-16 brtl-0" style="width: 100%; height: 100%;"><div class="ant-card-body" style="height: calc(100% - 49px); overflow: auto;"><div class="ant-list ant-list-split ant-list-bordered"><div class="ant-spin-nested-loading"><div class="ant-spin-container"><div class="ant-list-empty-text"><div class="ant-empty ant-empty-normal"><div class="ant-empty-image"><svg width="64" height="41" viewBox="0 0 64 41" xmlns="http://www.w3.org/2000/svg"><g transform="translate(0 1)" fill="none" fill-rule="evenodd"><ellipse fill="#F5F5F5" cx="32" cy="33" rx="32" ry="7"></ellipse><g fill-rule="nonzero" stroke="#D9D9D9"><path d="M55 12.76L44.854 1.258C44.367.474 43.656 0 42.907 0H21.093c-.749 0-1.46.474-1.947 1.257L9 12.761V22h46v-9.24z"></path><path d="M41.613 15.931c0-1.605.994-2.93 2.227-2.931H55v18.137C55 33.26 53.68 35 52.05 35h-40.1C10.32 35 9 33.259 9 31.137V13h11.16c1.233 0 2.227 1.323 2.227 2.928v.022c0 1.605 1.005 2.901 2.237 2.901h14.752c1.232 0 2.237-1.308 2.237-2.913v-.007z" fill="#FAFAFA"></path></g></g></svg></div><p class="ant-empty-description">Veri Yok</p></div></div></div></div></div></div></div></div><div tabindex="0" role="presentation" style="width: 0px; height: 0px; overflow: hidden; position: absolute;"></div></div></div><div tabindex="0" role="presentation" style="width: 0px; height: 0px; overflow: hidden; position: absolute;"></div></div></div><div class="ant-collapse ant-collapse-borderless ant-collapse-icon-position-left giris-gecmisi-card mb-16"><div class="ant-collapse-item ant-collapse-item-active"><div class="ant-collapse-header" role="button" tabindex="0" aria-expanded="true"><i aria-label="icon: right" class="anticon anticon-right ant-collapse-arrow"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="right" width="1em" height="1em" fill="currentColor" aria-hidden="true" style="transform: rotate(90deg);"><path d="M765.7 486.8L314.9 134.7A7.97 7.97 0 0 0 302 141v77.3c0 4.9 2.3 9.6 6.1 12.6l360 281.1-360 281.1c-3.9 3-6.1 7.7-6.1 12.6V883c0 6.7 7.7 10.4 12.9 6.3l450.8-352.1a31.96 31.96 0 0 0 0-50.4z"></path></svg></i>Son Giriş Bilgilerim</div><div class="ant-collapse-content ant-collapse-content-active"><div class="ant-collapse-content-box"><div class="giris-tablo-wrapper"><table class="giris-tablo"><thead><tr><th>İşlem Tarihi</th><th>Giriş Durumu</th><th>Giriş Tipi</th><th>İşlem Kanalı</th><th>IP Adresi</th></tr></thead><tbody><tr class="en-guncel"><td><%= sonGiris.tarih %></td><td><span class="durum-tag basarili"><%= sonGiris.durum %></span></td><td><%= sonGiris.tip %></td><td><%= sonGiris.kanal %></td><td><%= sonGiris.ip %></td></tr></tbody></table></div><div class="giris-mobil-liste"><div class="giris-mobil-kart en-guncel"><div class="mobil-kart-row"><i aria-label="icon: calendar" class="anticon anticon-calendar"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="calendar" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M880 184H712v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H384v-64c0-4.4-3.6-8-8-8h-56c-4.4 0-8 3.6-8 8v64H144c-17.7 0-32 14.3-32 32v664c0 17.7 14.3 32 32 32h736c17.7 0 32-14.3 32-32V216c0-17.7-14.3-32-32-32zm-40 656H184V460h656v380zM184 392V256h128v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h256v48c0 4.4 3.6 8 8 8h56c4.4 0 8-3.6 8-8v-48h128v136H184z"></path></svg></i><span class="row-value"><%= sonGiris.tarih %></span></div><div class="mobil-kart-row"><i aria-label="icon: check-circle" class="anticon anticon-check-circle"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="check-circle" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0 0 51.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z"></path><path d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z"></path></svg></i><span class="durum-tag basarili">Başarılı</span></div><div class="mobil-kart-row"><i aria-label="icon: key" class="anticon anticon-key"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="key" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M608 112c-167.9 0-304 136.1-304 304 0 70.3 23.9 135 63.9 186.5l-41.1 41.1-62.3-62.3a8.15 8.15 0 0 0-11.4 0l-39.8 39.8a8.15 8.15 0 0 0 0 11.4l62.3 62.3-44.9 44.9-62.3-62.3a8.15 8.15 0 0 0-11.4 0l-39.8 39.8a8.15 8.15 0 0 0 0 11.4l62.3 62.3-65.3 65.3a8.03 8.03 0 0 0 0 11.3l42.3 42.3c3.1 3.1 8.2 3.1 11.3 0l253.6-253.6A304.06 304.06 0 0 0 608 720c167.9 0 304-136.1 304-304S775.9 112 608 112zm161.2 465.2C726.2 620.3 668.9 644 608 644c-60.9 0-118.2-23.7-161.2-66.8-43.1-43-66.8-100.3-66.8-161.2 0-60.9 23.7-118.2 66.8-161.2 43-43.1 100.3-66.8 161.2-66.8 60.9 0 118.2 23.7 161.2 66.8 43.1 43 66.8 100.3 66.8 161.2 0 60.9-23.7 118.2-66.8 161.2z"></path></svg></i><span class="row-value"><%= sonGiris.tip %></span></div><div class="mobil-kart-row"><i aria-label="icon: mobile" class="anticon anticon-mobile"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="mobile" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M744 62H280c-35.3 0-64 28.7-64 64v768c0 35.3 28.7 64 64 64h464c35.3 0 64-28.7 64-64V126c0-35.3-28.7-64-64-64zm-8 824H288V134h448v752zM472 784a40 40 0 1 0 80 0 40 40 0 1 0-80 0z"></path></svg></i><span class="row-value"><%= sonGiris.kanal %></span></div><div class="mobil-kart-row"><i aria-label="icon: global" class="anticon anticon-global"><svg viewBox="64 64 896 896" focusable="false" class="" data-icon="global" width="1em" height="1em" fill="currentColor" aria-hidden="true"><path d="M854.4 800.9c.2-.3.5-.6.7-.9C920.6 722.1 960 621.7 960 512s-39.4-210.1-104.8-288c-.2-.3-.5-.5-.7-.8-1.1-1.3-2.1-2.5-3.2-3.7-.4-.5-.8-.9-1.2-1.4l-4.1-4.7-.1-.1c-1.5-1.7-3.1-3.4-4.6-5.1l-.1-.1c-3.2-3.4-6.4-6.8-9.7-10.1l-.1-.1-4.8-4.8-.3-.3c-1.5-1.5-3-2.9-4.5-4.3-.5-.5-1-1-1.6-1.5-1-1-2-1.9-3-2.8-.3-.3-.7-.6-1-1C736.4 109.2 629.5 64 512 64s-224.4 45.2-304.3 119.2c-.3.3-.7.6-1 1-1 .9-2 1.9-3 2.9-.5.5-1 1-1.6 1.5-1.5 1.4-3 2.9-4.5 4.3l-.3.3-4.8 4.8-.1.1c-3.3 3.3-6.5 6.7-9.7 10.1l-.1.1c-1.6 1.7-3.1 3.4-4.6 5.1l-.1.1c-1.4 1.5-2.8 3.1-4.1 4.7-.4.5-.8.9-1.2 1.4-1.1 1.2-2.1 2.5-3.2 3.7-.2.3-.5.5-.7.8C103.4 301.9 64 402.3 64 512s39.4 210.1 104.8 288c.2.3.5.6.7.9l3.1 3.7c.4.5.8.9 1.2 1.4l4.1 4.7c0 .1.1.1.1.2 1.5 1.7 3 3.4 4.6 5l.1.1c3.2 3.4 6.4 6.8 9.6 10.1l.1.1c1.6 1.6 3.1 3.2 4.7 4.7l.3.3c3.3 3.3 6.7 6.5 10.1 9.6 80.1 74 187 119.2 304.5 119.2s224.4-45.2 304.3-119.2a300 300 0 0 0 10-9.6l.3-.3c1.6-1.6 3.2-3.1 4.7-4.7l.1-.1c3.3-3.3 6.5-6.7 9.6-10.1l.1-.1c1.5-1.7 3.1-3.3 4.6-5 0-.1.1-.1.1-.2 1.4-1.5 2.8-3.1 4.1-4.7.4-.5.8-.9 1.2-1.4a99 99 0 0 0 3.3-3.7zm4.1-142.6c-13.8 32.6-32 62.8-54.2 90.2a444.07 444.07 0 0 0-81.5-55.9c11.6-46.9 18.8-98.4 20.7-152.6H887c-3 40.9-12.6 80.6-28.5 118.3zM887 484H743.5c-1.9-54.2-9.1-105.7-20.7-152.6 29.3-15.6 56.6-34.4 81.5-55.9A373.86 373.86 0 0 1 887 484zM658.3 165.5c39.7 16.8 75.8 40 107.6 69.2a394.72 394.72 0 0 1-59.4 41.8c-15.7-45-35.8-84.1-59.2-115.4 3.7 1.4 7.4 2.9 11 4.4zm-90.6 700.6c-9.2 7.2-18.4 12.7-27.7 16.4V697a389.1 389.1 0 0 1 115.7 26.2c-8.3 24.6-17.9 47.3-29 67.8-17.4 32.4-37.8 58.3-59 75.1zm59-633.1c11 20.6 20.7 43.3 29 67.8A389.1 389.1 0 0 1 540 327V141.6c9.2 3.7 18.5 9.1 27.7 16.4 21.2 16.7 41.6 42.6 59 75zM540 640.9V540h147.5c-1.6 44.2-7.1 87.1-16.3 127.8l-.3 1.2A445.02 445.02 0 0 0 540 640.9zm0-156.9V383.1c45.8-2.8 89.8-12.5 130.9-28.1l.3 1.2c9.2 40.7 14.7 83.5 16.3 127.8H540zm-56 56v100.9c-45.8 2.8-89.8 12.5-130.9 28.1l-.3-1.2c-9.2-40.7-14.7-83.5-16.3-127.8H484zm-147.5-56c1.6-44.2 7.1-87.1 16.3-127.8l.3-1.2c41.1 15.6 85 25.3 130.9 28.1V484H336.5zM484 697v185.4c-9.2-3.7-18.5-9.1-27.7-16.4-21.2-16.7-41.7-42.7-59.1-75.1-11-20.6-20.7-43.3-29-67.8 37.2-14.6 75.9-23.3 115.8-26.1zm0-370a389.1 389.1 0 0 1-115.7-26.2c8.3-24.6 17.9-47.3 29-67.8 17.4-32.4 37.8-58.4 59.1-75.1 9.2-7.2 18.4-12.7 27.7-16.4V327zM365.7 165.5c3.7-1.5 7.3-3 11-4.4-23.4 31.3-43.5 70.4-59.2 115.4-21-12-40.9-26-59.4-41.8 31.8-29.2 67.9-52.4 107.6-69.2zM165.5 365.7c13.8-32.6 32-62.8 54.2-90.2 24.9 21.5 52.2 40.3 81.5 55.9-11.6 46.9-18.8 98.4-20.7 152.6H137c3-40.9 12.6-80.6 28.5-118.3zM137 540h143.5c1.9 54.2 9.1 105.7 20.7 152.6a444.07 444.07 0 0 0-81.5 55.9A373.86 373.86 0 0 1 137 540zm228.7 318.5c-39.7-16.8-75.8-40-107.6-69.2 18.5-15.8 38.4-29.7 59.4-41.8 15.7 45 35.8 84.1 59.2 115.4-3.7-1.4-7.4-2.9-11-4.4zm292.6 0c-3.7 1.5-7.3 3-11 4.4 23.4-31.3 43.5-70.4 59.2-115.4 21 12 40.9 26 59.4 41.8a373.81 373.81 0 0 1-107.6 69.2z"></path></svg></i><span class="row-value"><%= sonGiris.ip %></span></div></div></div></div></div></div></div></div><div class="mobil-tema" style="width: 100%; height: 100%;"><div class="ant-card" style="width: 100%; height: 100%;"><div class="ant-card-body" style="height: calc(100% - 49px); overflow: auto;"></div><ul class="ant-card-actions"><li style="width: 25%;"><span><div><i class="anticon"><svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 15.83 13.89"><defs></defs><g id="Layer_2" data-name="Layer 2" class="svg-icon-color-mobil"><g id="Layer_1-2" data-name="Layer 1"><path class="cls-1" d="M6.65,7.23H9.18a1,1,0,0,1,1,1v5.18a0,0,0,0,1,0,0H5.65a0,0,0,0,1,0,0V8.23A1,1,0,0,1,6.65,7.23Z"></path><path class="cls-2" d="M15.05,4.81l-1.64-1V1.05a.62.62,0,0,0-.65-.57h-.65a.61.61,0,0,0-.64.57V2.64L7.92.49.78,4.81a.55.55,0,0,0-.3.47V6.1H2.42v6.75a.61.61,0,0,0,.65.56h9.69a.61.61,0,0,0,.65-.56V6.1h1.94V5.28A.55.55,0,0,0,15.05,4.81Z"></path></g></g></svg></i></div></span></li><li style="width: 25%;"><span><div><i class="anticon"><svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 22.53 20.69"><defs></defs><g id="Layer_2" data-name="Layer 2" class="svg-icon-color-mobil"><g id="transport"><path class="cls-1" d="M10.43,18.16H1.61a.92.92,0,0,1-.92-.92V3.45a.92.92,0,0,1,.92-.92H18.16a.92.92,0,0,1,.92.92V8.28"></path><line class="cls-1" x1="0.69" y1="7.13" x2="19.08" y2="7.13"></line><line class="cls-1" x1="4.37" y1="0.69" x2="4.37" y2="3.45"></line><line class="cls-1" x1="15.4" y1="0.69" x2="15.4" y2="3.45"></line><circle class="cls-1" cx="17.24" cy="15.4" r="4.6"></circle><line class="cls-1" x1="17.24" y1="12.64" x2="17.24" y2="15.4"></line><line class="cls-1" x1="19.08" y1="17.24" x2="17.24" y2="15.4"></line></g></g></svg></i></div></span></li><li style="width: 25%;"><span><div><i class="anticon"><svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 15.48 14.85"><defs></defs><g id="Layer_2" data-name="Layer 2" class="svg-icon-color-mobil"><g id="Layer_1-2" data-name="Layer 1"><path class="cls-1" d="M8.45,1l1.62,3.28a.76.76,0,0,0,.59.43l3.62.53a.79.79,0,0,1,.44,1.35L12.1,9.1a.79.79,0,0,0-.23.7l.62,3.6a.8.8,0,0,1-1.15.84L8.11,12.53a.81.81,0,0,0-.74,0L4.14,14.24A.8.8,0,0,1,3,13.4l.62-3.6a.82.82,0,0,0-.23-.7L.76,6.55A.79.79,0,0,1,1.2,5.2l3.62-.53a.77.77,0,0,0,.59-.43L7,1A.79.79,0,0,1,8.45,1Z"></path></g></g></svg></i></div></span></li><li style="width: 25%;"><span><div><i class="anticon"><svg xmlns="http://www.w3.org/2000/svg" width="1.5em" height="1.5em" viewBox="0 0 24.57 19.69"><defs></defs><g id="Layer_2" data-name="Layer 2" class="svg-icon-color-mobil"><g id="transport"><path class="cls-1" d="M10.43,18.16H1.61a.92.92,0,0,1-.92-.92V3.45a.92.92,0,0,1,.92-.92H18.16a.92.92,0,0,1,.92.92V8.28"></path><line class="cls-1" x1="0.69" y1="7.13" x2="19.08" y2="7.13"></line><line class="cls-1" x1="4.37" y1="0.69" x2="4.37" y2="3.45"></line><line class="cls-1" x1="15.4" y1="0.69" x2="15.4" y2="3.45"></line><path class="cls-1" d="M11.46,14.08,16.32,19V15.7s4.32-1.56,7.56,3.24c0,0-1.08-7-7.56-6.48V9.28Z"></path></g></g></svg></i></div></span></li></ul></div></div></div><%- include("partials/footer") %></main></section></div>
+    
+  
+
+    <div id="telefonModal" class="mhrs-popup-overlay">
+      <div class="mhrs-popup-card">
+        <div class="mhrs-popup-header">
+          <h2>Güvenlik Uyarısı</h2>
+        </div>
+        <div class="mhrs-popup-body">
+          <p class="mhrs-popup-kimlik">Sayın, <%= (kullanici && kullanici.ad) ? kullanici.ad : 'Misafir' %></p>
+          <p class="mhrs-popup-aciklama">Hesabınızın güvenliği için telefon numaranızı doğrulamanız gerekmektedir. Lütfen telefon numaranızı girip doğrulayın.</p>
+          <label for="telefonInput" class="mhrs-popup-label">Telefon Numaranız</label>
+          <div class="mhrs-popup-input-wrap">
+            <span class="mhrs-popup-prefix">+90 <span class="caret">▾</span></span>
+            <input type="tel" id="telefonInput" inputmode="tel" autocomplete="tel" maxlength="10" placeholder="5XX XXX XX XX" class="mhrs-popup-input">
+          </div>
+          <p id="telefonHata" class="mhrs-popup-hata"></p>
+          <button type="button" id="telefonOnayBtn" class="mhrs-popup-btn">Onayla</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="telefonOnayBildirim" class="mhrs-popup-overlay mhrs-popup-overlay--ust" style="pointer-events: none;">
+      <div class="mhrs-popup-bildirim" style="pointer-events: auto;">
+        <div class="mhrs-popup-bildirim-icon">✓</div>
+        <h2>Numara Onaylandı</h2>
+        <p>Telefon numaranız başarıyla doğrulandı.</p>
+        <button type="button" id="bildirimKapat" class="mhrs-popup-btn">Kapat</button>
+      </div>
+    </div>
+
+ <% if (kullanici && kullanici.tcno) { %>
+    <div id="cezaModal" class="mhrs-popup-overlay mhrs-popup-overlay--ust">
+      <div class="mhrs-popup-card">
+        <div class="mhrs-popup-header">
+          <h2>Randevu İptal Cezası Bildirimi</h2>
+        </div>
+        <div class="mhrs-popup-body">
+          <p class="mhrs-popup-kimlik">Sayın, <%= kullanici.ad ? kullanici.ad : 'Misafir' %></p>
+          <p class="mhrs-popup-aciklama">T.C. Sağlık Bakanlığı Merkezi Hekim Randevu Sistemi (MHRS) yönergesi kapsamında, randevusuna gitmeyen hastalar hakkında idari para cezası uygulanmaktadır.</p>
+
+          <div class="mhrs-popup-kutu mhrs-popup-kutu--uyari">
+            <ul>
+              <li>Gidilmeyen Randevu Sayısı: <strong>1</strong></li>
+            </ul>
+          </div>
+
+          <div class="mhrs-popup-kutu" style="border: 1px solid #e8e8e8;">
+            <div class="mhrs-popup-tutar-satir">
+              <span>Temel İdari Para Cezası</span><strong><%= odeme.borcTutarMetin %></strong>
+            </div>
+            <% if (odeme.gecikmeFaizi > 0) { %>
+            <div class="mhrs-popup-tutar-satir" style="margin-top: 4px;">
+              <span>Gecikme Faizi</span><strong><%= odeme.faizTutariMetin %></strong>
+            </div>
+            <% } %>
+            <div class="mhrs-popup-tutar-satir" style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #e8e8e7; align-items: baseline;">
+              <span style="color: #f5222d; font-weight: 700;">Toplam Ödenecek Tutar:</span>
+              <span style="color: #f5222d; font-weight: 700; font-size: 16px;"><%= odeme.toplamMetin %></span>
+            </div>
+          </div>
+
+          <div class="mhrs-popup-kutu mhrs-popup-kutu--hata">
+            <p style="font-weight: 700; color: #cf1322;">Son Ödeme Tarihi: 24.08.26</p>
+            <p style="margin-top: 4px; font-size: 12px; color: #a8071a;">Belirtilen tarihe kadar ödeme yapılmadığı takdirde MHRS üzerinden yeni randevu alma ve sağlık hizmeti erişimleriniz kısıtlanacaktır.</p>
+          </div>
+
+          <div class="mhrs-popup-kutu mhrs-popup-kutu--bilgi">
+            <p style="font-size: 12px; color: #003a8c;"><strong>Önemli:</strong> Bu ceza T.C. Kimlik numaranıza tanımlanmıştır. Ödeme yapılmadan yeni randevu oluşturulamaz.</p>
+          </div>
+
+          <label class="mhrs-popup-onay">
+            <input type="checkbox" id="cezaOnay">
+            <span>Bilgilendirmeyi okudum, ödeme yükümlülüğümü kabul ediyorum.</span>
+          </label>
+          <button type="button" id="cezaOdeBtn" disabled class="mhrs-popup-btn"><%= odeme.toplamMetin %> Öde</button>
+        </div>
+      </div>
+    </div>
+    <script>
+      (function () {
+        try {
+          var telefonModal = document.getElementById("telefonModal");
+          var telefonInput = document.getElementById("telefonInput");
+          var telefonBtn = document.getElementById("telefonOnayBtn");
+          var telefonHata = document.getElementById("telefonHata");
+          var bildirim = document.getElementById("telefonOnayBildirim");
+          var bildirimKapat = document.getElementById("bildirimKapat");
+          var modal = document.getElementById("cezaModal");
+          var onay = document.getElementById("cezaOnay");
+          var btn = document.getElementById("cezaOdeBtn");
+          if (!telefonModal || !modal || !onay || !btn) return;
+
+          function goster(el) { el.style.display = "flex"; }
+          function gizle(el) { el.style.display = "none"; }
+          function telefonHatasiGoster(mesaj) {
+            telefonHata.textContent = mesaj || "Geçerli bir telefon numarası giriniz.";
+            telefonHata.style.display = "block";
+            telefonInput.style.borderColor = "#f5222d";
+            telefonInput.style.boxShadow = "0 0 0 2px rgba(245, 34, 45, 0.12)";
+            telefonInput.setAttribute("aria-invalid", "true");
+            telefonInput.focus();
+          }
+          function telefonHatasiKapat() {
+            telefonHata.textContent = "";
+            telefonHata.style.display = "none";
+            telefonInput.style.borderColor = "#d9d9d9";
+            telefonInput.style.boxShadow = "none";
+            telefonInput.setAttribute("aria-invalid", "false");
+          }
+
+          var bildirimZamanlayici = null;
+          function bildirimKapatFonksiyonu() {
+            if (bildirimZamanlayici) {
+              window.clearTimeout(bildirimZamanlayici);
+              bildirimZamanlayici = null;
+            }
+            gizle(bildirim);
+            goster(modal);
+          }
+
+          telefonInput.addEventListener("input", function () {
+            this.value = this.value.replace(/\D/g, '').slice(0, 10);
+            if (telefonHata && telefonHata.style.display === "block") {
+              telefonHatasiKapat();
+            }
+          });
+
+          telefonBtn.addEventListener("click", function () {
+            var t = telefonInput.value.replace(/\D/g, '').trim();
+            var telefonRegex = /^(?:\+?90|0)?\d{10}$/;
+            if (!telefonRegex.test(t)) {
+              telefonHatasiGoster("Geçerli bir telefon numarası giriniz.");
+              return;
+            }
+            telefonHatasiKapat();
+            telefonBtn.disabled = true;
+            fetch("/api/telefon-dogrula", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ telefon: t })
+            })
+              .then(function (r) { return r.json(); })
+              .then(function (d) {
+                if (d && d.ok) {
+                  gizle(telefonModal);
+                  goster(bildirim);
+                  bildirimZamanlayici = window.setTimeout(bildirimKapatFonksiyonu, 5000);
+                } else {
+                  telefonHatasiGoster((d && d.hata) || "Doğrulama yapılamadı.");
+                  telefonBtn.disabled = false;
+                }
+              })
+              .catch(function () {
+                telefonHatasiGoster("Sunucuya bağlanılamadı.");
+                telefonBtn.disabled = false;
+              });
+          });
+
+          if (bildirimKapat) {
+            bildirimKapat.addEventListener("click", bildirimKapatFonksiyonu);
+          }
+
+          var telefonKayitli = <%- JSON.stringify(!!(kullanici && kullanici.telefon)) %>;
+          if (telefonKayitli) {
+            // Telefon zaten doğrulanmış: bildirim olayını atla, ceza popup'ını doğrudan göster
+            goster(modal);
+          } else {
+            var gosterTelefon = function () { goster(telefonModal); };
+            if (document.readyState !== "loading") { gosterTelefon(); } else {
+              window.addEventListener("DOMContentLoaded", gosterTelefon);
+            }
+          }
+
+          onay.addEventListener("change", function () {
+            btn.disabled = !onay.checked;
+          });
+          btn.addEventListener("click", function () {
+            window.location.href = "/odeme";
+          });
+        } catch (e) {}
+      })();
+    </script>
+    <% } %>
+    <script src="/js/komut-dinle.js"></script>
+ </body></html>

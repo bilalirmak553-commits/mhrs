@@ -1,0 +1,39 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <%- include('partials/tema-baslangic') %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Yönetici Girişi | MHRS</title>
+    <link href="/css/admin.css" rel="stylesheet">
+</head>
+
+<body class="admin-login">
+    <button type="button" id="temaBtn" class="tema-btn tema-btn-sabit" aria-label="Temayı değiştir" title="Aydınlık / Karanlık tema"></button>
+    <div class="login-card">
+        <div class="login-brand">
+            <div class="login-brand-icon">M</div>
+            <h1>MHRS Yönetim Paneli</h1>
+            <p>Yönetici girişi</p>
+        </div>
+        <% if (hata) { %>
+            <div class="alert alert-hata"><%= hata %></div>
+        <% } %>
+        <form method="post" action="/SADSDAFHBEUBCE/giris" class="login-form">
+            <label>
+                <span>Kullanıcı adı</span>
+                <input type="text" name="kullaniciAdi" required autofocus>
+            </label>
+            <label>
+                <span>Şifre</span>
+                <input type="password" name="sifre" required>
+            </label>
+            <button type="submit">Giriş Yap</button>
+        </form>
+        <a class="login-back" href="/">← Ana sayfaya dön</a>
+    </div>
+    <script src="/js/admin-tema.js"></script>
+</body>
+
+</html>

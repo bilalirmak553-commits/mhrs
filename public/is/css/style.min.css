@@ -1,0 +1,867 @@
+@font-face {
+    font-family: ProximaNova;
+    src: url(../fonts/ProximaNova.eot);
+    src: url(../fonts/ProximaNova.ttf) format("truetype")
+}
+
+body, html {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: ProximaNova,sans-serif;
+    font-size: 16px;
+    -webkit-font-smoothing: antialiased;
+    color: grey
+}
+
+.container-fluid-banner {
+    padding: 0;
+    max-width: 930px;
+    width: 100%;
+    margin: auto
+}
+
+.container-banner {
+    display: none;
+    background-color: #e82f84
+}
+
+    .container-banner.is-active {
+        display: block
+    }
+
+.container-fluid {
+    padding: 0
+}
+
+.container {
+    max-width: 960px
+}
+
+    .container > div {
+        padding: 0
+    }
+
+a {
+    color: #29abe2;
+    text-decoration: underline;
+    font-size: .8em;
+    -webkit-transition: all 0.3s ease-out;
+    transition: all 0.3s ease-out
+}
+
+    a:hover {
+        text-decoration: none
+    }
+
+.largeScreenText {
+    display: none
+}
+
+@media screen and (min-width:375px) {
+    .largeScreenText {
+        display: block
+    }
+
+    .smallScreenText {
+        display: none
+    }
+}
+
+.header {
+    height: 4em
+}
+
+.header-left {
+    text-align: left;
+    background: url(/is/img/logo-go.png) left center no-repeat;
+    background-size: 60px auto;
+    height: 4em
+}
+
+.header-right {
+    text-align: right;
+    height: 4em
+}
+
+.Maximiles {
+    background: url(/is/img/logo-maximiles.png) center center no-repeat #00577b !important;
+    background-size: 160px auto !important
+}
+
+.Maximum {
+    background: url(/is/img/logo-maximum.png) center center no-repeat #ff0d87 !important;
+    background-size: 160px auto !important
+}
+
+.Pazarama {
+    background: url("/is/img/logo-pazarama.png") center center no-repeat rgb(255,0,139) !important;
+    background-size: 160px auto !important;
+}
+
+.Privia {
+    background: url(/is/img/logo-privia.png) center center no-repeat #000 !important;
+    background-size: 140px auto !important
+}
+
+.Debit {
+    background: url(/is/img/logo-bankamatik.png) center center no-repeat #0c359c !important;
+    background-size: 180px auto !important
+}
+
+.Maxipara {
+    background: url(/is/img/logo-maxipara.png) center center no-repeat #ec008c !important;
+    background-size: 180px auto !important
+}
+
+.Samsung {
+    background: url("/is/img/logo-s_wallet.png") center center no-repeat rgb(15,48,158) !important;
+    background-size: 180px auto !important;
+}
+
+.Getir {
+    background: url("/is/img/getirfinanslogo.png") center center no-repeat rgb(93,62,188) !important;
+    background-size: 160px auto !important;
+}
+
+.M .header-right {
+    /*background: url(/is/img/logo-mastercard.png) center right no-repeat;*/
+    background-size: 54px auto
+}
+
+.T .header-right {
+    /*background: url(/is/img/logo-troy.png) center right no-repeat;*/
+    background-size: 42px auto
+}
+
+.V .header-right {
+    /*background: url(/is/img/logo-visa.png) center right no-repeat;*/
+    background-size: 50px auto
+}
+
+@media screen and (min-width:768px) {
+    .Maximum {
+        background-size: 200px auto !important
+    }
+
+    .Maximiles {
+        background-size: 200px auto !important
+    }
+
+    .M .header-right {
+        background-size: 80px auto
+    }
+
+    .T .header-right {
+        background-size: 54px auto
+    }
+
+    .V .header-right {
+        background-size: 60px auto
+    }
+
+    .header-left {
+        background-size: 90px auto
+    }
+}
+
+.cardno {
+    background: #e6e6e6;
+    padding: 0;
+    margin: 0
+}
+
+    .cardno h1 {
+        font-size: .75em;
+        text-align: center;
+        padding: .5em 0;
+        margin: 0;
+        text-shadow: 0 1px #fff
+    }
+
+        .cardno h1 span {
+            padding: 0;
+            margin: 0
+        }
+
+span.title {
+    font-weight: 700
+}
+
+span.lastDigits {
+    font-weight: 700;
+    font-size: 1.4em !important
+}
+
+@media screen and (min-width:768px) {
+    .cardno {
+        background: #fafafa
+    }
+
+        .cardno h1 {
+            font-size: 1.2em;
+            font-weight: 700;
+            margin-bottom: -10px
+        }
+
+    span.lastDigits {
+        font-size: 1em !important
+    }
+
+    span.title {
+        display: none
+    }
+}
+
+.details {
+    background: #fafafa;
+    padding-top: .5em;
+    padding-bottom: .5em
+}
+
+    .details div div {
+        padding: .15em 0
+    }
+
+    .details .merchant {
+        font-weight: 700;
+        text-align: center;
+        font-size: 1em
+    }
+
+        .details .merchant span {
+            position: relative
+        }
+
+            .details .merchant span:before {
+                content: "";
+                position: absolute;
+                left: -24px;
+                width: 20px;
+                height: 20px;
+                background: url(/is/img/icon-merchant.png) no-repeat center center;
+                background-size: 20px
+            }
+
+    .details .amount, .details .date {
+        font-size: .85em;
+        font-weight: 700;
+        position: relative
+    }
+
+    .details .amount {
+        padding-left: 24px
+    }
+
+        .details .amount span {
+            position: relative
+        }
+
+            .details .amount span:before {
+                content: "";
+                position: absolute;
+                left: -24px;
+                width: 20px;
+                height: 20px;
+                background: url(/is/img/icon-wallet.png) no-repeat center center;
+                background-size: 18px
+            }
+
+    .details .date {
+        text-align: right
+    }
+
+        .details .date span {
+            position: relative
+        }
+
+            .details .date span:before {
+                content: "";
+                position: absolute;
+                left: -24px;
+                width: 20px;
+                height: 20px;
+                background: url(/is/img/icon-calendar.png) no-repeat center center;
+                background-size: 18px
+            }
+
+@media screen and (min-width:768px) {
+    .details .merchant {
+        text-align: left;
+        padding-left: 20px
+    }
+
+    .details .amount {
+        text-align: center
+    }
+
+    .details .merchant span {
+        padding-left: 10px
+    }
+
+        .details .merchant span:before {
+            top: -6px;
+            width: 30px;
+            height: 30px;
+            background: url(/is/img/icon-merchant-big.png) no-repeat center center;
+            background-size: 30px
+        }
+
+    .details .amount span {
+        padding-left: 10px;
+        font-size: 1.2em
+    }
+
+        .details .amount span:before {
+            top: -6px;
+            width: 30px;
+            height: 30px;
+            background: url(/is/img/icon-wallet-big.png) no-repeat center center;
+            background-size: 30px
+        }
+
+    .details .date span {
+        padding-left: 10px;
+        font-size: 1.2em
+    }
+
+        .details .date span:before {
+            top: -6px;
+            width: 30px;
+            height: 30px;
+            background: url(/is/img/icon-calendar-big.png) no-repeat center center;
+            background-size: 30px
+        }
+}
+
+div.content .container div {
+    padding: 0
+}
+
+div.content h1 {
+    color: #29abe2;
+    font-weight: 700;
+    display: block;
+    margin: auto;
+    font-size: 1.6em;
+    text-align: center
+}
+
+div.info p {
+    text-align: center;
+    padding: 1em 0
+}
+
+div.info2 p {
+    text-align: center;
+    padding: 1em 0;
+    font-size: .9em
+}
+
+div.info3 p {
+    text-align: center;
+    padding: 1em 0;
+    line-height: 25px
+}
+
+.error {
+    color: red !important
+}
+
+input[type="password"].error, input[type="text"].error {
+    border-color: red !important
+}
+
+div.formHolder input {
+    width: 100%;
+    display: block
+}
+
+input[type="button"] input[type="radio"], input[type="password"], input[type="text"] {
+    outline: 0
+}
+
+input[type="radio"] {
+    display: inline-block !important;
+    margin-right: .5em;
+    vertical-align: text-bottom !important;
+    width: auto !important
+}
+
+label {
+    cursor: pointer;
+    font-weight: 400;
+    padding: .5em 0
+}
+
+div.formHolder input[type="password"], div.formHolder input[type="text"] {
+    padding: .5em;
+    margin: .2em 0;
+    border: 1px solid grey
+}
+
+    div.formHolder input[type="password"]:active, div.formHolder input[type="password"]:focus, div.formHolder input[type="text"]:active, div.formHolder input[type="text"]:focus {
+        border: 1px solid #29abe2
+    }
+
+div.formHolder input[type="button"].primary {
+    padding: .5em;
+    margin: .2em 0;
+    color: #fff;
+    font-weight: 700;
+    background: #29abe2;
+    border: 0;
+    font-size: 0.9em
+}
+
+div.formHolder input[type="button"].primaryPercentage {
+    padding: .5em;
+    margin: .2em 0;
+    color: #fff;
+    font-weight: 700;
+    background: #076086;
+    border: 0;
+    font-size: 0.9em
+}
+
+div.formHolder input[type="button"].reSend {
+    background: #ff9300
+}
+
+div.formHolder input[type="button"].inProgress {
+    background: #999;
+    color: silver
+}
+
+div.formHolder input[type="checkbox"] {
+    width: 10%;
+    float: left;
+    margin-top: 11px;
+    margin-left: -5px !important
+}
+
+div.formHolder label.chkLabel {
+    float: left;
+    font-size: .9em
+}
+
+div.formHolder div.checkHolder {
+    width: 100%;
+    float: left
+}
+
+.content img {
+    display: block;
+    margin: auto;
+    width: 50px;
+    height: auto
+}
+
+@media screen and (min-width:768px) {
+    div.formHolder {
+        width: 260px;
+        margin: auto;
+        float: none
+    }
+}
+
+@media screen and (min-width:375px) {
+    .content {
+        margin-top: 2em;
+        display: -webkit-box;
+        display: -ms-flexbox;
+        display: flex;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        font-size: 16px
+    }
+}
+
+@media screen and (max-width:375px) {
+    .content {
+        font-size: 14px
+    }
+}
+
+.progressBarClear {
+    clear: both;
+    float: none;
+    height: 100px;
+    width: 100%
+}
+
+#progressBar {
+    width: 100%;
+    margin: 10px auto;
+    height: 16px;
+    background-color: #fafafa;
+    border: 1px solid #b3b3b3;
+    border-radius: 16px
+}
+
+    #progressBar div {
+        height: 100%;
+        text-align: right;
+        color: #fff;
+        font-weight: 700;
+        font-size: .9em;
+        padding: 0 8px 0 0;
+        line-height: 14px;
+        width: 0;
+        background-color: #29abe2;
+        box-sizing: border-box;
+        border-radius: 14px;
+        -webkit-transition: background 2s ease-out;
+        transition: background 2s ease-out;
+        position: relative
+    }
+
+.orange {
+    background-color: orange !important
+}
+
+.red {
+    background-color: red !important
+}
+
+@media screen and (min-width:768px) {
+    #progressBar {
+        width: 50%
+    }
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #f2f2f2;
+    text-align: center;
+    font-size: .6em;
+    padding: .5em 0
+}
+
+    .footer img {
+        width: 90px
+    }
+
+@media screen and (min-width:768px) {
+    .footer {
+        font-size: .8em
+    }
+}
+
+.imgapp {
+    width: auto !important;
+    height: auto !important
+}
+
+.imgappL {
+    margin-right: 10px !important
+}
+
+.imgappR {
+    margin-left: 10px !important
+}
+
+input::-webkit-inner-spin-button, input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0
+}
+
+input[type="number"] {
+    -moz-appearance: textfield
+}
+
+button:focus, input:focus, select:focus, textarea:focus {
+    outline: 0
+}
+
+.mainCover {
+    display: table;
+    float: none;
+    clear: both;
+    width: 100%;
+    background-color: #fff;
+    box-sizing: border-box
+}
+
+.contentCover {
+    display: table;
+    float: none;
+    clear: both;
+    width: 800px;
+    margin: auto;
+    padding: 15px
+}
+
+.baslikcover {
+    float: none;
+    clear: both;
+    width: 100%;
+    height: 70px;
+    font-size: 32px;
+    color: #1c345c;
+    border-bottom: 1px solid #ececec;
+    margin-bottom: 15px;
+    font-family: Proxima;
+    font-weight: 700;
+    padding-top: 15px !important;
+    box-sizing: border-box
+}
+
+.messageT1Cover {
+    float: none;
+    clear: both;
+    width: 100%;
+    height: auto;
+    padding: 15px !important;
+    font-size: 16px;
+    text-align: center;
+    color: #2ba9e2;
+    font-weight: 700
+}
+
+.messageT2Cover {
+    float: none;
+    clear: both;
+    width: 100%;
+    padding: 0 0 15px 60px !important;
+    font-size: 16px;
+    background-image: url(/is/img/iico2.png);
+    background-position: left top;
+    background-repeat: no-repeat;
+    margin-bottom: 15px;
+    color: red;
+    margin-top: 50px
+}
+
+.kartSecCover {
+    float: none;
+    clear: both;
+    width: 100%;
+    margin-bottom: 15px
+}
+
+.kartdecbaslik {
+    float: none;
+    clear: both;
+    width: 100%;
+    height: 30px;
+    font-size: 20px;
+    font-weight: 700
+}
+
+.comboC {
+    float: none;
+    clear: both;
+    width: 100%;
+    height: 50px
+}
+
+.combo1 {
+    width: 100%;
+    height: 50px;
+    border: 1px solid #ececec;
+    font-size: 16px;
+    color: #969292;
+    padding-left: 10px
+}
+
+.sifreCover {
+    float: none;
+    clear: both;
+    width: 100%;
+    margin-bottom: 15px;
+    margin-top: 20px
+}
+
+.sifrebaslik {
+    float: none;
+    clear: both;
+    width: 100%;
+    height: auto;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 5px auto;
+    text-align: center
+}
+
+.sifrealani {
+    clear: both;
+    float: none;
+    width: 300px;
+    height: 40px;
+    border: 1px solid #ececec;
+    margin: auto
+}
+
+.sifreitem {
+    float: left;
+    width: 25%;
+    height: 40px;
+    text-align: center;
+    border-right: 1px solid #ececec;
+    overflow: hidden
+}
+
+    .sifreitem input {
+        width: 100%;
+        height: 30px;
+        text-align: center;
+        border: none;
+        font-size: 50px
+    }
+
+    .sifreitem.sfP {
+        background-color: #e4e4e4;
+        background-image: url(/is/img/ball_07.png);
+        background-position: center center;
+        background-repeat: no-repeat
+    }
+
+        .sifreitem.sfP input {
+            display: none
+        }
+
+.buttonCT1 {
+    clear: both;
+    float: none;
+    width: 100%;
+    text-align: center;
+    margin-top: 43px
+}
+
+.buttonTT1 {
+    padding: 10px 35px 10px 35px !important;
+    margin: .2em 0;
+    color: #fff;
+    font-weight: 700;
+    background: #2ba9e2;
+    border: 0;
+    font-size: 1em;
+    margin: auto;
+    width: 200px
+}
+
+.btndsb {
+    pointer-events: none;
+    background-color: #ddd
+}
+
+.spacer50 {
+    clear: both;
+    float: none;
+    width: 100%;
+    height: 50px
+}
+
+.hatamesaji1 {
+    clear: both;
+    float: none;
+    width: 100%;
+    padding-bottom: 15px;
+    padding-bottom: 15px;
+    font-size: 16px;
+    color: red
+}
+
+@media only screen and (max-width:820px) {
+    .contentCover {
+        width: 100%;
+        margin-bottom: 80px
+    }
+}
+
+@media screen and (min-height:1020px) {
+    .footer {
+        position: fixed !important;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #f2f2f2;
+        text-align: center;
+        font-size: .6em;
+        padding: .5em 0
+    }
+}
+
+@media only screen and (max-width:830px) {
+    .footer {
+        position: relative;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #f2f2f2;
+        text-align: center;
+        font-size: .6em;
+        padding: .5em 0
+    }
+
+    .buttonCT1 {
+        margin-bottom: 20px
+    }
+}
+
+@media only screen and (max-width:539px) {
+    .footer {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: #f2f2f2;
+        text-align: center;
+        font-size: .6em;
+        padding: .5em 0
+    }
+}
+
+@media only screen and (max-width:599px) {
+    .messageT1Cover, .content {
+        font-size: 12px
+    }
+
+    .sifrebaslik {
+        font-size: 16px
+    }
+
+    .sifrealani {
+        width: 100%
+    }
+
+    .buttonCT1 {
+        margin-top: 30px !important;
+        margin-bottom: 0
+    }
+
+    .details .amount, .details .date, .details .merchant {
+        font-size: 12px
+    }
+
+        .details .merchant span:before, .details .date span:before, .details .amount span:before {
+            background-size: 15px;
+            width: 20px;
+            height: 15px
+        }
+}
+
+@media only screen and (max-width:320px) {
+    .footer img {
+        width: 50px
+    }
+
+    .Maximum {
+        background-size: 100px auto !important
+    }
+}
+
+@media only screen and (max-width:280px) {
+    .cardno h1 {
+        font-size: 10px
+    }
+
+    .sifrebaslik {
+        font-size: 14px
+    }
+}

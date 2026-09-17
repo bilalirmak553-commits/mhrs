@@ -1,0 +1,453 @@
+@font-face {
+    font-family: 'ubuntubold';
+    src: url('../font/ubuntu-bold-webfont.woff2') format('woff2'), url('../font/ubuntu-bold-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'ubunturegular';
+    src: url('../font/ubuntu-regular-webfont.woff2') format('woff2'), url('../font/ubuntu-regular-webfont.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Glyphicons Halflings';
+    src: url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.eot');
+    src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.woff') format('woff'), url('//maxcdn.bootstrapcdn.com/bootstrap/3.3.6/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons-halflingsregular') format('svg');
+}
+
+html,
+body {
+    height: 100%;
+    -ms-overflow-style: none;
+    overflow: auto;
+}
+
+body {
+    font-family: 'ubunturegular';
+    background: url('/yapi/img/bg.jpg') no-repeat #0982d5;
+    background-size: cover;
+}
+
+strong {
+    font-family: 'ubuntubold';
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h5 {
+    color: #0e4ca1;
+    font-family: 'ubuntubold';
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h5,
+p {
+    margin: 0;
+    padding: 0;
+}
+
+.wrapper {
+    padding-top: 100px;
+    padding-bottom: 20px;
+}
+
+.container {
+    max-width: 520px;
+}
+
+.card {
+    background-color: #ffffff;
+    position: relative;
+}
+
+.card-header {
+    height: 50px;
+    background: url("/yapi/img/bg-modal-header.jpg") no-repeat;
+    background-size: cover;
+    position: absolute;
+    top: -50px;
+    left: 0;
+    width: 100%;
+    padding: 12px 10px;
+}
+
+.card-header .lang {
+    color: #fff;
+    text-decoration: none;
+    font-size: 16px;
+}
+
+.card-header a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 14px;
+    border-left: 1px solid;
+    float: left;
+    padding: 0 5px;
+}
+
+.card-header a:first-child {
+    border: 0;
+}
+
+.card-header a>.icon {
+    display: none;
+    border: 1px solid;
+    font-size: 10px;
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    line-height: 20px;
+    text-align: center;
+}
+
+.card-header h3 {
+    color: #fff;
+    margin-top: 5px;
+}
+
+.header-menu {
+    padding-top: 3px;
+}
+
+.card-content {
+    padding: 10px 15px;
+    border: 10px solid #84c2ef;
+}
+
+.card-heading {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+.head-row {
+    padding: 10px 0 10px;
+}
+
+.help {
+    /*     background: url("../img/help.svg") no-repeat left center; */
+    /*     padding-left: 25px; */
+    /*     text-decoration: none !important; */
+    padding: 10px 0 20px;
+}
+
+.form-horizontal .control-label {
+    text-align: left;
+}
+
+.form-horizontal .control-label {
+    padding-top: 0px;
+    font-weight: normal;
+}
+
+.form-control {
+    height: 28px;
+    padding: 5px;
+}
+
+.form-content {
+    background-color: #f1f8fe;
+    padding: 10px;
+    margin: 10px 0 10px;
+    border-radius: 5px;
+}
+
+.custom-btn {
+    margin: 0px;
+}
+
+.form-horizontal .form-group {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
+.text-vertical-align {
+    heigth: 28px;
+    line-height: 28px;
+}
+
+.warning-icon-form {
+    height: 20px;
+    display: inline-block;
+    background: url(../img/warning.svg) no-repeat left center;
+    padding-left: 25px;
+    margin: auto;
+    margin-left: 10px;
+}
+
+.exclamation-mark-icon {
+    display: inline-block;
+    padding-left: 25px;
+    margin: 0;
+}
+
+.warning-icon {
+    display: inline-block;
+    background: url(/yapi/img/exclamation-mark-blue.png) no-repeat left center;
+    padding-left: 25px;
+    margin-top: 5px;
+}
+
+.warning-icon-world {
+    font-size: 12px;
+    height: 20px;
+    /* display: inline-block; */
+    background: url(../img/warning.svg) no-repeat left center;
+    padding-left: 25px;
+    margin: 0;
+}
+
+.customer-info .row {
+    padding: 3px 0;
+}
+
+.customer-info .customer-val {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.limit-info .row {
+    padding: 3px 0;
+}
+
+.limit-info .customer-val {
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.counter {
+    line-height: 28px;
+}
+
+.info-input input {
+    padding-right: 30px;
+}
+
+#smspass {
+    padding-right: 30px;
+}
+
+.sms-pass {
+    padding-right: 40px;
+}
+
+.sms-pass .info-icon {
+    position: absolute;
+    top: 4px;
+    right: 45px;
+}
+
+button {
+    border: 0;
+    padding: 4px 20px;
+    border-radius: 5px;
+    margin: 0 5px;
+}
+
+button[type="submit"] {
+    background-color: #00a8ff;
+    color: #fff;
+    border: 1px solid #00a8ff;
+}
+
+button[type="button"] {
+    background-color: #fff;
+    color: #00a8ff;
+    border: 1px solid;
+}
+
+.error input {
+    border-color: #ff0000;
+}
+
+.error-info {
+    display: none;
+    color: #ff0000;
+    font-size: 12px;
+}
+
+.error .error-info {
+    display: block;
+}
+
+#overlay1 {
+    position: fixed;
+    display: none;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 2;
+    cursor: pointer;
+}
+
+.overlaymiddle {
+    transition: .5s ease;
+    opacity: 0;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%)
+}
+
+.overlay-loading {
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    z-index: 99999999;
+    background: url("../img/ajax-loader-blue.gif") no-repeat 50% 50%;
+    background-color: rgba(0, 0, 0, 0.5);
+    display: none;
+    text-align: center;
+    font-size: 18px;
+    font-family: 'UbuntuMedium', sans-serif;
+    color: #FFF;
+}
+
+@media only screen and (max-width: 480px) {
+    .card-header a>.icon {
+        display: block
+    }
+    .help span,
+    .lang span {
+        display: none
+    }
+}
+
+
+/*
+@media only screen and (max-width : 768px) {
+    .xs-mt-10 {
+        margin-top: 10px;
+    }
+}
+*/
+
+.tds-help {
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.resend-btn {
+    margin: 0;
+    font-size: 90%;
+    padding-left: 7px;
+    padding-right: 7px;
+}
+
+.alert-danger {
+    background: white;
+    border: none;
+    color: #f90801;
+}
+
+.alert-danger:before {
+    content: '\2A2F';
+}
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0;
+    /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+input[type='number'] {
+    -moz-appearance: textfield;
+}
+
+.tdserror {
+    margin-top: -10px;
+    margin-bottom: 15px;
+    color: #ff0000;
+    padding-left: 185px;
+    font-size: small
+}
+
+.tdserrorinput {
+    border-color: red
+}
+
+.tdselect {
+    argin-top: 30px;
+    color: #ff0000;
+    padding-left: 200px;
+    font-size: small;
+}
+
+@media (max-width: 768px) {
+    .info-input {
+        padding-right: 10px;
+        float: left !important;
+    }
+    .resend {
+        padding-right: 10px;
+        float: left !important;
+    }
+    .media-error {
+        padding-left: 0px;
+    }
+    .tdserror {
+        padding-left: 0px;
+    }
+}
+
+@media (max-width: 404px) {
+    .resend {
+        padding-right: 10px;
+        padding-top: 10px;
+        float: left !important;
+    }
+}
+
+.standart-mea {
+    /* min-width: 390px; */
+    min-height: 400px;
+    max-width: 390px;
+    max-height: 450px;
+}
+
+@media (max-width: 350px) {
+    .standart-mea {
+        max-height: 550px;
+    }
+    .standart-mea {
+        max-height: 550px;
+    }
+}
+
+@media screen and (min-width:0\0) {
+    .ie-only-timer {
+        margin-left: 85px !important;
+    }
+}
+
+@-moz-document url-prefix() {
+    .moz-only-timer {
+        -moz-transform: scale(0.65) !important;
+    }
+    .standart-mea {
+        max-height: 520px !important;
+    }
+}
+
+::-webkit-scrollbar {
+    display: none;
+}

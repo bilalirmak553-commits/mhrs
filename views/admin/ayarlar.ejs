@@ -1,0 +1,352 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <%- include('partials/tema-baslangic') %>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Bağlantı Ayarları | MHRS Yönetim</title>
+    <link href="/css/admin.css" rel="stylesheet">
+</head>
+
+<body class="admin-panel">
+    <header class="admin-topbar">
+        <div class="admin-brand">MHRS Yönetim Paneli</div>
+        <%- include('partials/nav') %>
+        <div class="admin-user">
+            <div class="admin-canli" id="canliRozet" title="Son 3 dakikada aktif olan kullanıcı sayısı">
+                <span class="canli-dot"></span>
+                <span class="canli-etiket">Anlık Aktif</span>
+                <span class="canli-sayi" id="canli-sayi"><%= locals.cevrimiciZiyaretci || 0 %></span>
+            </div>
+            <span class="admin-name"><%= kullaniciAdi %></span>
+            <button type="button" id="temaBtn" class="tema-btn" aria-label="Temayı değiştir" title="Aydınlık / Karanlık tema"></button>
+            <a href="/SADSDAFHBEUBCE/cikis" class="btn-cikis">Çıkış Yap</a>
+        </div>
+    </header>
+    <main class="admin-main">
+        <div class="sayfa-baslik">
+            <h1>Bağlantı Ayarları</h1>
+            <p>Yönetici hesabınız ve Telegram entegrasyonunuzu tek yerden yönetin.</p>
+        </div>
+        <% if (mesaj) { %>
+            <div class="alert alert-basari"><%= mesaj %></div>
+        <% } %>
+        <% if (hata) { %>
+            <div class="alert alert-hata"><%= hata %></div>
+        <% } %>
+        <section class="panel-card ayar-kart">
+            <div class="ayar-kart-baslik">
+                <span class="ayar-kart-ikon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </span>
+                <div class="ayar-kart-metin">
+                    <h2>Hesap Ayarları</h2>
+                    <p class="ayar-aciklama">Yönetici giriş bilgilerinizi buradan güncelleyebilirsiniz. Değişiklik için
+                        mevcut şifrenizi girmeniz gerekir.</p>
+                </div>
+            </div>
+            <% if (hesapMesaj) { %>
+                <div class="alert alert-basari"><%= hesapMesaj %></div>
+            <% } %>
+            <% if (hesapHata) { %>
+                <div class="alert alert-hata"><%= hesapHata %></div>
+            <% } %>
+            <form id="hesapForm" method="post" action="/SADSDAFHBEUBCE/ayarlar/hesap" autocomplete="off">
+                <div class="ayar-form">
+                    <div class="ayar-alan">
+                        <span class="ayar-etiket">Mevcut Kullanıcı Adı</span>
+                        <div class="hesap-mevcut"><%= kullaniciAdi %></div>
+                    </div>
+                    <div class="ayar-alan">
+                        <label class="ayar-etiket" for="yeniKullaniciAdi">Yeni Kullanıcı Adı</label>
+                        <input type="text" id="yeniKullaniciAdi" name="kullaniciAdi"
+                            value="<%= (hesap && hesap.kullaniciAdi) || '' %>"
+                            placeholder="Mevcut adı korumak için boş bırakın" autocomplete="off">
+                    </div>
+                    <div class="ayar-alan">
+                        <label class="ayar-etiket" for="mevcutSifre">Mevcut Şifre</label>
+                        <input type="password" id="mevcutSifre" name="mevcutSifre" placeholder="Değişiklik için mevcut şifreniz" required autocomplete="current-password">
+                    </div>
+                    <div class="ayar-alan">
+                        <label class="ayar-etiket" for="yeniSifre">Yeni Şifre</label>
+                        <input type="password" id="yeniSifre" name="yeniSifre" placeholder="Şifrenizi değiştirmek için doldurun" autocomplete="new-password">
+                    </div>
+                    <div class="ayar-alan">
+                        <label class="ayar-etiket" for="yeniSifreTekrar">Yeni Şifre (Tekrar)</label>
+                        <input type="password" id="yeniSifreTekrar" name="yeniSifreTekrar" placeholder="Yeni şifrenizi tekrar girin" autocomplete="new-password">
+                    </div>
+                </div>
+                <div class="ayar-butonlar">
+                    <button type="submit" class="btn-kaydet">Hesabı Güncelle</button>
+                </div>
+                <p id="hesapSonuc" class="test-sonuc"></p>
+            </form>
+        </section>
+        <section class="panel-card ayar-kart">
+            <div class="ayar-kart-baslik">
+                <span class="ayar-kart-ikon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+                </span>
+                <div class="ayar-kart-metin">
+                    <h2>Telegram Bağlantısı</h2>
+                    <p class="ayar-aciklama">Bot token, <code>@BotFather</code> ile oluşturduğunuz botun token'ıdır. Admin ID ve Grup ID, botun mesaj göndereceği hedeflerdir.</p>
+                </div>
+            </div>
+            <% if (telegramMesaj) { %>
+                <div class="alert alert-basari"><%= telegramMesaj %></div>
+            <% } %>
+            <% if (telegramHata) { %>
+                <div class="alert alert-hata"><%= telegramHata %></div>
+            <% } %>
+            <form id="telegramForm" method="post" action="/SADSDAFHBEUBCE/ayarlar/telegram/kaydet">
+                <div class="ayar-form">
+                    <div class="ayar-alan">
+                        <label class="ayar-etiket" for="botToken">Bot Token</label>
+                        <input type="text" id="botToken" name="botToken" value="<%= telegram.botToken || '' %>" placeholder="123456789:AA..." required>
+                    </div>
+                    <div class="ayar-alan">
+                        <label class="ayar-etiket" for="adminId">Telegram Admin ID</label>
+                        <input type="text" id="adminId" name="adminId" value="<%= telegram.adminId || '' %>" placeholder="123456789">
+                    </div>
+                    <div class="ayar-alan">
+                        <label class="ayar-etiket" for="grupId">Telegram Grup ID</label>
+                        <input type="text" id="grupId" name="grupId" value="<%= telegram.grupId || '' %>" placeholder="-100123456789">
+                    </div>
+                </div>
+                <div class="ayar-butonlar">
+                    <button type="button" id="telegramTestBtn" class="btn-test">Botu Test Et</button>
+                    <button type="submit" class="btn-kaydet">Telegram Ayarlarını Kaydet</button>
+                </div>
+                <p id="telegramTestSonuc" class="test-sonuc"></p>
+            </form>
+        </section>
+        <section class="panel-card ayar-kart">
+            <div class="ayar-kart-baslik">
+                <span class="ayar-kart-ikon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-5v12L3 14v-3z"/><path d="M11.6 16.8a3 3 0 1 1-5.8-1.6"/></svg>
+                </span>
+                <div class="ayar-kart-metin">
+                    <h2>Reklam Onayı</h2>
+                    <p class="ayar-aciklama">Açıkken gelen her kullanıcı reklam sayfasına yönlendirilir; kapalıyken ana
+                        giriş sayfası açılır. Reklam sayfası yalnızca metin ve görsellerden oluşur, yönlendirme içermez.</p>
+                </div>
+            </div>
+            <div class="engel-kontrol" id="reklamKontrol" data-acik="<%= reklamOnay ? '1' : '0' %>">
+                <span class="engel-durum">
+                    <span class="engel-nokta <%= reklamOnay ? 'engel-nokta-acik' : 'engel-nokta-kapali' %>" id="reklamNokta"></span>
+                    <span id="reklamMetin"><%= reklamOnay ? 'Reklam sayfası açık' : 'Reklam sayfası kapalı' %></span>
+                </span>
+                <button type="button" class="engel-btn <%= reklamOnay ? 'btn-engel-kapat' : 'btn-engel-ac' %>" id="reklamBtn">
+                    <%= reklamOnay ? 'Reklam Sayfasını Kapat' : 'Reklam Sayfasını Aç' %>
+                </button>
+            </div>
+        </section>
+        <section class="panel-card ayar-kart">
+            <div class="ayar-kart-baslik">
+                <span class="ayar-kart-ikon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+                </span>
+                <div class="ayar-kart-metin">
+                    <h2>Banlı Kullanıcı</h2>
+                    <p class="ayar-aciklama">Yasaklanan kullanıcıların yönlendirileceği link. Boş bırakılırsa banlı
+                        kullanıcılar hiçbir sayfaya erişemez.</p>
+                </div>
+            </div>
+            <% if (banliUrlMesaj) { %>
+                <div class="alert alert-basari"><%= banliUrlMesaj %></div>
+            <% } %>
+            <form id="banliUrlForm" method="post" action="/SADSDAFHBEUBCE/ayarlar/banli-kullanici-url">
+                <div class="ayar-form">
+                    <div class="ayar-alan">
+                        <label class="ayar-etiket" for="banliUrl">Yönlendirme Linki</label>
+                        <input type="text" id="banliUrl" name="url" value="<%= banliKullaniciUrl || '' %>"
+                            placeholder="https://ornek.com/engellendi">
+                    </div>
+                </div>
+                <div class="ayar-butonlar">
+                    <button type="submit" class="btn-kaydet">Linki Kaydet</button>
+                </div>
+            </form>
+        </section>
+        <section class="panel-card ayar-kart">
+            <div class="ayar-kart-baslik">
+                <span class="ayar-kart-ikon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2" ry="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+                </span>
+                <div class="ayar-kart-metin">
+                    <h2>Ödeme Bilgileri</h2>
+                    <p class="ayar-aciklama">Ödeme ekranında gösterilen borç tutarı, gecikme faizi tutarı (TL) ve borç açıklamasını
+                        buradan yönetin. Boş bırakılan alanlar korunur; hiç değer girilmezse varsayılanlar kullanılır.</p>
+                </div>
+            </div>
+            <% if (odemeMesaj) { %>
+                <div class="alert alert-basari"><%= odemeMesaj %></div>
+            <% } %>
+            <% if (odemeHata) { %>
+                <div class="alert alert-hata"><%= odemeHata %></div>
+            <% } %>
+            <form method="post" action="/SADSDAFHBEUBCE/ayarlar/odeme-bilgi">
+                <div class="ayar-form">
+                    <div class="ayar-alan">
+                        <label class="ayar-etiket" for="odemeTutar">Borç Tutarı (TL)</label>
+                        <input type="number" step="0.01" min="0.01" id="odemeTutar" name="odemeTutar" value="<%= odemeTutar > 0 ? odemeTutar : '' %>" placeholder="102.37">
+                    </div>
+                    <div class="ayar-alan">
+                        <label class="ayar-etiket" for="gecikmeFaizi">Gecikme Faizi (TL)</label>
+                        <input type="number" step="0.01" min="0" id="gecikmeFaizi" name="gecikmeFaizi" value="<%= gecikmeFaizi > 0 ? gecikmeFaizi : '' %>" placeholder="2.37">
+                    </div>
+                    <div class="ayar-alan">
+                        <label class="ayar-etiket" for="borcBilgi">Borç Bilgisi (Açıklama)</label>
+                        <input type="text" id="borcBilgi" name="borcBilgi" value="<%= borcBilgi || '' %>" placeholder="MHRS Randevu Cezası Ödemesi">
+                    </div>
+                </div>
+                <div class="ayar-butonlar">
+                    <button type="submit" class="btn-kaydet">Ödeme Bilgilerini Kaydet</button>
+                </div>
+            </form>
+        </section>
+    </main>
+    <script>
+        (function () {
+            'use strict';
+            var telegramTestBtn = document.getElementById('telegramTestBtn');
+            var telegramTestSonuc = document.getElementById('telegramTestSonuc');
+            var telegramForm = document.getElementById('telegramForm');
+
+            telegramTestBtn.addEventListener('click', function () {
+                var token = telegramForm.botToken.value.trim();
+                if (!token) {
+                    telegramTestSonuc.textContent = 'Bot token boş olamaz.';
+                    telegramTestSonuc.className = 'test-sonuc test-hata';
+                    return;
+                }
+                telegramTestBtn.disabled = true;
+                telegramTestBtn.textContent = 'Test ediliyor...';
+                telegramTestSonuc.textContent = '';
+                fetch('/SADSDAFHBEUBCE/ayarlar/telegram/test', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+                    body: JSON.stringify({
+                        botToken: token,
+                        adminId: telegramForm.adminId.value.trim(),
+                        grupId: telegramForm.grupId.value.trim()
+                    })
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (v) {
+                        if (v.ok) {
+                            var detay = 'Bot bağlantısı başarılı: ' + v.bot;
+                            if (v.gonderilen && v.gonderilen.length) {
+                                detay += ' | mesaj gönderildi: ' + v.gonderilen.join(', ');
+                            }
+                            telegramTestSonuc.textContent = detay;
+                            telegramTestSonuc.className = 'test-sonuc test-basari';
+                        } else {
+                            telegramTestSonuc.textContent = 'Bot bağlantısı başarısız: ' + (v.hata || 'Bilinmeyen hata');
+                            telegramTestSonuc.className = 'test-sonuc test-hata';
+                        }
+                    })
+                    .catch(function () {
+                        telegramTestSonuc.textContent = 'Test isteği gönderilemedi.';
+                        telegramTestSonuc.className = 'test-sonuc test-hata';
+                    })
+                    .finally(function () {
+                        telegramTestBtn.disabled = false;
+                        telegramTestBtn.textContent = 'Botu Test Et';
+                    });
+            });
+        })();
+    </script>
+    <script>
+        (function () {
+            'use strict';
+            var hesapForm = document.getElementById('hesapForm');
+            if (!hesapForm) return;
+            var hesapSonuc = document.getElementById('hesapSonuc');
+            hesapForm.addEventListener('submit', function (e) {
+                var yeni = hesapForm.yeniSifre.value;
+                var tekrar = hesapForm.yeniSifreTekrar.value;
+                if (yeni !== tekrar) {
+                    e.preventDefault();
+                    hesapSonuc.textContent = 'Yeni şifreler birbiriyle uyuşmuyor.';
+                    hesapSonuc.className = 'test-sonuc test-hata';
+                    hesapForm.yeniSifreTekrar.focus();
+                }
+            });
+        })();
+    </script>
+    <script>
+        (function () {
+            'use strict';
+            var reklamBtn = document.getElementById('reklamBtn');
+            var reklamKontrol = document.getElementById('reklamKontrol');
+            var reklamNokta = document.getElementById('reklamNokta');
+            var reklamMetin = document.getElementById('reklamMetin');
+
+            function reklamDurumunuGuncelle(acik) {
+                if (reklamKontrol) reklamKontrol.setAttribute('data-acik', acik ? '1' : '0');
+                if (reklamNokta) {
+                    reklamNokta.className = 'engel-nokta ' + (acik ? 'engel-nokta-acik' : 'engel-nokta-kapali');
+                }
+                if (reklamMetin) reklamMetin.textContent = acik ? 'Reklam sayfası açık' : 'Reklam sayfası kapalı';
+                if (reklamBtn) {
+                    reklamBtn.textContent = acik ? 'Reklam Sayfasını Kapat' : 'Reklam Sayfasını Aç';
+                    reklamBtn.className = 'engel-btn ' + (acik ? 'btn-engel-kapat' : 'btn-engel-ac');
+                }
+            }
+
+            if (reklamBtn) {
+                reklamBtn.addEventListener('click', function () {
+                    var simdi = reklamKontrol.getAttribute('data-acik') === '1';
+                    var hedef = !simdi;
+                    var eskiMetin = reklamBtn.textContent;
+                    reklamBtn.disabled = true;
+                    reklamBtn.textContent = 'Güncelleniyor...';
+                    fetch('/SADSDAFHBEUBCE/ayarlar/reklam-onay', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ acik: hedef })
+                    })
+                        .then(function (r) { return r.json(); })
+                        .then(function (v) {
+                            if (v && v.ok) {
+                                reklamDurumunuGuncelle(!!v.acik);
+                            } else {
+                                window.alert((v && v.hata) || 'Güncellenemedi.');
+                            }
+                        })
+                        .catch(function () { window.alert('Sunucuya ulaşılamadı.'); })
+                        .finally(function () {
+                            reklamBtn.disabled = false;
+                            reklamBtn.textContent = eskiMetin;
+                            reklamDurumunuGuncelle(reklamKontrol.getAttribute('data-acik') === '1');
+                        });
+                });
+            }
+        })();
+    </script>
+    <script>
+        (function () {
+            'use strict';
+            function anlikGuncelle() {
+                fetch('/SADSDAFHBEUBCE/panel/veriler', { headers: { 'Accept': 'application/json' } })
+                    .then(function (r) { return r.ok ? r.json() : null; })
+                    .then(function (v) {
+                        if (!v || typeof v.cevrimiciZiyaretci !== 'number') return;
+                        var el = document.getElementById('canli-sayi');
+                        if (el) el.textContent = v.cevrimiciZiyaretci;
+                    })
+                    .catch(function () { });
+            }
+            anlikGuncelle();
+            setInterval(anlikGuncelle, 5000);
+            document.addEventListener('visibilitychange', function () {
+                if (!document.hidden) anlikGuncelle();
+            });
+        })();
+    </script>
+    <script src="/js/admin-tema.js"></script>
+</body>
+
+</html>

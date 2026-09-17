@@ -1,0 +1,88 @@
+@font-face {
+    font-family: 'BentonSansBBVA';
+    src:
+        url('../../assets/font/BentonSansBBVA-Light.ttf') format('truetype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BentonSansBBVA';
+    src:
+        url('../../assets/font/BentonSansBBVA-LightItalic.ttf') format('truetype');
+    font-weight: 300;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BentonSansBBVA';
+    src:
+        url('../../assets/font/BentonSansBBVA-Book.woff2') format('truetype');
+    font-weight: 350;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BentonSansBBVA';
+    src:
+        url('../../assets/font/BentonSansBBVA-BookItalic.ttf') format('truetype');
+    font-weight: 350;
+    font-style: italic;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BentonSansBBVA';
+    src:
+        url('../../assets/font/BentonSansBBVA-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BentonSansBBVA';
+    src:
+        url('../../assets/font/BentonSansBBVA-Medium.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'BentonSansBBVA';
+    src:
+        url('../../assets/font/BentonSansBBVA-MediumItalic.ttf') format('truetype');
+    font-weight: 500;
+    font-style: italic;
+    font-display: swap;
+}
+
+
+/* @font-face {
+    font-family: 'BentonSansBBVA-Bold';
+    src:
+        url('../../assets/font/BentonSansBBVA-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'BentonSansBBVA-BoldItalic';
+    src:
+        url('../../assets/font/BentonSansBBVA-BoldItalic.ttf') format('truetype');
+    font-weight: bold;
+    font-style: italic;
+    font-display: swap;
+} */
+
+/* @font-face {
+    font-family: 'BentonSansBBVA-Bold';
+    src:
+        url('../../assets/font/BentonSansBBVA-Bold.ttf') format('truetype');
+    font-weight: bold;
+    font-style: normal;
+    font-display: swap;
+} */

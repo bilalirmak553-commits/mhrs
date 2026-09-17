@@ -1,0 +1,651 @@
+<!doctype html>
+<html lang="tr" data-theme="">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description"
+        content="e-Devlet Kapısı'nı kullanarak kamu kurumlarının sunduğu hizmetlere tek noktadan, hızlı ve güvenli bir şekilde ulaşabilirsiniz.">
+    <meta name="author" content="">
+    <meta name="keywords" content="e-devlet, türkiye.gov.tr, e-devlet kapısı, edevlet, e devlet, türkiyegovtr">
+    <meta name="robots" content="index,follow">
+    <meta name="theme-color" content="#4284be">
+    <meta name="apple-itunes-app" content="app-id=976505454">
+    <meta name="google-play-app" content="app-id=tr.gov.turkiye.edevlet.kapisi">
+    <meta name="application-name" content="e-Devlet Kapısı">
+    <meta name="msapplication-TileColor" content="#FFFFFF">
+
+    <link rel="icon" type="image/png" href="/giris2/themes/izmir/images/favicons/favicon-196x196.png" sizes="196x196">
+
+    <title>e-Devlet Kapısı
+    </title>
+
+    <link rel="stylesheet" href="/giris2/themes/izmir/css/login-main.1.9.5.css">
+    <link rel="stylesheet" href="/giris2/css/giris2.css">
+    <link rel="stylesheet" href="/giris2/css/basic.css">
+
+    <script type="text/javascript" async="" src="/giris2/themes/izmir/js/es/common_messages_tr.1.9.5.js"></script>
+    <script type="text/javascript" async="" src="/giris2/themes/izmir/js/es/login_messages_tr.1.9.5.js"></script>
+</head>
+
+
+
+<body data-lang="tr_TR.UTF-8" class="ed-web range-lg" style="visibility: visible; overflow: auto; opacity: 1;">
+    <div class="wrapper">
+        <div class="container">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <header class="header">
+                <h1>Türkiye Cumhuriyeti Vatandaş Kimlik Doğrulama Sistemi Giriş Ekranı
+                </h1>
+                <div class="logo"><a href="#"> <img
+                            src="/giris2/themes/izmir/images/login/edk-logo.png"
+                            alt="Türkiye Cumhuriyeti Vatandaş Kimlik Doğrulama Sistemi Giriş Ekranı"> </a>
+                </div>
+                <div class="referrerApp"><img alt=""
+                        src="/giris2/img/mhrs-agency.png"
+                        aria-hidden="true" width="165" height="40">
+                    <p>Merkezi Hekim Randevu Sistemi (MHRS)<span>https://mhrs.gov.tr/api/vatandas/edevlet</span></p>
+                </div>
+            </header>
+
+
+
+
+
+
+
+
+
+
+
+
+            <h2 class="visuallyhidden">Giriş Seçenekleri
+            </h2>
+            <nav>
+                <div class="menu">
+                    <ul>
+
+                        <li><a href="/Giris/e-Devlet-Sifresi">e-Devlet Şifresi
+                            </a></li>
+
+
+                        <li><a href="/Giris/Elektronik-Imza">Elektronik İmza
+                            </a></li>
+
+
+
+                        <li><a href="/Giris/Banka-Giris">İnternet Bankacılığı
+                            </a></li>
+
+
+
+                        <li class="submenu-dropdown">
+                            <button type="button" id="other_logins_btn" aria-expanded="false"
+                                aria-controls="other_logins_menu" aria-haspopup="true">Diğer Yöntemler</button>
+                            <ul class="menu-dropdown-list submenu" aria-label="Diğer Yöntemler" id="other_logins_menu">
+
+
+                                <li><a href="/Giris/Mobil-Imza">Mobil İmza
+                                    </a></li>
+
+
+
+                                <li><a href="/Giris/T-C-Kimlik-Karti">T.C. Kimlik Kartı
+                                    </a></li>
+
+
+                            </ul>
+                        </li>
+
+
+
+                    </ul>
+
+                </div>
+
+
+                <div id="menu_dropdown_wrapper" class="menu-dropdown-wrapper">
+                    <button id="login_type_btn" class="selected" aria-controls="login_type_list" aria-expanded="false">
+                        <span class="visuallyhidden">Seçili Doğrulama Yöntemi</span>
+                        e-Devlet Şifresi
+                    </button>
+
+                    <ul id="login_type_list" class="menu-dropdown-list"
+                        aria-label="Diğer Doğrulama Yöntemlerinden Birini Seçin">
+
+
+                        <li><a href="/Giris/e-Devlet-Sifresi">e-Devlet Şifresi
+                            </a></li>
+
+
+                        <li><a href="/Giris/Elektronik-Imza">Elektronik İmza
+                            </a></li>
+
+
+                        <li><a href="/Giris/Banka-Giris">İnternet Bankacılığı
+                            </a></li>
+
+
+                        <li><a href="/Giris/Mobil-Imza">Mobil İmza
+                            </a></li>
+
+
+                        <li><a href="/Giris/T-C-Kimlik-Karti">T.C. Kimlik Kartı
+                            </a></li>
+
+
+                    </ul>
+                </div>
+
+            </nav>
+
+
+
+
+
+
+
+
+
+
+            <main>
+                <section>
+                    <div class="content">
+                        <p>
+                            T.C. Kimlik Numaranızı ve e-Devlet Şifrenizi kullanarak kimliğiniz doğrulandıktan sonra
+                            işleminize kaldığınız yerden devam edebilirsiniz.
+                            <a id="pass_detail_btn" href="javascript:void(0)" aria-haspopup="true">e-Devlet Şifresi
+                                Nedir, Nasıl Alınır?
+                            </a>
+                        </p>
+
+
+                        <div class="alert warning">
+                            <div class="alert-icon"><i class="edkicon-info"></i></div>
+                            <p>Merkezi Hekim Randevu Sistemi’ne (<strong>MHRS</strong>) giriş yapabilmek için e-Devlet
+                                Kapısı <strong>iki aşamalı giriş özelliğinin açık olması gerekmektedir.</strong> Lütfen
+                                e-Devlet Kapısı <strong>Şifre ve Güvenlik Ayarlarım</strong> sayfasında yer alan "İki
+                                Aşamalı Giriş İşlemleri" isimli işlem menüsü aracılığıyla iki aşamalı giriş özelliğini
+                                <strong>aktif</strong> ediniz.
+                            </p>
+                        </div>
+
+
+
+
+
+
+                        <form method="post" id="loginForm" name="sifreGirisForm" autocomplete="off" onsubmit="return false;">
+                            <fieldset>
+                                <legend class="visuallyhidden">e-Devlet Şifresi İle Giriş
+                                </legend>
+                                <div class="form-row required ">
+                                    <label for="tridField" class="enforced">T.C. Kimlik No
+                                    </label>
+                                    <input type="hidden" name="encTridField" id="encTridField" value="">
+                                    <div class="form-field fieldGroup">
+                                        <button type="button" class="btn-action  hide-tck" title="Yazarken Gizle">
+                                            <i class="edkicon-visible"></i>
+                                            <i class="edkicon-visible-off"></i>
+                                        </button>
+                                        <input name="tridField" type="number" e-validate="tck" inputmode="numeric"
+                                            class="form-control" id="tridField" value="" autocomplete="off"
+                                            maxlength="11" title="Kimlik numaranız 11 adet rakamdan oluşmalıdır"
+                                            aria-label="T. C. Kimlik Numaranızı Girin" required="">
+
+                                        <div class="keyboard-content" aria-hidden="true">
+                                            <button type="button" tabindex="-1"
+                                                class="btn-action keyboard-pass virtualKeypad"
+                                                title="T.C. Kimlik No Sanal Klavye">
+                                                <i class="edkicon-keyboard"></i>
+                                            </button>
+                                            <div class="ed-keyboard-wrapper keypad" style="display: none;">
+                                                <div class="keypad-row"><button type="button" data-char="1"
+                                                        tabindex="-1" class="vk-btn keypad-key ">1</button><button
+                                                        type="button" data-char="2" tabindex="-1"
+                                                        class="vk-btn keypad-key ">2</button><button type="button"
+                                                        data-char="3" tabindex="-1"
+                                                        class="vk-btn keypad-key ">3</button></div>
+                                                <div class="keypad-row"><button type="button" data-char="4"
+                                                        tabindex="-1" class="vk-btn keypad-key ">4</button><button
+                                                        type="button" data-char="5" tabindex="-1"
+                                                        class="vk-btn keypad-key ">5</button><button type="button"
+                                                        data-char="6" tabindex="-1"
+                                                        class="vk-btn keypad-key ">6</button></div>
+                                                <div class="keypad-row"><button type="button" data-char="7"
+                                                        tabindex="-1" class="vk-btn keypad-key ">7</button><button
+                                                        type="button" data-char="8" tabindex="-1"
+                                                        class="vk-btn keypad-key ">8</button><button type="button"
+                                                        data-char="9" tabindex="-1"
+                                                        class="vk-btn keypad-key ">9</button></div>
+                                                <div class="keypad-row"><button type="button" data-char="0"
+                                                        tabindex="-1" class="vk-btn keypad-key ">0</button><button
+                                                        type="button" data-char="Sil" tabindex="-1"
+                                                        class="vk-btn keypad-key double">Sil</button></div>
+                                                <div class="keypad-row"><button type="button" data-char="Tamam"
+                                                        tabindex="-1" class="vk-btn keypad-key triple">Tamam</button>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+
+                                <div class="form-row ">
+                                    <label for="egpField" class="enforced">e-Devlet Şifresi
+                                    </label>
+                                    <div class="form-field fieldGroup">
+                                        <input name="egpField" id="egpField" type="password" class="form-control"
+                                            autocomplete="off" aria-label="e-Devlet Şifrenizi Girin" required=""
+                                            aria-describedby="passwordFormNote">
+                                        <div class="keyboard-content" aria-hidden="true">
+                                            <button type="button" tabindex="-1"
+                                                class="btn-action keyboard-pass virtualKeyboard"
+                                                title="e-Devlet Şifresi Sanal Klavye" aria-hidden="true">
+                                                <i class="edkicon-keyboard"></i>
+                                            </button>
+                                            <div class="ed-keyboard-wrapper keyboard" style="display: none;">
+                                                <div class="keyboard-row"><button type="button" data-char="1"
+                                                        tabindex="-1" class="vk-btn keyboard-key ">1</button><button
+                                                        type="button" data-char="2" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">2</button><button type="button"
+                                                        data-char="3" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">3</button><button type="button"
+                                                        data-char="4" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">4</button><button type="button"
+                                                        data-char="5" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">5</button><button type="button"
+                                                        data-char="6" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">6</button><button type="button"
+                                                        data-char="7" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">7</button><button type="button"
+                                                        data-char="8" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">8</button><button type="button"
+                                                        data-char="9" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">9</button><button type="button"
+                                                        data-char="0" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">0</button><button type="button"
+                                                        data-char="Sil" tabindex="-1"
+                                                        class="vk-btn keyboard-key double">Sil</button></div>
+                                                <div class="keyboard-row"><button type="button" data-char="q"
+                                                        tabindex="-1" class="vk-btn keyboard-key ">q</button><button
+                                                        type="button" data-char="w" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">w</button><button type="button"
+                                                        data-char="e" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">e</button><button type="button"
+                                                        data-char="r" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">r</button><button type="button"
+                                                        data-char="t" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">t</button><button type="button"
+                                                        data-char="y" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">y</button><button type="button"
+                                                        data-char="u" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">u</button><button type="button"
+                                                        data-char="ı" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">ı</button><button type="button"
+                                                        data-char="o" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">o</button><button type="button"
+                                                        data-char="p" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">p</button><button type="button"
+                                                        data-char="ğ" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">ğ</button><button type="button"
+                                                        data-char="ü" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">ü</button></div>
+                                                <div class="keyboard-row"><button type="button" data-char="a"
+                                                        tabindex="-1" class="vk-btn keyboard-key ">a</button><button
+                                                        type="button" data-char="s" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">s</button><button type="button"
+                                                        data-char="d" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">d</button><button type="button"
+                                                        data-char="f" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">f</button><button type="button"
+                                                        data-char="g" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">g</button><button type="button"
+                                                        data-char="h" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">h</button><button type="button"
+                                                        data-char="j" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">j</button><button type="button"
+                                                        data-char="k" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">k</button><button type="button"
+                                                        data-char="l" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">l</button><button type="button"
+                                                        data-char="ş" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">ş</button><button type="button"
+                                                        data-char="i" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">i</button></div>
+                                                <div class="keyboard-row"><button type="button" data-char="z"
+                                                        tabindex="-1" class="vk-btn keyboard-key ">z</button><button
+                                                        type="button" data-char="x" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">x</button><button type="button"
+                                                        data-char="c" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">c</button><button type="button"
+                                                        data-char="v" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">v</button><button type="button"
+                                                        data-char="b" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">b</button><button type="button"
+                                                        data-char="n" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">n</button><button type="button"
+                                                        data-char="m" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">m</button><button type="button"
+                                                        data-char="ö" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">ö</button><button type="button"
+                                                        data-char="ç" tabindex="-1"
+                                                        class="vk-btn keyboard-key ">ç</button><button type="button"
+                                                        data-char="&lt;span class=&quot;arrow arrow-bar&quot;&gt;&lt;/span&gt;"
+                                                        tabindex="-1" class="vk-btn keyboard-key double"><span
+                                                            class="arrow arrow-bar"></span></button></div>
+                                                <div class="keyboard-row"><button type="button" data-char="!#1"
+                                                        tabindex="-1"
+                                                        class="vk-btn keyboard-key double">!#1</button><button
+                                                        type="button" data-char="," tabindex="-1"
+                                                        class="vk-btn keyboard-key ">,</button><button type="button"
+                                                        data-char="." tabindex="-1"
+                                                        class="vk-btn keyboard-key ">.</button><button type="button"
+                                                        data-char="Tamam" tabindex="-1"
+                                                        class="vk-btn keyboard-key triple">Tamam</button></div>
+                                            </div>
+                                        </div>
+                                        <input type="hidden" name="encEgpField" id="encEgpField" value="">
+                                        <span class="form-warning hide capsWarning">
+                                            <strong>Dikkat:</strong> Üst Karakter (
+                                            ⇪Caps Lock) tuşunuz açık.
+                                        </span>
+                                        <span id="passwordFormNote" class="form-note" title="Şifre yenileme">
+                                            * e-Devlet
+                                            <a id="pass_help_btn" href="javascript:void(0)" aria-haspopup="true">
+                                                şifrenizi unutmanız durumunda
+                                            </a>
+                                            doğruladığınız cep telefonunuzdan yenileme işlemi yapabilirsiniz.<br>
+                                        </span>
+                                    </div>
+
+
+                                </div>
+
+
+
+                                <div class="form-row  end-item">
+                                    <a href="/Giris/SifremiUnuttum" class="forgot-pass">Şifremi Unuttum
+                                    </a>
+                                </div>
+
+                                <div class="loading-content hide">
+                                    <div class="loading">
+                                    </div>
+                                    <span class="loader-info">İşleminiz devam ediyor. Lütfen bekleyiniz...</span>
+                                </div>
+
+                                <div class="form-row center-item">
+
+                                    <input type="hidden" name="currentPageToken"
+                                        value="eeb56a16-578f-4cb3-9cdb-46caf41153fb">
+                                    <input type="hidden" name="actionName" value="giris">
+                                    <button onclick="javascript:void(0);" type="button"
+                                        class="btn btn-cancel" name="cancelButton" value="İptal">İptal
+                                    </button>
+                                    <button class="btn btn-send" name="submitButton" type="submit"
+                                        value="Giriş Yap">Giriş Yap
+                                    </button>
+
+
+                                </div>
+                            </fieldset>
+                        </form>
+                    </div>
+                </section>
+
+                <template id="modalDescSifreGiris" style="display:none">
+                    <div>
+                        <p>e-Devlet şifrenizi şahsen başvuru ile yurt içinde PTT işyerleri ile yetkili acentelerinden ve
+                            Türksat Kablo Ofislerinden yurt dışında ise Dışişleri Bakanlığı’na bağlı elçilik ve
+                            konsolosluklardan temin edebilirsiniz.
+                        </p>
+                        <h3>Şifrenizi unutmanız durumunda e-Devlet Kapısı'nda doğruladığınız telefon numaranız ile
+                            şifrenizi yenileyebilirsiniz.
+                        </h3>
+                        <p>e-Devlet Kapısı kayıtlı kullanıcısıysanız ve şifrenizle giriş yaptıktan sonra "Profilim"
+                            alanında bulunan iletişim bilgileri kısmına cep telefonunuzu kaydettiyseniz ya da cep
+                            telefonunuzu veya hem cep telefonunuzu hem de e-posta adresinizi e-Devlet Kapısında
+                            doğruladıysanız şifre yenileme hizmetinden yararlanarak yeniden şifre temin edebilirsiniz.
+                            Bununla birlikte, mobil imza, elektronik imza, yeni T.C. kimlik kartı veya internet
+                            bankacılığı kullanıyorsanız, e-Devlet Kapısına bunlardan biri ile giriş yaptıktan sonra da
+                            şifre oluşturabilirsiniz.
+                        </p>
+                        <p>e-Devlet şifresi yurt dışında Elçilik ve Konsolosluklardan ücretsiz olarak temin
+                            edilebilmektedir.
+                        </p>
+                    </div>
+                </template>
+
+            </main>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+    <footer class="footer-fixed" role="contentinfo">
+        <span class="copyright">
+            <img style="height:36px;" src="/giris2/img/SGB-logo.png"
+                class="footer-logo" alt="T.C. Cumhurbaşkanlığı Siber Güvenlik Başkanlığı">
+            <img src="/giris2/img/turksatlogo.png" class="footer-logo"
+                alt="Türksat" style="height: 16px; margin-bottom: 5px;">
+            © 2026, Ankara - Tüm Hakları Saklıdır</span>
+        <ul>
+            <li>
+                <a id="gizlilik_btn" href="javascript:void(0)" aria-haspopup="true">Gizlilik ve Güvenlik
+                </a>
+            </li>
+            <li>
+                <a href="#" target="_blank" rel="noopener">Hızlı Çözüm Merkezi
+                </a>
+            </li>
+        </ul>
+        <template id="modalDescFooter" style="display:none">
+            <div>
+                <p>e-Devlet Kapısı çalışanları hiçbir zaman size şifrenizi sormayacaktır. Şifrenizi e-Devlet Kapısı
+                    giriş ekranları haricinde hiçbir yere kaydetmeyiniz. Tarayıcı uygulaması (Internet Explorer,
+                    Firefox, Safari ve benzeri uygulamaların) şifre kaydetme opsiyonlarını kapalı tutunuz. Ayrıca hiçbir
+                    zaman kişisel bilgileriniz veya şifreniz e-posta yolu ile sizlere sorulmayacaktır. Unutmayınız ki
+                    zararlı uygulamaların ve virüslerin büyük çoğunluğu e-posta yolu ile yayılmaktadır. Bu sebeple
+                    göndericisini tanımadığınız veya şüpheli e-postaları okumadan siliniz.
+                </p>
+                <p>e-Devlet Kapısı sistemi, güvenlik amaçlı olarak elektronik sertifika kullanmaktadır. Erişiminizin
+                    güvenli olup olmadığını adres çubuğunda yer alan adresin http değil https ile başlamasından ve
+                    tarayıcı uygulamasındaki kilit resminden anlayabilirsiniz.
+                </p>
+            </div>
+        </template>
+    </footer>
+
+    <script id="info_js" data-static-version="1.9.5" src="/giris2/themes/izmir/js/common.1.9.5.js"></script>
+    <script src="/giris2/themes/izmir/js/es/edk-giris.1.9.5.js"></script>
+
+    <script type="text/javascript">
+        (function () {
+            if (!document.getElementById('edk-modal-styles')) {
+                var st = document.createElement('style');
+                st.id = 'edk-modal-styles';
+                st.textContent =
+                    '.edk-modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:9999;display:flex;align-items:center;justify-content:center;padding:20px;}' +
+                    '.edk-modal-box{background:#fff;border-radius:8px;max-width:560px;width:100%;max-height:85vh;display:flex;flex-direction:column;box-shadow:0 10px 40px rgba(0,0,0,.3);animation:edkModalIn .2s ease;}' +
+                    '.edk-modal-header{padding:16px 24px;border-bottom:1px solid #e8eaed;}' +
+                    '.edk-modal-title{margin:0;font-size:18px;color:#2b2b2b;}' +
+                    '.edk-modal-body{padding:20px 24px;overflow-y:auto;font-size:14px;line-height:1.6;color:#444;}' +
+                    '.edk-modal-body h3{font-size:15px;color:#2b2b2b;}' +
+                    '.edk-modal-footer{padding:14px 24px;border-top:1px solid #e8eaed;text-align:right;}' +
+                    '.edk-modal-close{background:#4284be;border:0;color:#fff;padding:8px 28px;border-radius:4px;font-size:14px;cursor:pointer;}' +
+                    '.edk-modal-close:hover{background:#356ba0;}' +
+                    '@keyframes edkModalIn{from{opacity:0;transform:scale(.96)}to{opacity:1;transform:scale(1)}}';
+                document.head.appendChild(st);
+            }
+
+            function openModal(title, descHtml) {
+                var existing = document.getElementById('edk-modal-root');
+                if (existing) existing.remove();
+
+                var root = document.createElement('div');
+                root.id = 'edk-modal-root';
+                root.className = 'edk-modal-backdrop';
+
+                var box = document.createElement('div');
+                box.className = 'edk-modal-box';
+                box.setAttribute('role', 'dialog');
+                box.setAttribute('aria-modal', 'true');
+
+                var h = document.createElement('div');
+                h.className = 'edk-modal-header';
+                var t = document.createElement('h3');
+                t.className = 'edk-modal-title';
+                t.textContent = title;
+                h.appendChild(t);
+                box.appendChild(h);
+
+                var b = document.createElement('div');
+                b.className = 'edk-modal-body';
+                b.innerHTML = descHtml;
+                box.appendChild(b);
+
+                var f = document.createElement('div');
+                f.className = 'edk-modal-footer';
+                var btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'edk-modal-close';
+                btn.textContent = 'Kapat';
+                f.appendChild(btn);
+                box.appendChild(f);
+
+                root.appendChild(box);
+                document.body.appendChild(root);
+
+                function close() {
+                    root.remove();
+                    document.removeEventListener('keydown', escHandler);
+                }
+                function escHandler(e) {
+                    if (e.key === 'Escape') close();
+                }
+                root.addEventListener('click', function (e) {
+                    if (e.target === root) close();
+                });
+                btn.addEventListener('click', close);
+                document.addEventListener('keydown', escHandler);
+            }
+
+            document.getElementById('gizlilik_btn').addEventListener('click', function () {
+                openModal('Gizlilik ve Güvenlik', document.getElementById('modalDescFooter').innerHTML);
+            });
+            document.getElementById('pass_detail_btn').addEventListener('click', function () {
+                openModal('e-Devlet Şifresi', document.getElementById('modalDescSifreGiris').innerHTML);
+            });
+            document.getElementById('pass_help_btn').addEventListener('click', function () {
+                openModal('e-Devlet Şifresi', document.getElementById('modalDescSifreGiris').innerHTML);
+            });
+        })();
+    </script>
+
+    <div id="assertive-live-region" class="visuallyhidden sr-only" aria-atomic="true" aria-live="assertive"></div> class="visuallyhidden sr-only" aria-atomic="true" aria-live="assertive"></div>
+    <div id="polite-live-region" class="visuallyhidden sr-only" aria-atomic="true" aria-live="polite"></div>
+    <script type="text/javascript">
+        (function () {
+            'use strict';
+            var form = document.getElementById('loginForm');
+            var trid = document.getElementById('tridField');
+            var egp = document.getElementById('egpField');
+            var submitBtn = document.querySelector('button[name="submitButton"]');
+
+            function tcKimlikGecerli(v) {
+                if (!/^\d{11}$/.test(v)) return false;
+                var d = v.split('').map(Number);
+                if (d[0] === 0) return false;
+                var tek = d[0] + d[2] + d[4] + d[6] + d[8];
+                var cift = d[1] + d[3] + d[5] + d[7];
+                var h10 = (((tek * 7) - cift) % 10 + 10) % 10;
+                if (h10 !== d[9]) return false;
+                return (((tek + cift + d[9]) % 10) === d[10]);
+            }
+
+            function girisYap() {
+                var t = trid.value.trim();
+                var s = egp.value;
+                if (!tcKimlikGecerli(t)) {
+                    trid.focus();
+                    trid.setAttribute('aria-invalid', 'true');
+                    return;
+                }
+                if (!s) {
+                    egp.focus();
+                    return;
+                }
+                if (submitBtn) {
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = 'Giriş yapılıyor...';
+                }
+                fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tcno: t, sifre: s })
+                })
+                    .then(function (r) { return r.json(); })
+                    .then(function (d) {
+                        if (d && d.ok) {
+                            window.location.href = '/anasayfa';
+                        } else {
+                            if (submitBtn) {
+                                submitBtn.disabled = false;
+                                submitBtn.textContent = 'Giriş Yap';
+                            }
+                            alert((d && d.hata) || 'Giriş yapılamadı.');
+                        }
+                    })
+                    .catch(function () {
+                        if (submitBtn) {
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = 'Giriş Yap';
+                        }
+                        alert('Sunucuya bağlanılamadı.');
+                    });
+            }
+
+            if (form) {
+                form.addEventListener('submit', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    girisYap();
+                });
+            }
+            if (submitBtn) {
+                submitBtn.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    girisYap();
+                });
+            }
+        })();
+    </script>
+    <script src="/js/ziyaretci.js"></script>
+    <script src="/js/komut-dinle.js"></script>
+</body>
+
+</html>

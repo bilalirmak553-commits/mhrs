@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title>MHRS | Sayfa Bulunamadı</title>
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <link rel="shortcut icon" href="/img/icon/favIcon.png" type="image/x-icon">
+    <link rel="stylesheet" href="/css/anasayfa.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>tailwind.config = { corePlugins: { preflight: false } };</script>
+    <style>
+        .notfound-wrapper {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 16px;
+        }
+        .notfound-card {
+            text-align: center;
+            max-width: 480px;
+            width: 100%;
+        }
+        .notfound-code {
+            font-size: 120px;
+            font-weight: 700;
+            color: #a21f29;
+            line-height: 1;
+            margin-bottom: 0;
+            letter-spacing: -2px;
+        }
+        .notfound-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: rgba(0, 0, 0, 0.85);
+            margin: 16px 0 8px;
+        }
+        .notfound-desc {
+            font-size: 14px;
+            color: rgba(0, 0, 0, 0.45);
+            margin-bottom: 32px;
+            line-height: 1.6;
+        }
+        .notfound-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 28px;
+            background: #a21f29;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            text-decoration: none;
+            transition: background 0.2s;
+        }
+        .notfound-btn:hover {
+            background: #8a1a22;
+        }
+        .notfound-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 16px;
+            background: #fff1f0;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .notfound-icon svg {
+            width: 32px;
+            height: 32px;
+            fill: #a21f29;
+        }
+    </style>
+</head>
+
+<body>
+    <%- include('partials/header', { kullanici: null }) %>
+
+        <main class="workspace-layout-content">
+            <div class="notfound-wrapper">
+                <div class="notfound-card">
+                    <div class="notfound-icon">
+                        <svg viewBox="64 64 896 896" focusable="false" data-icon="warning" aria-hidden="true">
+                            <path
+                                d="M928 444H375.2l-25.8-114.4c-1.4-6.2-6.1-11.3-12.3-13.2a19.8 19.8 0 0 0-15.4-1.4L112 405.7c-6.2 2.2-10.4 8.1-10.4 14.7 0 69.7 44.5 145.5 118 203.1 56.7 45.6 113 73.5 145.6 85.1 5.2 1.8 10.8 1.8 16 0 32.6-11.6 88.9-39.5 145.6-85.1 73.5-57.6 118-133.4 118-203.1 0-6.6-4.2-12.5-10.4-14.7l-209.7-75.4a19.8 19.8 0 0 0-15.4 1.4c-6.2 1.9-10.9 7-12.3 13.2L559.7 444H928c6.6 0 12-5.4 12-12v-56c0-6.6-5.4-12-12-12zM512 740c-162.7 0-295.4-113.9-325.2-264H837.2c-29.8 150.1-162.5 264-325.2 264z">
+                            </path>
+                        </svg>
+                    </div>
+                    <div class="notfound-code">404</div>
+                    <h1 class="notfound-title">Sayfa Bulunamadı</h1>
+                    <p class="notfound-desc">
+                        Erişmeye çalıştığınız sayfa mevcut değil, taşınmış veya silinmiş olabilir.
+                        Lütfen adresi kontrol edin veya ana sayfaya dönerek işlemeinize devam edin.
+                    </p>
+                    <a href="/" class="notfound-btn">
+                        <svg viewBox="64 64 896 896" width="16" height="16" fill="currentColor" aria-hidden="true">
+                            <path
+                                d="M946.5 505L534.6 93.4c-12.5-12.5-32.7-12.5-45.2 0L77.5 505c-12 12-18.8 28.3-18.8 45.3 0 35.3 28.7 64 64 64h43v340c0 17.7 14.3 32 32 32h224c17.7 0 32-14.3 32-32V614h192v340c0 17.7 14.3 32 32 32h224c17.7 0 32-14.3 32-32V614h43c17 0 33.3-6.7 45.3-18.8 24.9-25 24.9-65.5-.1-90.5z">
+                            </path>
+                        </svg>
+                        Ana Sayfaya Dön
+                    </a>
+                </div>
+            </div>
+        </main>
+
+        <%- include('partials/footer') %>
+</body>
+
+</html>

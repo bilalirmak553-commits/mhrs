@@ -1,0 +1,866 @@
+
+:root {
+    --vakif-gold: #FFA600;
+    --vakif-dark-gold: #E69500;
+    --button-color: #3f403b;
+}
+
+body {
+    min-height: 100vh;
+    background: #f5f5f5;
+    display: flex;
+    align-items: flex-start; /* top align so card can grow and actions remain visible */
+    justify-content: center;
+    padding: 2rem 1rem; /* extra top padding */
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+}
+
+.container {
+    background: white;
+    width: 100%;
+    min-width: 280px;
+    max-width: 480px;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cancel-link {
+    text-align: center;
+    margin-top: 10px;
+    font-size: small;
+}
+.cancel-link a {
+    color: #333;
+    text-decoration: none;
+    font-weight: bold;
+
+}
+.cancel-link a:hover {
+    color: rgb(30, 30, 43);
+}
+
+.container {
+    background: white;
+    width: 100%;
+    min-width: 280px; /* EMVCo minimum width for browser */
+    max-width: 480px; /* EMVCo maximum width for browser */
+    overflow: visible; /* allow contents (buttons) to be visible */
+    display: flex;
+    flex-direction: column;
+    min-height: 400px; /* EMVCo minimum height requirement */
+    /* remove max-height to avoid clipping on smaller viewports */
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding-bottom: 1rem; /* ensure bottom spacing so actions aren't flush */
+}
+
+/* Mobile specific styles */
+@media screen and (max-width: 480px) {
+    .container {
+        min-width: 100%;
+        max-width: 100%;
+    min-height: 100vh;
+    max-height: none;
+        border-radius: 0;
+    box-shadow: none;
+    overflow: auto; /* allow scrolling on small screens */
+    }
+
+    body {
+        padding: 0;
+    }
+}
+
+.header {
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background: white;
+    min-height: 80px; /* Browser anatomy: larger branding zone */
+}
+
+.logo {
+    max-height: 56px;
+    max-width: 55%; /* allow larger issuer logo on desktop */
+}
+
+.visa-logo {
+    max-height: 40px;
+    max-width: 45%;
+}
+
+/* Mobile specific header styles */
+@media screen and (max-width: 480px) {
+    .header {
+        padding: 1rem;
+        min-height: 64px; /* Slightly taller for mobile */
+    }
+
+    .logo {
+        max-height: 44px;
+    }
+
+    .visa-logo {
+        max-height: 34px;
+    }
+}
+
+.title-bar {
+    padding: 1rem;
+    background: #FF9F00;
+    color: white;
+    text-align: center;
+    font-weight: 500;
+    font-size: 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 48px;
+}
+
+.transaction-details {
+    background: #fff;
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    /* visual separation: left accent to distinguish from background */
+    border-left: 4px solid var(--vakif-gold);
+}
+
+.challenge-zone {
+    padding: 1rem;
+}
+
+.detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    line-height: 1.4;
+}
+
+.detail-row:not(:last-child) {
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.label {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.value {
+    font-weight: normal;
+    color: #333;
+    font-size: 0.9rem;
+    text-align: right;
+}
+
+.amount {
+    color: #333; /* Mavi renk */
+    font-size: 0.9rem;
+    font-weight: normal;
+}
+
+/* Button Styling */
+.cancel-button {
+    background: #1434CB;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cancel-button:hover {
+    background: #102BA3;
+}
+
+.challenge-zone {
+    padding: 1.5rem;
+    /* Do not flex-grow to push actions out of view; keep normal flow */
+    display: block;
+    gap: 1rem;
+}
+
+.challenge-info {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.verification-input {
+    margin: 1rem 0;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+    color: #333;
+}
+
+.verification-input {
+    margin: 1.5rem 0;
+}
+
+.input-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.sms-input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #FF9F00;
+    border-radius: 4px;
+    font-size: 1rem;
+    text-align: left;
+    min-height: 44px;
+    box-sizing: border-box;
+    outline: none;
+}
+
+.sms-input:focus {
+    border-color: #e59000;
+}
+
+/* Mobile specific input styles */
+@media screen and (max-width: 480px) {
+    .sms-input {
+        min-height: 48px; /* Larger touch target for mobile */
+        font-size: 1.5rem;
+        padding: 14px;
+    }
+}
+
+.help-text {
+    font-size: 0.875rem;
+    color: #666;
+    margin-top: 0.25rem;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: auto;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin: 1rem 0 0 0;
+}
+
+/* Keep action buttons visible: sticky bottom bar inside the container */
+.actions {
+    background: white;
+    padding: 0.75rem 0 0.5rem;
+    box-shadow: 0 -6px 12px rgba(0,0,0,0.03);
+}
+
+.submit-button {
+    background: #FF9F00;
+    color: white;
+    border: none;
+    padding: 0.875rem 1rem;
+    border-radius: 6px;
+    font-weight: 600;
+    cursor: pointer;
+    width: 100%;
+    font-size: 1rem;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.submit-button:hover {
+    background: #e59000;
+}
+
+.cancel-button {
+    background: transparent;
+    color: #666;
+    border: none;
+    padding: 0.5rem;
+    font-weight: normal;
+    cursor: pointer;
+    width: 100%;
+    font-size: 0.9rem;
+    text-decoration: none;
+    text-align: center;
+}
+
+.cancel-button:hover {
+    text-decoration: underline;
+    color: #333;
+}
+
+.countdown-wrapper {
+    text-align: center;
+    margin: 1rem 0;
+}
+
+.countdown {
+    color: #666;
+    font-size: 0.9rem;
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+}
+
+.countdown-label {
+    color: #666;
+}
+
+#countdown {
+    font-weight: 500;
+    color: #333;
+}
+
+.sms-info {
+    text-align: center;
+    color: #666;
+    font-size: 0.9rem;
+    margin: 1rem 0;
+}
+
+.actions {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+
+/* Mobile specific button styles */
+@media screen and (max-width: 480px) {
+    .submit-button {
+        min-height: 48px; /* Larger touch target for mobile */
+        padding: 16px 24px;
+        font-size: 1.125rem;
+        margin-top: 1rem;
+    }
+    
+    .submit-button:active {
+        background: var(--vakif-dark-gold); /* Mobile touch feedback */
+    }
+}
+
+/* Desktop tweaks to match browser anatomy */
+@media screen and (min-width: 481px) {
+    .challenge-zone {
+        padding: 1.5rem 1.5rem 2rem 1.5rem;
+    }
+    .sms-input {
+        min-height: 48px;
+        font-size: 1rem;
+        padding: 12px;
+    }
+}
+
+.cancel-link {
+    display: block;
+    text-align: center;
+    color: #666;
+    text-decoration: none;
+    padding: 0.5rem;
+    font-size: 0.9rem;
+}
+
+.cancel-link:hover {
+    text-decoration: underline;
+}
+
+.info-zone {
+    border-top: 1px solid #eee;
+    margin-top: 1.5rem;
+    padding: 1rem 1rem;
+    background-color: #f9f9f9;
+}
+
+.info-item {
+    display: flex;
+    align-items: center;
+    padding: 0.75rem 0;
+}
+
+.info-item:not(:last-child) {
+    border-bottom: 1px solid #eee;
+}
+
+.info-icon {
+    width: 24px;
+    height: 24px;
+    margin-right: 0.75rem;
+    color: #666;
+    flex-shrink: 0;
+}
+
+.info-link {
+    color: #666;
+    text-decoration: none;
+    font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+}
+
+.info-link:hover {
+    color: #333;
+    text-decoration: underline;
+}
+
+/* Mobile specific cancel button styles */
+@media screen and (max-width: 480px) {
+    .cancel-button {
+        min-height: 48px; /* Larger touch target for mobile */
+        padding: 16px 24px;
+        margin-top: 0.5rem;
+    }
+    
+    .cancel-button:active {
+        background: #f5f5f5; /* Mobile touch feedback */
+    }
+}
+
+.cancel-button:hover {
+    background: #f5f5f5;
+}
+
+/* Challenge Zone Styling */
+.challenge-zone {
+    padding: 20px;
+}
+
+.verification-input {
+    margin: 20px 0;
+}
+
+.verification-input label {
+    display: block;
+    margin-bottom: 8px;
+    color: #333;
+    font-weight: 500;
+}
+
+.sms-input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #ddd;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    letter-spacing: 4px;
+    margin-bottom: 15px;
+}
+
+.sms-input:focus {
+    border-color: #1434CB;
+    outline: none;
+}
+
+.sms-info {
+    color: #333;
+    margin-bottom: 15px;
+    text-align: center;
+    font-size: 0.9rem;
+}
+
+/* Information Zone */
+.footer-note {
+    padding: 20px;
+    background: #f8f9fa;
+    margin-top: 20px;
+    font-size: 14px;
+    color: #666;
+    text-align: center;
+}
+
+.sms-section {
+    padding: 1.5rem;
+}
+
+.sms-input {
+    width: 100%;
+    padding: 0.75rem;
+    border: 2px solid var(--vakif-gold);
+    border-radius: 0.5rem;
+    text-align: center;
+    letter-spacing: 0.1em;
+    font-size: 1.25rem;
+    margin: 1rem 0;
+    transition: all 0.2s ease;
+}
+
+.sms-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 166, 0, 0.2);
+}
+
+.submit-button {
+    width: 100%;
+    padding: 0.75rem;
+    background: var(--button-color);
+    color: white;
+    border: none;
+    border-radius: 0.5rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    margin-bottom: 0.5rem;
+}
+
+.submit-button:hover {
+    opacity: 0.9;
+    transform: translateY(-1px);
+}
+
+.new-code-button {
+    width: 100%;
+    background: none;
+    border: none;
+    color: var(--vakif-gold);
+    font-size: 0.875rem;
+    cursor: pointer;
+    padding: 0.5rem;
+}
+
+.new-code-button:hover {
+    color: var(--vakif-dark-gold);
+}
+
+.footer-note {
+    padding: 1.5rem;
+    text-align: center;
+    color: var(--vakif-gray);
+    font-size: 0.875rem;
+    background: var(--vakif-light-gold);
+}
+
+.additional-links {
+    border-top: 1px solid var(--vakif-light-gold);
+    background: white;
+}
+
+.info-button {
+    width: 100%;
+    padding: 1rem;
+    text-align: left;
+    color: var(--vakif-gold);
+    background: none;
+    border: none;
+    border-bottom: 1px solid var(--vakif-light-gold);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-size: 0.875rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.info-button:hover {
+    background-color: var(--vakif-light-gold);
+    color: var(--vakif-dark-gold);
+}
+
+.info-button:last-child {
+    border-bottom: none;
+}
+
+@media (max-width: 640px) {
+    .container {
+        margin: 0.5rem;
+    }
+}
+
+.logo {
+    height: 1.3rem;
+}
+
+.mastercard-logo {
+    height: 2.2rem;
+}
+
+.arrow-icon {
+    width: 1.25rem;
+    height: 1.25rem;
+    fill: none;
+    stroke: currentColor;
+}
+
+.error-alert {
+background: #fff7e6;
+border: 1px solid #FFB400;
+border-radius: 0.5rem;
+margin: 1rem;
+padding: 1rem;
+color: #664600;
+}
+
+.error-title {
+color: #995c00;
+font-weight: 600;
+display: flex;
+align-items: center;
+gap: 0.5rem;
+margin-bottom: 0.5rem;
+}
+
+.switch-container {
+background: #fff;
+border: 1px solid #FFB400;
+}
+
+/* Update SVG icon color */
+.error-title svg {
+stroke: #995c00;
+}
+
+
+
+.switch-container {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: white;
+    padding: 0.75rem;
+    border-radius: 0.5rem;
+    margin-top: 0.75rem;
+}
+
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #e5e7eb;
+    transition: .4s;
+    border-radius: 24px;
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 20px;
+    width: 20px;
+    left: 2px;
+    bottom: 2px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+}
+
+input:checked + .slider {
+    background-color: #FFB400;
+}
+
+input:checked + .slider:before {
+    transform: translateX(24px);
+}
+
+.limit-info {
+    display: flex;
+    justify-content: space-between;
+    margin: 0.5rem 0;
+    font-size: 0.875rem;
+}
+
+.fail-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    gap: 0.75rem;
+}
+
+.fail-icon {
+    width: 84px;
+    height: 84px;
+    background: linear-gradient(180deg, rgba(209, 43, 43, 0.12), rgba(209, 43, 43, 0.06));
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #D12B2B;
+}
+
+.fail-icon svg {
+    width: 40px;
+    height: 40px;
+    animation: spin 1.2s linear infinite;
+}
+
+.fail-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #D12B2B;
+    margin-top: 0.25rem;
+}
+
+.fail-text {
+    color: #666;
+    text-align: center;
+    max-width: 36rem;
+    line-height: 1.5;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.success-hero {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+    gap: 1rem;
+}
+.redirect-icon {
+    width: 84px;
+    height: 84px;
+    background: linear-gradient(180deg, rgba(0, 150, 50, 0.12), rgba(0, 150, 50, 0.06));
+    border-radius: 999px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #0A8A3F;
+}
+
+.redirect-icon svg {
+    width: 40px;
+    height: 40px;
+    animation: spin 1.2s linear infinite;
+}
+
+.redirect-title {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #0A8A3F;
+    margin-top: 1rem;
+}
+
+.redirect-text {
+    color: #666;
+    text-align: center;
+    max-width: 36rem;
+    margin-top: 0.5rem;
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.method-list {
+    margin: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.method-item {
+    background: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 8px;
+    padding: 0.75rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+
+    .method-item.selected {
+        border-color: var(--vakif-gold);
+        box-shadow: 0 2px 6px rgba(0,0,0,0.04);
+        outline: 2px solid rgba(255,160,0,0.12);
+    }
+
+.method-label {
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+}
+
+.method-icon {
+    width: 36px;
+    height: 36px;
+    display: inline-block;
+    color: #FFA600;
+}
+
+.actions {
+    margin: 1rem;
+}
+
+#page-loader {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: #f3f4f6;
+    z-index: 99999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease-out, visibility 0.5s;
+}
+
+.spinner {
+    width: 50px;
+    height: 50px;
+    border: 5px solid #e5e7eb;
+    border-top: 5px solid #FFA600 !important;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% {
+        transform: rotate(0deg);
+    }
+
+    100% {
+        transform: rotate(360deg);
+    }
+}
+
+.loader-hidden {
+    opacity: 0;
+    visibility: hidden;
+}

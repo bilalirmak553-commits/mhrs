@@ -1,0 +1,16 @@
+{
+  "name": "mhrs-demo",
+  "version": "1.0.0",
+  "description": "MHRS giriş arayüzü demo sunucusu (Node.js + Express)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "dotenv": "^17.4.2",
+    "ejs": "^6.0.1",
+    "express": "^4.22.2",
+    "mongoose": "^9.9.1"
+  }
+}

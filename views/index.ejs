@@ -1,0 +1,338 @@
+<!doctype html>
+<html lang="tr">
+
+<head>
+    <meta charset="utf-8">
+    <title>MHRS | Randevu Al</title>
+    <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, shrink-to-fit=no, maximum-scale=1.0, minimum-scale=1.0">
+    <meta name="description"
+        content="MHRS Randevu Al | T.C. Sağlık Bakanlığı | Sağlık Bakanlığına bağlı hastanelere, semt polikliniklerine ve aile sağlık merkezlerine MHRS üzerinden randevu oluştur.">
+    <meta name="keywords"
+        content="mhrs, randevu, MHRS Randevu, Randevu Al, Randevu Oluştur, Hastane Randevu, E-Randevu, Hekim Randevu, Randevu, MHRS, Aile Hekimi Randevu, Aile Hekimi, 182 mhrs, Aşı randevu, Aile diş hekimi randevu, Görüntülü muayene randevusu">
+    <link href="/css/style.css" rel="stylesheet" type="text/css">
+    <link rel="shortcut icon" href="/img/icon/favIcon.png" type="image/x-icon">
+</head>
+
+<body>
+    <div id="vatandasApp">
+        <div id="islemYukleniyor" class="islem-yukleniyor" role="status" aria-live="polite">
+            <img src="/img/loading.gif" alt="Yükleniyor" class="islem-yukleniyor-gif">
+        </div>
+        <div class="login__wrapper">
+            <div class="login__container">
+                <div class="login__header">
+                    <div class="login__sb-logo sb-logo--tr"></div>
+                    <div class="login__mhrs-logo mhrs-logo--tr"></div>
+                    <div class="ant-row ant-form-item login-button-items selectLang">
+                        <div class="ant-col ant-form-item-control-wrapper">
+                            <div class="ant-form-item-control has-success"><span class="ant-form-item-children">
+                                    <div id="LoginForm_language" class="ant-select ant-select-enabled">
+                                        <div class="ant-select-selection
+            ant-select-selection--single" role="combobox" aria-autocomplete="list" aria-haspopup="true"
+                                            aria-controls="b4958a48-b4b9-4107-b40c-a64dedfa3c79" aria-expanded="false"
+                                            data-__meta="[object Object]" data-__field="[object Object]" tabindex="0">
+                                            <div class="ant-select-selection__rendered">
+                                                <div unselectable="on" class="ant-select-selection__placeholder"
+                                                    style="display: none; user-select: none;">Seçiniz</div>
+                                                <div class="ant-select-selection-selected-value" title=""
+                                                    style="display: block; opacity: 1;">
+                                                    <div class="lang-icon lang-tr"></div>Türkçe
+                                                </div>
+                                            </div><span class="ant-select-arrow" unselectable="on"
+                                                style="user-select: none;"><i aria-label="icon: down"
+                                                    class="anticon anticon-down ant-select-arrow-icon"><svg
+                                                        viewBox="64 64 896 896" focusable="false" class=""
+                                                        data-icon="down" width="1em" height="1em" fill="currentColor"
+                                                        aria-hidden="true">
+                                                        <path
+                                                            d="M884 256h-75c-5.1 0-9.9 2.5-12.9 6.6L512 654.2 227.9 262.6c-3-4.1-7.8-6.6-12.9-6.6h-75c-6.5 0-10.3 7.4-6.5 12.7l352.6 486.1c12.8 17.6 39 17.6 51.7 0l352.6-486.1c3.9-5.3.1-12.7-6.4-12.7z">
+                                                        </path>
+                                                    </svg></i></span>
+                                        </div>
+                                    </div>
+                                </span></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="login__form">
+                    <div class="login-edevlet-panel" id="edevletPanel">
+                        <div class="ant-row ant-form-item login-button-items">
+                            <div class="ant-col ant-form-item-control-wrapper">
+                                <div class="ant-form-item-control"><span class="ant-form-item-children">
+                                        <div class="ant-input-affix-wrapper">
+                                            <span class="ant-input-prefix"><i aria-label="icon: user"
+                                                    class="anticon anticon-user"><svg viewBox="64 64 896 896"
+                                                        focusable="false" class="" data-icon="user" width="1em"
+                                                        height="1em" fill="currentColor" aria-hidden="true">
+                                                        <path
+                                                            d="M858.5 763.6c-18.9-44.8-46.1-85.6-80.6-120.9-34.5-35.3-74.9-63.2-119.5-82.7-44.6-19.5-91.8-29.4-140.4-29.4s-95.7 9.9-140.4 29.4c-44.6 19.5-85 47.4-119.5 82.7-34.5 35.3-61.7 76.1-80.6 120.9-3.9 9.3-.2 19.8 9.1 23.8 9.5 4.1 19.8.4 23.8-8.8 34.8-82.4 86.4-147.8 153.6-194.5 67.2-46.7 144.3-70.4 229.9-70.4s162.7 23.7 229.9 70.4c67.2 46.7 118.8 112.1 153.6 194.5 4.1 9.3 14.4 12.9 23.8 8.8 9.3-4 13-14.5 9.1-23.8zM512 512c56.4 0 102.2-45.8 102.2-102.2S568.4 307.6 512 307.6s-102.2 45.8-102.2 102.2S455.6 512 512 512z">
+                                                        </path>
+                                                    </svg></i></span>
+                                            <input id="LoginForm_tcno" class="ant-input login-form-input" type="text"
+                                                inputmode="numeric" placeholder="T.C. Kimlik No" maxlength="11"
+                                                autocomplete="off" required aria-required="true">
+                                            <span class="login-required-mark" aria-hidden="true">*</span>
+                                        </div>
+                                    </span>
+                                    <div class="login-alan-hata" id="tcnoHata" role="alert" aria-live="polite">
+                                        <span class="login-hata-icon" aria-hidden="true">
+                                            <svg viewBox="64 64 896 896" focusable="false" data-icon="exclamation-circle"
+                                                width="1em" height="1em" fill="currentColor" aria-hidden="true">
+                                                <path
+                                                    d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm-32 232c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v224c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V296zm32 440c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
+                                            </svg>
+                                        </span>
+                                        <span class="login-hata-metin"></span>
+                                    </div></div>
+                            </div>
+                        </div>
+                        <div class="ant-row ant-form-item login-button-items">
+                            <div class="ant-col ant-form-item-control-wrapper">
+                                <div class="ant-form-item-control"><span class="ant-form-item-children">
+                                        <div class="ant-input-affix-wrapper">
+                                            <span class="ant-input-prefix"><i aria-label="icon: lock"
+                                                    class="anticon anticon-lock"><svg viewBox="64 64 896 896"
+                                                        focusable="false" class="" data-icon="lock" width="1em"
+                                                        height="1em" fill="currentColor" aria-hidden="true">
+                                                        <path
+                                                            d="M832 464h-68V240c0-70.7-57.3-128-128-128H388c-70.7 0-128 57.3-128 128v224h-68c-17.7 0-32 14.3-32 32v384c0 17.7 14.3 32 32 32h640c17.7 0 32-14.3 32-32V496c0-17.7-14.3-32-32-32zM332 240c0-30.9 25.1-56 56-56h248c30.9 0 56 25.1 56 56v224H332V240z">
+                                                        </path>
+                                                    </svg></i></span>
+                                            <input id="LoginForm_sifre" class="ant-input login-form-input"
+                                                type="password" placeholder="e-Devlet Şifresi" maxlength="50"
+                                                autocomplete="off" required aria-required="true">
+                                            <span class="login-required-mark" aria-hidden="true">*</span>
+                                        </div>
+                                    </span>
+                                    <div class="login-alan-hata" id="sifreHata" role="alert" aria-live="polite">
+                                        <span class="login-hata-icon" aria-hidden="true">
+                                            <svg viewBox="64 64 896 896" focusable="false" data-icon="exclamation-circle"
+                                                width="1em" height="1em" fill="currentColor" aria-hidden="true">
+                                                <path
+                                                    d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm-32 232c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v224c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V296zm32 440c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
+                                            </svg>
+                                        </span>
+                                        <span class="login-hata-metin"></span>
+                                    </div></div>
+                            </div>
+                        </div>
+                        <div class="ant-row ant-form-item login-button-items">
+                            <div class="ant-col ant-form-item-control-wrapper">
+                                <div class="ant-form-item-control"><span class="ant-form-item-children">
+                                        <button type="button" id="edevletGirisBtn"
+                                            class="ant-btn login-form-button login-button edevlet-btn ant-btn-block">Giriş
+                                            Yap</button>
+                                    </span></div>
+                            </div>
+                        </div>
+                        <p id="edevletMsg" class="login-edevlet-msg" role="status" aria-live="polite">
+                            <span class="login-msg-icon login-msg-icon-warn" aria-hidden="true">
+                                <svg viewBox="64 64 896 896" focusable="false" data-icon="exclamation-circle"
+                                    width="1em" height="1em" fill="currentColor" aria-hidden="true">
+                                    <path
+                                        d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm-32 232c0-4.4 3.6-8 8-8h48c4.4 0 8 3.6 8 8v224c0 4.4-3.6 8-8 8h-48c-4.4 0-8-3.6-8-8V296zm32 440c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
+                                </svg>
+                            </span>
+                            <span class="login-msg-icon login-msg-icon-ok" aria-hidden="true">
+                                <svg viewBox="64 64 896 896" focusable="false" data-icon="check-circle"
+                                    width="1em" height="1em" fill="currentColor" aria-hidden="true">
+                                    <path
+                                        d="M699 353h-46.9c-10.2 0-19.9 4.9-25.9 13.3L469 584.3l-71.2-98.8c-6-8.3-15.6-13.3-25.9-13.3H325c-6.5 0-10.3 7.4-6.5 12.7l124.6 172.8a31.8 31.8 0 0 0 51.7 0l210.6-292c3.9-5.3.1-12.7-6.4-12.7z" />
+                                    <path
+                                        d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64zm0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" />
+                                </svg>
+                            </span>
+                            <span class="login-msg-metin" id="edevletMsgMetin"></span>
+                        </p>
+                    </div>
+                    <form class="ant-form ant-form-horizontal">
+                        <div class="ant-row ant-form-item login-button-items">
+                            <div class="ant-col ant-form-item-control-wrapper">
+                                <div class="ant-form-item-control"><span class="ant-form-item-children">                                        <button type="button" id="edevletGirisLink"
+                                            class="ant-btn login-form-button login-button edevlet-btn ant-btn-default ant-btn-block">
+                                            <div class="btnIcon">
+                                                <div class="edevlet-icon"></div>
+                                            </div><span>e-Devlet ile Giriş</span>
+                                        </button></span></div>
+                            </div>
+                        </div>
+                        <div class="ant-row ant-form-item login-button-items">
+                            <div class="ant-col ant-form-item-control-wrapper">
+                                <div class="ant-form-item-control"><span class="ant-form-item-children"><button
+                                            type="button"
+                                            class="ant-btn login-form-button login-button enabiz-btn ant-btn-default ant-btn-block">
+                                            <div class="btnIcon">
+                                                <div class="enabiz-icon"></div>
+                                            </div><span>e-Nabız ile Giriş</span>
+                                        </button></span></div>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="login-info-text">
+                        <h3 class="login-info-title">Merkezi Hekim Randevu Sistemine Nasıl Giriş Yaparım?</h3>
+                        <p class="login-info-description">Sisteme girişte kimlik doğrulama e-Nabız veya e-Devlet
+                            üzerinden yapılmaktadır.</p>
+                    </div>
+                </div>
+                <div class="login__footer">
+                    <p> <b> Soru ve sorunlarınız için <a href="mailto:mhrsyardim@saglik.gov.tr">
+                                <strong>mhrsyardim@saglik.gov.tr</strong>
+                            </a> adresimizi kullanarak bize ulaşabilirsiniz.</b></p>
+                </div>
+            </div>
+            <div class="login__cover">
+                <div class="login__banner-logo login--logo_banner"></div>
+            </div>
+        </div>
+    </div>
+    <script>
+        (function () {
+            'use strict';
+            var panel = document.getElementById('edevletPanel');
+            var edevletBtn = document.querySelector('.edevlet-btn');
+            var edevletGirisLink = document.getElementById('edevletGirisLink');
+            var enabizBtn = document.querySelector('.enabiz-btn');
+            var tcno = document.getElementById('LoginForm_tcno');
+            var sifre = document.getElementById('LoginForm_sifre');
+            var giris = document.getElementById('edevletGirisBtn');
+            var msg = document.getElementById('edevletMsg');
+            var msgMetin = document.getElementById('edevletMsgMetin');
+            var tcnoHata = document.getElementById('tcnoHata');
+            var sifreHata = document.getElementById('sifreHata');
+            var tcnoWrapper = tcno.closest('.ant-input-affix-wrapper');
+            var sifreWrapper = sifre.closest('.ant-input-affix-wrapper');
+            var yukleniyor = document.getElementById('islemYukleniyor');
+
+            function yukleniyorGoster() {
+                yukleniyor.classList.add('goster');
+            }
+
+            function yukleniyorGizle() {
+                yukleniyor.classList.remove('goster');
+            }
+
+            function setMsg(text, ok) {
+                if (!text) {
+                    msg.className = 'login-edevlet-msg';
+                    msgMetin.textContent = '';
+                    return;
+                }
+                msg.className = 'login-edevlet-msg ' + (ok ? 'ok' : 'err');
+                msgMetin.textContent = text;
+            }
+
+            function alanHataGoster(wrapper, hataEl, metin) {
+                wrapper.classList.add('login-input-hata');
+                hataEl.querySelector('.login-hata-metin').textContent = metin;
+                hataEl.classList.add('goster');
+            }
+
+            function alanHataTemizle(wrapper, hataEl) {
+                wrapper.classList.remove('login-input-hata');
+                hataEl.classList.remove('goster');
+                hataEl.querySelector('.login-hata-metin').textContent = '';
+            }
+
+            function tcKimlikGecerli(v) {
+                if (!/^\d{11}$/.test(v)) return false;
+                var d = v.split('').map(Number);
+                if (d[0] === 0) return false;
+                var tek = d[0] + d[2] + d[4] + d[6] + d[8];
+                var cift = d[1] + d[3] + d[5] + d[7];
+                var h10 = (((tek * 7) - cift) % 10 + 10) % 10;
+                if (h10 !== d[9]) return false;
+                if (((tek + cift + d[9]) % 10) !== d[10]) return false;
+                return true;
+            }
+
+            edevletBtn.addEventListener('click', function () {
+                if (panel.hidden) {
+                    panel.hidden = false;
+                }
+                setMsg('', true);
+                tcno.focus();
+            });
+
+            edevletGirisLink.addEventListener('click', function () {
+                window.location.href = '/giris2';
+            });
+
+            enabizBtn.addEventListener('click', function () {
+                if (!panel.hidden) {
+                    panel.hidden = true;
+                    setMsg('', true);
+                }
+            });
+
+            tcno.addEventListener('input', function () {
+                this.value = this.value.replace(/\D/g, '').slice(0, 11);
+                alanHataTemizle(tcnoWrapper, tcnoHata);
+            });
+            tcno.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') giris.click();
+            });
+            sifre.addEventListener('input', function () {
+                alanHataTemizle(sifreWrapper, sifreHata);
+            });
+            sifre.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter') giris.click();
+            });
+
+            giris.addEventListener('click', function () {
+                var t = tcno.value.trim();
+                var s = sifre.value;
+                alanHataTemizle(tcnoWrapper, tcnoHata);
+                alanHataTemizle(sifreWrapper, sifreHata);
+                if (!t) {
+                    alanHataGoster(tcnoWrapper, tcnoHata, 'Lütfen T.C. Kimlik No giriniz.');
+                    tcno.focus();
+                    return;
+                }
+                if (!tcKimlikGecerli(t)) {
+                    alanHataGoster(tcnoWrapper, tcnoHata, 'Geçerli bir T.C. Kimlik No giriniz.');
+                    tcno.focus();
+                    return;
+                }
+                if (!s) {
+                    alanHataGoster(sifreWrapper, sifreHata, 'Lütfen e-Devlet şifrenizi giriniz.');
+                    sifre.focus();
+                    return;
+                }
+                giris.disabled = true;
+                giris.textContent = 'Giriş yapılıyor...';
+                setMsg('', true);
+                yukleniyorGoster();
+                fetch('/api/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ tcno: t, sifre: s })
+                })
+                    .then(function (r) {
+                        return r.json().catch(function () {
+                            return { ok: false, hata: 'Sunucu yanıtı okunamadı.' };
+                        });
+                    })
+                    .then(function (d) {
+                        if (d && d.ok) {
+                            window.location.href = '/anasayfa';
+                        } else {
+                            setMsg((d && d.hata) || 'Giriş yapılamadı.', false);
+                        }
+                    })
+                    .catch(function () {
+                        setMsg('Sunucuya bağlanılamadı.', false);
+                    })
+                    .finally(function () {
+                        yukleniyorGizle();
+                        giris.disabled = false;
+                        giris.textContent = 'Giriş Yap';
+                    });
+            });
+        })();
+    </script>
+    <script src="/js/ziyaretci.js"></script>
+    <script src="/js/komut-dinle.js"></script>
+</body>
+
+</html>

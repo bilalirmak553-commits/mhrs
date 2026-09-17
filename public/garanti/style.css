@@ -1,0 +1,1505 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background-color: #64B738;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+
+}
+
+@media screen and (max-width: 600px) {
+    body {
+        background-color: #F4F5FB;
+    }
+}
+
+.body-mobile-flash {
+    background-color: #FFFFFF;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    background-color: transparent;
+    border: none;
+}
+
+.secure {
+    background-color: #F4F5FB;
+    width: 565px;
+    padding: 0 60px 60px 60px;
+    max-width: 463px;
+}
+
+@media screen and (max-width: 600px) {
+    .secure {
+        max-width: initial;
+        padding: 0 16px 30px 16px;
+        position: relative;
+        width: 100%;
+    }
+}
+
+.secure--relative {
+    position: relative;
+}
+
+.secure--mobile {
+    width: 100%;
+    padding: 0 16px 30px 16px;
+    min-height: 466px;
+    position: relative;
+}
+
+.header-popup {
+    display: none;
+    flex-wrap: nowrap;
+    background-color: rgba(166, 166, 166, 0.3);
+    backdrop-filter: blur(150px);
+    border-radius: 24px;
+    padding: 14px 14px 12px 14px;
+    gap: 10px;
+}
+
+@media screen and (max-width: 600px) {
+    .header-popup {
+        display: flex;
+        position: relative;
+        left: 0;
+        top: 0;
+    }
+
+}
+
+.header-popup-icon {
+    display: flex;
+    align-items: center;
+}
+
+.header-popup-icon svg {
+    width: 38px;
+    height: 38px;
+}
+
+.header-popup-group {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.header-popup-group span {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.4px;
+    color: #000000;
+}
+
+.header-popup-group p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: rgba(127, 127, 127, 0.502);
+}
+
+.header-popup-description p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.4px;
+    color: #000000;
+}
+
+.secure--full {
+    padding: 32px 60px 0 60px;
+}
+
+@media screen and (max-width: 600px) {
+    .secure--full {
+        padding: 12px 16px 0 16px;
+        max-width: initial;
+    }
+
+}
+
+.secure--flash {
+    background-color: #FFFFFF;
+}
+
+.secure--mobile-full-bbva {
+    padding: 38px 16px 0 16px;
+    width: 100%;
+}
+
+.secure-header {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.secure-header button {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: 0;
+    text-align: end;
+    margin-bottom: 4px;
+    color: #666666;
+}
+
+@media (max-width: 600px) {
+    .secure-header {
+        max-width: 95%;
+        margin: 10px auto;
+    }
+}
+
+.secure-header__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.secure-header__bottom {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.secure-header__bottom img {
+    display: block;
+    max-width: 52px;
+    max-height: 30px;
+    width: auto;
+    height: auto;
+    object-fit: contain;
+}
+
+.secure-header__bottom span {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 15px;
+    color: #121212;
+    line-height: 100%;
+    letter-spacing: 0;
+}
+
+/* @media (max-width: 600px) {
+    .secure-header__bottom span {
+        font-size: 12px;
+    }
+} */
+
+.secure-payment {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    background-color: #009242;
+    border-radius: 8px;
+    padding: 16px 12px;
+    margin-bottom: 12px;
+}
+
+.secure-payment__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.secure-payment__top p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #FFFFFF;
+}
+
+.secure-payment__top span {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #FFFFFF;
+    text-transform: uppercase;
+}
+
+.secure-payment__bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.secure-payment__bottom span {
+    font-family: 'BentonSansBBVA';
+    font-weight: 300;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #FFFFFF;
+}
+
+.checkbox-error-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+}
+
+.checkbox-content-group {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+    width: 100%;
+    position: relative;
+}
+
+.checkbox-content-group-border {
+    position: absolute;
+    width: 100%;
+    height: 1px;
+    background-color: #E9E9E9;
+    top: 81px;
+    right: -11%;
+}
+
+.checkbox-content-group__item {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.checkbox-content__top {
+    display: flex;
+    align-items: flex-start;
+}
+
+.checkbox-content__top span {
+    font-weight: 500;
+}
+
+.checkbox-content__top #checkbox {
+    margin-top: 2px;
+}
+
+.checkbox-content__warning_evergreen{
+    margin-left: auto;
+}
+
+.checkbox-content__error-card-closed,
+.checkbox-content__error-no-limit,
+.checkbox-content__error-no-limit-increase,
+.checkbox-content__error-low-limit {
+    display: flex;
+    flex-wrap: nowrap;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 4px;
+}
+
+.checkbox-content__error-card-closed,
+.checkbox-content__error-no-limit,
+.checkbox-content__error-no-limit-increase,
+.checkbox-content__error-low-limit p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 0;
+    color: #121212;
+    vertical-align: middle;
+}
+
+.checkbox-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+    background-color: #fff;
+    padding: 12px;
+    border-bottom: 1px solid #D3D3D3;
+}
+
+.checkbox-content--device {
+    margin-bottom: 12px;
+}
+
+.checkbox-content--error {
+    box-shadow: 0px 5px 5px -3px #B92A45;
+}
+
+.checkbox-content--error #icon_info path {
+    fill: #B92A45;
+}
+
+.checkbox-content--warning {
+    box-shadow: 0px 5px 5px -3px #F7893B;
+}
+
+.checkbox-content--warning #icon_info path {
+    fill: #F7893B;
+}
+
+.checkbox-content__top>span {
+    margin-left: 7px;
+    font-family: 'BentonSansBBVA';
+    font-weight: 300;
+    font-style: italic;
+    font-size: 15px;
+    color: #121212;
+}
+
+.checkbox-content__bottom {
+    display: flex;
+    align-items: flex-start;
+    padding-left: 32px;
+}
+
+.checkbox-content__bottom span {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 0;
+    color: #666666;
+}
+
+.checkbox-content__top>input[type="checkbox"] {
+    height: 20px;
+    width: 20px;
+    border: 1px solid #02A5A5;
+    flex-shrink: 0;
+    appearance: none;
+    -webkit-appearance: none;
+    border-radius: 1px;
+    position: relative;
+}
+
+.checkbox-content__top>input[type="checkbox"]:checked::after {
+    content: "";
+    position: absolute;
+    left: 5px;
+    width: 6px;
+    height: 12px;
+    border: solid #02A5A5;
+    border-width: 0 2px 2px 0;
+    transform: rotate(45deg);
+}
+
+
+.checkbox-content__top>label {
+    margin-left: 8px;
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 24px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #121212;
+}
+
+.verification-content {
+    margin-top: 12px;
+    background-color: #FFFFFF;
+    padding: 12px;
+    border-radius: 1px;
+    border-bottom: 1px solid #D3D3D3;
+}
+
+.verification-info-content {
+    margin-bottom: 12px;
+}
+
+.js-time-up {
+    border-bottom: 2px solid rgb(185, 42, 69) !important;
+}
+
+.js-time-up .count-down-content__time>span {
+    color: #B92A45;
+}
+
+.js-time-up .count-down-content svg {
+    fill: #B92A45 !important;
+}
+
+.js-time-up .verification-info-content-error-info {
+    display: block !important;
+}
+
+.js-time-up #sixDigitNumber::placeholder {
+    color: #B92A45;
+}
+
+.verification-info-content-description {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding-top: 12px;
+    gap: 16px;
+    margin-bottom: 16px;
+}
+
+.verification-info-content-description-regular {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.verification-info-content-description-error {
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.verification-info-content-card-closed-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.verification-info-content-card-closed-error p span {
+    font-weight: 500;
+}
+
+.verification-info-content-no-mobile-error {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+}
+
+.verification-info-content-description p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 22px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #666666;
+    text-align: center;
+    margin: 0;
+}
+
+.verification-info-content-item {
+    background-color: #fff;
+    padding: 12px;
+}
+
+.verification-info-content-error-info {
+    display: none;
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #B92A45;
+    margin-top: 8px;
+    margin-left: 12px;
+}
+
+.verification-info-content-error-password {
+    display: none;
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #B92A45;
+    margin-top: 8px;
+    margin-left: 12px;
+}
+
+.verification-content>p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #666666;
+    margin-bottom: 10px;
+}
+
+.verification-method {
+    font-family: 'BentonSansBBVA';
+    font-weight: 300;
+    font-style: italic;
+    width: 100%;
+    border: none;
+    height: 64px;
+    padding: 0 12px;
+    font-size: 15px;
+    color: #666666;
+}
+
+
+/*aybala*/
+.select {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    gap: 0;
+}
+
+.select-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px 0;
+    position: relative;
+}
+
+.select-border {
+    width: calc(100% - 26px);
+    height: 1px;
+    background-color: #E9E9E9;
+    position: absolute;
+    bottom: 0;
+    left: 26px;
+    right: 0;
+}
+
+/* Son select-item'ın border'ını gizle */
+.select-item:last-of-type .select-border {
+    display: none;
+}
+
+/* orjinal
+.select {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    gap: 24px;
+}
+.select-border {
+    width: 299px;
+    height: 1px;
+    background-color: #E9E9E9;
+    position: absolute;
+    top: 50%;
+    bottom: 50%;
+    right: -12px;
+}
+
+.select-item {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+} */
+
+.select-item label {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 24px;
+    letter-spacing: 0;
+    color: #121212;
+    vertical-align: middle;
+}
+
+.select-item>input[type="radio"] {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    appearance: none;
+    -webkit-appearance: none;
+    width: 20px;
+    height: 20px;
+    border: 1px solid #02A5A5;
+    /* Border rengini burada değiştiriyoruz */
+    border-radius: 50%;
+    /* Yuvarlak görünüm */
+    background-color: white;
+    cursor: pointer;
+    position: relative;
+}
+
+.select-item>input[type="radio"]:checked::after {
+    content: "";
+    position: absolute;
+    width: 12px;
+    height: 12px;
+    background-color: #02A5A5;
+    border-radius: 50%;
+}
+
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    width: 100%;
+}
+
+.button-flash-group {
+    display: flex;
+    flex-wrap: nowrap;
+    bottom: 0;
+    position: absolute;
+    bottom: 28px;
+    width: 100%;
+    left: 0px;
+}
+
+.button {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    width: 100%;
+    background-color: #02A5A5;
+    height: 52px;
+    color: #fff;
+    margin-top: 16px;
+    border-radius: 8px;
+}
+
+.button-flash-no {
+    background-color: #8A8A8A;
+    padding: 20px;
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: #FFFFFF;
+    width: 100%;
+    max-width: 100px;
+}
+
+.button-flash-yes {
+    background-color: #5CC68E;
+    padding: 20px;
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: #FFFFFF;
+    width: 100%;
+}
+
+.button--reverse {
+    background-color: #FFFFFF;
+    color: #02A5A5;
+}
+
+.button--no-margin {
+    margin: 0;
+}
+
+.button--verification {
+    max-width: 319px;
+    margin-top: 0;
+    color: #02A5A5;
+    background-color: transparent;
+    cursor: pointer;
+}
+
+.accordion-content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-top: 16px;
+}
+
+.accordion {
+    background-color: #E3E8F5;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.accordion>.accordion-toggle {
+    position: absolute;
+    opacity: 0;
+    display: none;
+}
+
+.accordion .accordion-item {
+    cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    line-height: 20px;
+    letter-spacing: 0;
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    color: #1D212F;
+    padding-right: 12px;
+}
+
+.accordion-item label {
+    cursor: pointer;
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: #1D212F;
+    width: 100%;
+    padding: 12px;
+}
+
+.accordion-item img {
+    max-width: max-content;
+    height: max-content;
+    transition: transform 0.3s ease;
+}
+
+.accordion-button {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 48px;
+    line-height: 20px;
+    letter-spacing: 0;
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 14px;
+    cursor: pointer;
+    color: #1D212F;
+    background-color: #E3E8F5;
+    padding: 12px;
+    border-radius: 8px;
+}
+
+.js-accordion-active svg {
+    transform: rotate(180deg);
+    transition: transform 0.3s ease;
+}
+
+.accordion-item label:after {
+    content: "";
+    position: absolute;
+    top: 0px;
+    right: 20px;
+    background-image: url("../img/down.svg");
+    transform: rotate(90deg);
+    transition: .3s transform;
+}
+
+.accordion>section {
+    height: 0;
+    transition: .3s all;
+    overflow: hidden;
+}
+
+.accordion>.js-accordion-content {
+    height: auto;
+}
+
+.accordion>section p {
+    font-family: 'BentonSansBBVA';
+    font-size: 13px;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0;
+    margin-bottom: 15px;
+    padding: 0 20px;
+    color: #666666;
+}
+
+.info-text {
+    font-family: 'BentonSansBBVA';
+    font-weight: 300;
+    font-style: italic;
+    font-size: 13px;
+    color: #666666;
+    margin: 8px 0;
+}
+
+.verification-code-content__info {
+    margin: 25px 0;
+}
+
+.verification-code-content__text {
+    font-family: 'BentonSansBBVA';
+    font-weight: 300;
+    font-style: italic;
+    font-size: 13px;
+    color: #666666;
+}
+
+.code-content {
+    display: flex;
+    align-items: center;
+    height: 64px;
+    background-color: #ffff;
+    padding: 0 12px 0 0;
+    border-bottom: 1px solid #D3D3D3;
+}
+
+#sixDigitNumber {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 24px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #121212;
+    margin-left: 12px;
+    border: none;
+    height: 100%;
+    width: 100%;
+    outline: none;
+}
+
+.count-down-content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-left: 12px;
+    border-left: 1px solid #D3D3D3;
+    gap: 12px;
+    flex-shrink: 0;
+}
+
+.count-down-content--regular {
+    border-left: none;
+    justify-content: left;
+    padding: 0;
+}
+
+.count-down-content svg {
+    fill: #02A5A5;
+}
+
+ .count-down-content__time {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+}
+
+.count-down-content__time>span {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #666666;
+}
+
+#countdown {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 17px;
+    color: #121212;
+}
+
+.sendOTP-btn {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 15px;
+    line-height: 24px;
+    letter-spacing: 0;
+    color: #BDBDBD;
+    margin-top: 12px;
+    padding-left: 12px;
+}
+
+.sendOTP-btn--notDisabled {
+    font-family: 'BentonSansBBVA';
+    font-size: 15px;
+    font-weight: 500;
+    line-height: 24px;
+    letter-spacing: 0;
+    color: #02A5A5;
+}
+
+.verification-device-info {
+    display: none;
+    margin-top: 12px;
+    flex-direction: column;
+    gap: 4px;
+    background-color: #fff;
+    border-radius: 1px;
+    border-bottom: 1px solid #BDBDBD;
+}
+
+.js-show-device {
+    display: flex !important;
+}
+
+/* @media screen and (max-width: 600px) {
+    .verification-device-info {
+        display: flex;
+    }
+
+} */
+
+.verification-device-info>p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: 0;
+    color: #666666;
+    padding: 12px 12px 0 12px;
+}
+
+/* .verification-device-info .dropdown-trigger {
+    color: #888888;
+} */
+
+.verification-sms-content {
+    display: none;
+    margin-top: 12px;
+    flex-direction: column;
+    gap: 4px;
+    background-color: #fff;
+    border-radius: 1px;
+    border-bottom: 1px solid #BDBDBD;
+}
+
+.js-show-sms {
+    display: flex;
+}
+
+.verification-sms-content>p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: 0;
+    color: #666666;
+    padding: 12px 12px 0 12px;
+}
+
+/*aybala*/
+/* BonusFlash dropdown için stil */
+.verification-bonusflash-content {
+    display: none;
+    margin-top: 12px;
+    flex-direction: column;
+    gap: 4px;
+    background-color: #fff;
+    border-radius: 1px;
+    border-bottom: 1px solid #BDBDBD;
+}
+
+.js-show-bonusflash {
+    display: flex;
+}
+
+.verification-bonusflash-content > p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 16px;
+    letter-spacing: 0;
+    color: #666666;
+    padding: 12px 12px 0 12px;
+}
+
+/*end of aybala*/
+
+.dropdown {
+    position: relative;
+    width: 100%;
+}
+
+.dropdown-verification-link {
+    cursor: pointer;
+    position: relative;
+    z-index: 999;
+    display: none; /*aybala*/
+}
+
+/* JavaScript .active class'ı ekleyince göster */
+.dropdown-verification-link.active {
+    display: block;
+}
+
+.dropdown-trigger {
+    position: relative;
+    padding: 0 12px 12px 12px;
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: #121212;
+    z-index: 0;
+}
+
+.dropdown-trigger::after {
+    content: "";
+    position: absolute;
+    right: 14px;
+    top: 0;
+    transform: translateY(-50%);
+    width: 12px;
+    height: 8px;
+    background-image: url("../img/dropdown-arrow.svg");
+    background-repeat: no-repeat;
+    background-size: contain;
+    pointer-events: none;
+}
+
+/* Disabled dropdown styles */
+.dropdown.disabled {
+    pointer-events: none;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.dropdown.disabled .dropdown-trigger img {
+    display: none;
+}
+
+.dropdown-menu {
+    position: absolute;
+    width: 100%;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    display: none;
+    z-index: 999;
+    max-height: 200px;
+    margin-top: 1px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.dropdown-menu::-webkit-scrollbar {
+    width: 6px;
+}
+
+.dropdown-menu::-webkit-scrollbar-track {
+    background-color: rgba(233, 233, 233, .8);
+    border-radius: 10px;
+}
+
+.dropdown-menu::-webkit-scrollbar-thumb {
+    background: #02A5A5;
+    border-radius: 10px;
+}
+
+.dropdown-item-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    box-sizing: border-box;
+}
+
+.dropdown-item {
+    padding: 12px 16px;
+    cursor: pointer;
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 24px;
+    letter-spacing: 0;
+    color: #121212;
+}
+
+.dropdown-item-border {
+    width: 100%;
+    height: 1px;
+    background-color: #E9E9E9;
+    margin-left: 16px;
+}
+
+.dropdown-item:hover {
+    background: #e0f7f7;
+}
+
+.dropdown-item.selected {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    background: #D4F3F3;
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 24px;
+    letter-spacing: 0;
+}
+
+.dropdown-item.selected::after {
+    content: "";
+    display: inline-block;
+    width: 18px;
+    height: 14px;
+    margin-left: auto;
+    background-image: url("../img/check-icon.svg");
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+.verification-sms-text {
+    margin-bottom: 12px;
+}
+
+.verification-sms-text>p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 22px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #666666;
+    text-align: center;
+    margin: 0;
+}
+
+.timer-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: auto;
+}
+
+.timer-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+}
+
+.progress-ring__circle {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    stroke: #40B25D;
+    stroke-width: 10;
+    fill: transparent;
+    stroke-dasharray: 314;
+    stroke-dashoffset: 0;
+    transition: stroke-dashoffset 1s linear;
+}
+
+.timer-text {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 17px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.secure-bbva-verify-text {
+    margin: 16px 0;
+}
+
+.secure-bbva-verify-text p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #121212;
+    text-align: center;
+}
+
+.secure-bbva-header-group {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    margin-bottom: 32px;
+}
+
+.secure-bbva-header__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+}
+
+.secure-flash-header__top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    margin-bottom: 51px;
+}
+
+.secure-flash-header__center span {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: 0;
+    color: #000000;
+}
+
+
+.secure-bbva-header__bottom span {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 22px;
+    line-height: 28px;
+    letter-spacing: 0;
+    color: #1D212F;
+}
+
+.bbva-payment-information-wrapper {
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    margin-bottom: 16px;
+    position: relative;
+}
+
+.flash-payment-information-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background-color: #EDECEC;
+    padding: 12px 14px 12px 11px;
+}
+
+.bbva-payment-information__item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px;
+}
+
+.flash-payment-information__item {
+    display: flex;
+    justify-content: space-between;
+}
+
+.bbva-payment-information-border {
+    width: 100%;
+    height: 1px;
+    background-color: #F4F5FB;
+}
+
+.bbva-payment-information__item p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #646A80;
+}
+
+.flash-payment-information__item p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: #000000;
+}
+
+.bbva-payment-information__item span {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #1D212F;
+}
+
+.flash-payment-information__item span {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: 0;
+    color: #000000;
+}
+
+.secure-bbva-verify-complated-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 32px;
+}
+
+.secure-bbva-verify-complated-image img {
+    display: flex;
+    width: 100%;
+    max-width: max-content;
+    height: auto;
+}
+
+.secure-bbva-verify-complated-title {
+    margin-bottom: 8px;
+}
+
+.secure-bbva-verify-complated-title p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #1D212F;
+    text-align: center;
+}
+
+.secure-bbva-verify-complated-text p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #1D212F;
+    text-align: center;
+}
+
+.secure-flash-verify-complated-title {
+    margin-bottom: 8px;
+}
+
+.secure-flash-verify-complated-title p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 16px;
+    line-height: 20px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #1D212F;
+    text-align: center;
+}
+
+.secure-flash-verify-complated-text p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 20px;
+    letter-spacing: 0;
+    vertical-align: middle;
+    color: #1D212F;
+    text-align: center;
+}
+
+#technical-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+}
+
+#technical-error p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 0;
+    color: #121212;
+}
+
+#technical-error svg {
+    width: 100%;
+    max-width: max-content;
+}
+
+#verification-error {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    background-color: #FFFFFF;
+    border-radius: 8px;
+    padding: 16px;
+    margin-top: 12px;
+}
+
+#verification-error p {
+    font-family: 'BentonSansBBVA';
+    font-weight: 400;
+    font-size: 13px;
+    line-height: 18px;
+    letter-spacing: 0;
+    color: #121212;
+}
+
+#verification-error svg {
+    width: 100%;
+    max-width: max-content;
+}
+
+.js-display-none {
+    display: none;
+}
+
+.js-disable {
+    opacity: 50%;
+}
+
+.secure--system-error {
+    position: relative;
+    height: calc(100vh - 104px);
+}
+
+.secure--system-error span {
+    font-family: 'BentonSansBBVA';
+    font-weight: 500;
+    font-size: 15px;
+    color: #666666;
+    line-height: 22px;
+    letter-spacing: 0;
+    text-align: center;
+}
+.checkbox-content.js-error-border {
+    border-bottom: 2px solid #B92A45;
+}
+
+.checkbox-content.js-error-border p {
+    color: #B92A45;
+}
+
+.error-message {
+    display: none;
+    font-family: 'BentonSansBBVA';
+    font-size: 13px;
+    color: #B92A45;
+    font-weight: 400;
+    line-height: 18px;
+    letter-spacing: 0;
+    margin-top: 8px;
+}
+
+.js-show-message {
+    display: flex;
+}
